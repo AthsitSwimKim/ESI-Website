@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "mhutchie.git-graph",
+    "eamodio.gitlens",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "oxc-project.oxc-vscode"
+  ]
+}

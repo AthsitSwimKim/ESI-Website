@@ -18,3 +18,10 @@ motion + lucide-react. No backend, database, auth, CMS or uploads — ever.
 - Section titles: Kanit, bold italic uppercase, left-aligned with the 40×3 bar.
 - Verify with `npm run typecheck && npm run lint && npm run build`, then check in the browser.
 - The user writes Thai — reply in Thai with English technical terms.
+
+## Git workflow
+- Never commit on `main`. Each phase/feature: `git switch -c feat/<name>` from `main`, commit
+  there, then merge back with a merge commit (`merge.ff=false` is set) and push both.
+- The owner reads the history in Git Graph — keep branch lines visible, one topic per branch,
+  descriptive commit subjects (`feat(solutions): …`, `fix(header): …`, `chore: …`).
+- `git graph` / `git lg` show the graph in the terminal.

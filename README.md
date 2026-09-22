@@ -53,6 +53,23 @@ Comments `// DRAFT – ESI to approve` and `// to confirm` mark copy that still 
 Vercel → `vercel.json` rewrites, Apache → `.htaccess` rewrite, Nginx → `try_files $uri /index.html`.
 The matching file is added in Phase 8 once the host is chosen.
 
+## Branching & Git graph
+
+Work never lands on `main` directly — every phase/feature gets its own branch and comes back
+through a merge commit, so the history shows real branch lines:
+
+```bash
+git switch -c feat/phase-5-solutions     # branch from main (feat/…, fix/…, chore/…)
+# …commits…
+git switch main
+git merge feat/phase-5-solutions         # merge.ff=false → always a merge commit (visible line)
+git push
+```
+
+View the graph in the terminal (`git graph` / `git lg` aliases are set for this repo) or in
+VS Code with the recommended **Git Graph** extension (`.vscode/extensions.json`). Run
+`git fetch --all` first to see everyone's remote branches.
+
 ## For contributors using Claude Code
 
 Project skill: `.claude/skills/esi-website/` (design spec, content, architecture).
