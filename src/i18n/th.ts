@@ -1,0 +1,95 @@
+import type { DeepPartial } from '@/lib/utils'
+
+import type { Dictionary } from './en'
+
+/**
+ * Thai UI strings — DRAFT until ESI supplies approved copy (PLAN.md D5).
+ * Any key missing here falls back to English automatically.
+ */
+export const th: DeepPartial<Dictionary> = {
+  nav: {
+    home: 'หน้าแรก',
+    about: 'เกี่ยวกับเรา',
+    solutions: 'โซลูชัน',
+    industries: 'อุตสาหกรรม',
+    projects: 'ผลงาน',
+    contact: 'ติดต่อเรา',
+  },
+  cta: {
+    contact: 'ติดต่อ ESI',
+    exploreSolutions: 'ดูโซลูชัน',
+    viewProjects: 'ดูผลงาน',
+    viewProject: 'ดูรายละเอียด',
+    viewAllProjects: 'ดูผลงานทั้งหมด',
+    learnMore: 'ดูเพิ่มเติม',
+    learnMoreAbout: 'รู้จัก ESI เพิ่มเติม',
+    backHome: 'กลับหน้าแรก',
+    emailUs: 'ส่งอีเมลถึงเรา',
+    call: 'โทร',
+    seeRelatedProjects: 'ดูผลงานที่เกี่ยวข้อง',
+  },
+  footer: {
+    contactUs: 'ติดต่อเรา',
+    quickLinks: 'ลิงก์ด่วน',
+    solutions: 'โซลูชัน',
+    certifications: 'การรับรอง',
+    rights: 'สงวนลิขสิทธิ์',
+  },
+  contact: {
+    address: 'ที่อยู่',
+    phone: 'โทรศัพท์',
+    email: 'อีเมล',
+    hours: 'เวลาทำการ',
+    mapTitle: 'ตำแหน่งสำนักงาน ESI บน Google Maps',
+  },
+  categories: {
+    network: 'ระบบเครือข่าย',
+    cctv: 'กล้องวงจรปิด',
+    'access-control': 'ระบบควบคุมการเข้าออก',
+    communication: 'ระบบสื่อสาร',
+    cybersecurity: 'ความปลอดภัยไซเบอร์',
+    maintenance: 'บำรุงรักษา',
+  },
+  projects: {
+    filterAll: 'ทั้งหมด',
+    filterLabel: 'กรองผลงานตามหมวด',
+    empty: 'ยังไม่มีผลงานในหมวดนี้',
+    showAll: 'แสดงผลงานทั้งหมด',
+    client: 'ลูกค้า',
+    industry: 'อุตสาหกรรม',
+    location: 'สถานที่',
+    services: 'บริการ',
+    overview: 'ภาพรวมโครงการ',
+    scope: 'ขอบเขตงาน',
+    solution: 'โซลูชัน',
+    gallery: 'ภาพโครงการ',
+    related: 'ผลงานที่เกี่ยวข้อง',
+  },
+  solutions: {
+    whatWeDeliver: 'สิ่งที่เราส่งมอบ',
+    industriesServed: 'อุตสาหกรรมที่ให้บริการ',
+    relatedProjects: 'ผลงานที่เกี่ยวข้อง',
+    previous: 'โซลูชันก่อนหน้า',
+    next: 'โซลูชันถัดไป',
+    typicalScope: 'ขอบเขตงานทั่วไป',
+  },
+  about: {
+    introduction: 'แนะนำบริษัท',
+    overview: 'ภาพรวมบริษัท',
+    expertise: 'ความเชี่ยวชาญ',
+    mission: 'พันธกิจ',
+    vision: 'วิสัยทัศน์',
+    coreValues: 'ค่านิยมหลัก',
+    industriesServed: 'อุตสาหกรรมที่ให้บริการ',
+  },
+  a11y: {
+    skipToContent: 'ข้ามไปยังเนื้อหา',
+    mainNav: 'เมนูหลัก',
+    openMenu: 'เปิดเมนู',
+    closeMenu: 'ปิดเมนู',
+    language: 'ภาษา',
+    breadcrumb: 'เส้นทางหน้า',
+    home: 'หน้าแรก ESI',
+    loading: 'กำลังโหลด…',
+  },
+}

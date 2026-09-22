@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+ * ESI design tokens — the ONLY source of colours, fonts and shadows.
+ * See .claude/skills/esi-website/references/design-spec.md §1
+ * ------------------------------------------------------------------------- */
+@theme {
+  /* Brand palette (spec §4) */
+  --color-esi-blue: #123b72;
+  --color-esi-navy: #061d38;
+  --color-esi-secondary: #1d65b7;
+  --color-esi-accent: #358fe8;
+  --color-esi-light: #f5f8fc;
+  --color-esi-text: #172033;
+  /* Derived neutrals — the only grey and border colour */
+  --color-esi-muted: #5b6577;
+  --color-esi-border: #dce4ef;
+
+  /* Typography */
+  --font-display: 'Kanit', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;
+
+  /* Elevation */
+  --shadow-card: 0 6px 20px rgba(6, 29, 56, 0.08);
+  --shadow-card-hover: 0 14px 32px rgba(6, 29, 56, 0.14);
+  --shadow-header: 0 4px 20px rgba(6, 29, 56, 0.1);
+
+  /* Motion */
+  --ease-esi: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Gradients used on dark surfaces (design-spec §1) */
+:root {
+  --gradient-hero: linear-gradient(
+    90deg,
+    #061d38 0%,
+    rgba(6, 29, 56, 0.88) 38%,
+    rgba(6, 29, 56, 0.45) 68%,
+    rgba(6, 29, 56, 0.2) 100%
+  );
+  --gradient-hero-bottom: linear-gradient(180deg, transparent 70%, rgba(6, 29, 56, 0.55) 100%);
+  --gradient-dark: linear-gradient(100deg, #061d38 0%, #0c2d5e 55%, #123b72 100%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white font-sans text-esi-text antialiased;
+    line-height: 1.6;
+  }
+
+  /* Visible focus for keyboard users — brand accent ring (spec §45) */
+  :focus-visible {
+    @apply ring-2 ring-esi-accent ring-offset-2 ring-offset-white outline-none;
+  }
+
+  img,
+  video {
+    @apply block max-w-full;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Brand utilities
+ * ------------------------------------------------------------------------- */
+
+/* Display type: h1/h2/CTA lines are always Kanit, bold, italic, uppercase */
+@utility display-title {
+  @apply font-display font-bold uppercase italic;
+  letter-spacing: 0;
+}
+
+/* Angular signature elements (design-spec §2) */
+@utility clip-slant-right {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 28px) 100%, 0 100%);
+}
+@utility clip-slant-img {
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 0 100%);
+}
+@utility clip-slant-img-left {
+  clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Dark surfaces */
+@utility bg-gradient-dark {
+  background-image: var(--gradient-dark);
+}
+@utility bg-gradient-hero {
+  background-image: var(--gradient-hero);
+}
+@utility bg-gradient-hero-bottom {
+  background-image: var(--gradient-hero-bottom);
+}
+
+/* Hide scrollbars on horizontal snap rows (industry cards on mobile) */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Slow node pulse for <NetworkGraphic> (disabled by the component under reduced motion) */
+@keyframes esi-node-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.esi-node-pulse {
+  animation: esi-node-pulse 5s ease-in-out infinite;
+}

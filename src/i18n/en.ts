@@ -1,0 +1,93 @@
+/**
+ * English UI strings — the source dictionary. Keys are typed (see useT.ts), so a typo in a
+ * component is a compile error. Long-form content lives in src/data with `Localized` fields.
+ */
+export const en = {
+  nav: {
+    home: 'Home',
+    about: 'About',
+    solutions: 'Solutions',
+    industries: 'Industries',
+    projects: 'Projects',
+    contact: 'Contact',
+  },
+  cta: {
+    contact: 'Contact ESI',
+    exploreSolutions: 'Explore Solutions',
+    viewProjects: 'View Projects',
+    viewProject: 'View Project',
+    viewAllProjects: 'View all projects',
+    learnMore: 'Learn more',
+    learnMoreAbout: 'Learn more about ESI',
+    backHome: 'Back to Home',
+    emailUs: 'Email us',
+    call: 'Call',
+    seeRelatedProjects: 'See related projects',
+  },
+  footer: {
+    contactUs: 'Contact Us',
+    quickLinks: 'Quick Links',
+    solutions: 'Solutions',
+    certifications: 'Certifications',
+    rights: 'All rights reserved.',
+  },
+  contact: {
+    address: 'Address',
+    phone: 'Phone',
+    email: 'Email',
+    hours: 'Business Hours',
+    mapTitle: 'ESI office location on Google Maps',
+  },
+  categories: {
+    network: 'Network',
+    cctv: 'CCTV',
+    'access-control': 'Access Control',
+    communication: 'Communication',
+    cybersecurity: 'Cybersecurity',
+    maintenance: 'Maintenance',
+  },
+  projects: {
+    filterAll: 'All',
+    filterLabel: 'Filter projects by category',
+    empty: 'No projects in this category yet.',
+    showAll: 'Show all projects',
+    client: 'Client',
+    industry: 'Industry',
+    location: 'Location',
+    services: 'Services',
+    overview: 'Project Overview',
+    scope: 'Scope of Work',
+    solution: 'Solution',
+    gallery: 'Project Gallery',
+    related: 'Related Projects',
+  },
+  solutions: {
+    whatWeDeliver: 'What we deliver',
+    industriesServed: 'Industries served',
+    relatedProjects: 'Related Projects',
+    previous: 'Previous solution',
+    next: 'Next solution',
+    typicalScope: 'Typical scope',
+  },
+  about: {
+    introduction: 'Company Introduction',
+    overview: 'Company Overview',
+    expertise: 'Our Expertise',
+    mission: 'Mission',
+    vision: 'Vision',
+    coreValues: 'Core Values',
+    industriesServed: 'Industries Served',
+  },
+  a11y: {
+    skipToContent: 'Skip to content',
+    mainNav: 'Main navigation',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    language: 'Language',
+    breadcrumb: 'Breadcrumb',
+    home: 'ESI home',
+    loading: 'Loading…',
+  },
+} as const
+
+export type Dictionary = typeof en
