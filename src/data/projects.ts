@@ -14,9 +14,8 @@ import type { IndustrySlug, Project, ProjectCategory } from '@/types'
  * other companies' sites (2026-09-29), so three more are in use — each marked with its source
  * above. Note the copyright in those stays with the original site, so swap them for ESI's own
  * photos when available.
- * Seven projects still show the navy placeholder: their source URL is dead (LinkedIn tokens
- * expired, 404s, site gone) or the image was another vendor's marketing banner / a 225px video
- * thumbnail, too small and too branded to put on an ESI card. See PLAN.md D6.
+ * Five projects still show the navy placeholder — their source URL is dead (LinkedIn tokens
+ * expired, 404s, site gone), so there is nothing to fetch. See PLAN.md D6.
  *
  * Array order = display order (newest first). `id` is stable and chronological — a new
  * project gets the next id and goes at the TOP of the array (spec §50).
@@ -50,7 +49,8 @@ export const projects: Project[] = [
     categories: ['network'],
     industry: 'petrochemical',
     location: 'Ba Ria – Vung Tau, Vietnam',
-    image: '/images/placeholders/project-long-son-petrochemical-network.svg',
+    // photo source: Google image result via the old site; LuxSolar wordmark and LXS logo cropped off — only ~117px wide once clean — replace with ESI's own
+    image: '/images/projects/long-son-petrochemical-network.webp',
     description:
       'Industrial network infrastructure design and implementation for plant-wide connectivity.',
     scope: ['Network system'],
@@ -112,7 +112,8 @@ export const projects: Project[] = [
     categories: ['cctv'],
     industry: 'manufacturing',
     location: 'Prachinburi, Thailand', // to confirm
-    image: '/images/placeholders/project-lenzing-t3-lyocell-cctv-timelapse.svg',
+    // photo source: Google image result via the old site (a video thumbnail); Lenzing logo and "Construction diary" caption cropped off — only ~168px wide once clean — replace with ESI's own
+    image: '/images/projects/lenzing-t3-lyocell-cctv-timelapse.webp',
     description:
       'Time-lapse CCTV system for monitoring the construction site of the T3 lyocell fibers plant.',
     scope: ['CCTV time-lapse system for the construction site'],
