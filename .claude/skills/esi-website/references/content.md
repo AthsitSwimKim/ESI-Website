@@ -169,12 +169,16 @@ Klongluang Utilities 120 MW SPP (WAN/LAN, CCTV, firewall, PABX; owner EGCO, EPC 
 Clients outside the five spec industries (resort, offices, government) are filed under
 `industrial-infrastructure` — the spec's industry list is fixed (D8).
 
-**Photos (2026-09-29).** Eight projects use ESI's own photos from the old site, re-encoded to
-WebP 3:2 in `public/images/projects/`: PTT GC5 Aromatics, Government House, Klongluang Utilities,
-Orisma office, Solar Center (+ a second shot in its gallery), Greenlake Resort, Linde ASU3, IRPC.
-The other fourteen keep the navy placeholder — the old site hotlinked someone else's image
-(Henkel, kaohoon, LinkedIn, Google, ggcplc …) which is not ESI's to reuse (D22), or only had a
-thumbnail under 450px. Ask ESI for those originals.
+**Photos (2026-09-29).** The old site's media library holds 18 files; 12 are project photos and
+**all 12 are used**, re-encoded to WebP 3:2 in `public/images/projects/`: PTT GC5 Aromatics,
+Government House, Klongluang Utilities, Orisma office, Solar Center (+ a second shot in its
+gallery), Greenlake Resort, Linde ASU3, IRPC, Senior Aerospace, SCG Kaeng Khoi, Edehege — the
+last three are only ~300px wide, kept because a real site photo beats a placeholder; ask ESI for
+the originals. The other **10 projects** keep the navy placeholder: for each of them the old site
+hotlinked someone else's image (Henkel, kaohoon, ggcplc, LinkedIn, Google …), not ESI's to reuse (D22).
+The remaining 6 media files are not project photos — two icon-tree banners carrying the old
+contact block, two "businessman drawing a hologram" stock shots and two location maps — so the
+hero / about / industry images still need real photography from ESI.
 
 **Verified 2026-09-29:** every reference post's full text was re-read through the WordPress REST
 API — the data file already carries everything they contain (title, owner/EPC/contractor, system
