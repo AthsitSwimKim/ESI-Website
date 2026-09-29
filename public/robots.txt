@@ -1,0 +1,5 @@
+# https://esi-th.com
+User-agent: *
+Allow: /
+
+Sitemap: https://esi-th.com/sitemap.xml

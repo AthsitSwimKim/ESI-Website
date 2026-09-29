@@ -4,15 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#123B72" />
+    <!-- Fallback title shown before React hydrates; <Seo> sets the real one per page -->
     <title>ESI | Industrial System Integration Thailand</title>
-    <meta
-      name="description"
-      content="Engineering System Integration Co., Ltd. provides industrial communication, network, security and system integration solutions."
-    />
 
+    <!-- SVG first for crispness; the PNGs cover browsers that ignore it -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Only tags that are the SAME on every page live here. Anything per-page (description,
+         canonical, og:title/description/url/image) is rendered by <Seo> — duplicating them here
+         made every page ship two conflicting descriptions. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ESI" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Fonts: Kanit (display, italic) · Inter (body) · Noto Sans Thai (Thai body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

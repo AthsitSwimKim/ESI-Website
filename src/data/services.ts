@@ -162,7 +162,7 @@ export const services: Service[] = [
 ]
 
 export const solutionsIntro = {
-  en: 'From network backbone to lifecycle support, ESI delivers the systems that keep industrial operations connected, secure and running.',
+  en: 'ESI covers six solution areas that most industrial sites need together: the network that carries everything, the surveillance and access systems that protect it, the communication people rely on, the security that keeps it isolated from threats, and the maintenance that keeps it running. We design, supply, install, commission and support each of them — so one partner is accountable from the first drawing to the next service visit.',
 } // DRAFT – ESI to approve
 
 export function getServiceBySlug(slug: string | undefined): Service | undefined {

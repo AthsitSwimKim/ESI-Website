@@ -2,9 +2,15 @@ import type { IndustrySlug, Project, ProjectCategory } from '@/types'
 
 /**
  * Project references — 22 real projects published on the previous website
- * (esi-th.com/reference, pages 1–3, retrieved 2026-09-22). Titles were normalised to
- * "Client – System"; `scope` keeps ESI's own wording. Fields marked "to confirm" are inferred
- * (mostly locations). Photos are placeholders until ESI supplies them (PLAN.md D6).
+ * (esi-th.com/reference, pages 1–3; text retrieved 2026-09-22, photos 2026-09-29 via the
+ * WordPress REST API). Titles were normalised to "Client – System"; `scope` keeps ESI's own
+ * wording. Fields marked "to confirm" are inferred (mostly locations).
+ *
+ * Photos: 8 projects use ESI's own uploads from the old site, re-encoded to WebP 3:2 in
+ * public/images/projects/. The rest keep the navy placeholder because the old site either
+ * hotlinked a THIRD-PARTY image (henkel.co.th, kaohoon.com, LinkedIn, Google …  — not ESI's to
+ * reuse) or only had a thumbnail under 450px. See PLAN.md D6 for the list ESI still needs to
+ * supply.
  *
  * Array order = display order (newest first). `id` is stable and chronological — a new
  * project gets the next id and goes at the TOP of the array (spec §50).
@@ -192,7 +198,7 @@ export const projects: Project[] = [
     categories: ['cctv'],
     industry: 'petrochemical',
     location: 'Map Ta Phut, Rayong, Thailand', // to confirm
-    image: '/images/placeholders/project-ptt-gc5-aromatics-2-cctv.svg',
+    image: '/images/projects/ptt-gc5-aromatics-2-cctv.webp',
     description:
       'Installation, modification and revamp of the analog CCTV system at the aromatics and refining plant.',
     scope: ['CCTV (analog) system – install, modification & revamp of the existing system'],
@@ -227,7 +233,7 @@ export const projects: Project[] = [
     categories: ['cctv', 'maintenance'],
     industry: 'petrochemical',
     location: 'Map Ta Phut, Rayong, Thailand',
-    image: '/images/placeholders/project-linde-asu3-cctv.svg',
+    image: '/images/projects/linde-asu3-cctv.webp',
     description:
       'Maintenance, installation, modification and revamp of the CCTV system at the ASU3 air separation unit.',
     scope: ['CCTV system – maintenance, install, modification & revamp of the existing system'],
@@ -242,7 +248,7 @@ export const projects: Project[] = [
     categories: ['cctv'],
     industry: 'petrochemical',
     location: 'Rayong, Thailand', // to confirm
-    image: '/images/placeholders/project-irpc-cctv.svg',
+    image: '/images/projects/irpc-cctv.webp',
     description: 'Installation, modification and revamp of the CCTV system.',
     scope: ['CCTV system – install, modification & revamp of the existing system'],
     year: 2018,
@@ -256,7 +262,7 @@ export const projects: Project[] = [
     categories: ['communication'],
     industry: 'industrial-infrastructure',
     location: 'Chiang Mai, Thailand',
-    image: '/images/placeholders/project-greenlake-resort-pabx.svg',
+    image: '/images/projects/greenlake-resort-pabx.webp',
     description: 'PABX telephone system for a resort.',
     scope: ['PABX system'],
     partners: ['Main contractor: Silentech'],
@@ -285,7 +291,7 @@ export const projects: Project[] = [
     categories: ['access-control'],
     industry: 'industrial-infrastructure',
     location: 'Thailand', // to confirm
-    image: '/images/placeholders/project-orisma-office-access-control.svg',
+    image: '/images/projects/orisma-office-access-control.webp',
     description: 'Access control system for a software development office.',
     scope: ['Access control system'],
     year: 2017,
@@ -299,7 +305,7 @@ export const projects: Project[] = [
     categories: ['network', 'communication'],
     industry: 'industrial-infrastructure',
     location: 'Bangkok, Thailand',
-    image: '/images/placeholders/project-government-house-phakdi-bodin-network-telephone.svg',
+    image: '/images/projects/government-house-phakdi-bodin-network-telephone.webp',
     description: 'Network and telephone systems for the Phakdi Bodin Building at Government House.',
     scope: ['Network system', 'Telephone system'],
     partners: ['Consultant / main contractor: Silentech · Excellence Plan & Engineering Co., Ltd.'],
@@ -329,7 +335,8 @@ export const projects: Project[] = [
     categories: ['cctv', 'access-control', 'network', 'cybersecurity'],
     industry: 'power-energy',
     location: 'Thailand', // to confirm
-    image: '/images/placeholders/project-solar-center-office-systems.svg',
+    image: '/images/projects/solar-center-office-systems.webp',
+    gallery: ['/images/projects/solar-center-office-alt.webp'],
     description:
       'CCTV, access control, network, firewall security and audio-visual systems for a solar company office.',
     scope: [
@@ -353,7 +360,7 @@ export const projects: Project[] = [
     categories: ['network', 'cctv', 'cybersecurity', 'communication'],
     industry: 'power-energy',
     location: 'Khlong Luang, Pathum Thani, Thailand',
-    image: '/images/placeholders/project-klongluang-utilities-spp-systems.svg',
+    image: '/images/projects/klongluang-utilities-spp-systems.webp',
     description:
       'WAN/LAN network, CCTV expansion, firewall security and PABX expansion for a 120 MW SPP cogeneration power plant.',
     scope: [

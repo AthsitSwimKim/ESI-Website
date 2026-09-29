@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, type Variants } from 'motion/react'
 import type { ReactNode } from 'react'
 
-import { fadeIn, fadeUp, stagger, viewportOnce } from '@/lib/motion'
+import { EASE_ESI, fadeIn, fadeUp, stagger, viewportOnce } from '@/lib/motion'
 
 type Tag = 'div' | 'section' | 'article' | 'ul' | 'ol' | 'li' | 'span'
 
@@ -42,9 +42,20 @@ export function Reveal({
 }: RevealProps) {
   const reduce = useReducedMotion()
   const MotionTag = tags[as]
+  const base = variants ?? (reduce ? fadeIn : fadeUp)
+  // `delay` works with or without stagger: offset this block's own reveal.
+  const delayed: Variants = {
+    ...base,
+    show: {
+      ...(base.show as Record<string, unknown>),
+      transition: { duration: 0.6, ease: EASE_ESI, delay },
+    },
+  }
   const resolved: Variants = staggerChildren
     ? stagger(staggerChildren, delay)
-    : (variants ?? (reduce ? fadeIn : fadeUp))
+    : delay
+      ? delayed
+      : base
 
   return (
     <MotionTag

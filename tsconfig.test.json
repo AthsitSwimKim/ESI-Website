@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.test.tsbuildinfo",
+    "types": ["node", "vitest/globals"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true
+  },
+  "include": ["src/**/*.test.ts", "src/**/*.test.tsx", "vitest.config.ts"],
+  "exclude": []
+}

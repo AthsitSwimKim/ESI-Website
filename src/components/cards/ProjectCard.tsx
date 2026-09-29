@@ -71,7 +71,7 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
           </Link>
         </h3>
         {!horizontal && (
-          <p className="mt-1 text-[13px] text-esi-muted">
+          <p className="mt-1 line-clamp-2 text-[13px] text-esi-muted">
             {project.client} · {project.location}
           </p>
         )}

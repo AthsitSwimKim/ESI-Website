@@ -4,6 +4,10 @@ import type { Company } from '@/types'
  * Company information — confirmed against the existing website (esi-th.com, 2026-09-22):
  * address, phone, fax, email, Thai legal name, tax ID, Facebook page and office location all
  * match the project spec (§34). PLAN.md D1 / D9 / D10 resolved.
+ *
+ * The address below is confirmed correct by ESI (2026-09-29). Their Google Business listing still
+ * shows an older address, so the map's info card may disagree until they update it (D24) —
+ * don't "fix" these fields to match Google.
  */
 const MAP_LAT = 12.68721
 const MAP_LNG = 101.2745016
@@ -46,7 +50,9 @@ export const company: Company = {
     lat: MAP_LAT,
     lng: MAP_LNG,
     url: 'https://goo.gl/maps/QZkF68qDPFv',
-    // Coordinates are more reliable than a free-text address for the key-less embed (spec §36).
-    embedUrl: `https://www.google.com/maps?q=${MAP_LAT},${MAP_LNG}&z=16&output=embed`,
+    // Official "Share → Embed a map" URL supplied by ESI: it carries the company's own Google
+    // Business place ID, so the pin shows the listing (not just a dropped coordinate). No API key.
+    embedUrl:
+      'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3522.4338416384085!2d101.2721614!3d12.6862423!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102fdc808aee941%3A0xb12d9dc2e18bcb84!2z4LmA4Lit4LmH4LiZ4LiI4Li04LmA4LiZ4Li14Lii4Lij4Li04LmI4LiHIOC4i-C4tOC4quC5gOC4leC5h-C4oSDguK3guLTguJnguJfguKPguLXguYDguIHguKPguIrguLHguYjguJkg4LiI4Liz4LiB4Lix4LiU!5e1!3m2!1sth!2sth!4v1790658330739!5m2!1sth!2sth',
   },
 }
