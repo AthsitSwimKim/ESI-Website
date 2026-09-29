@@ -6,11 +6,13 @@ import type { IndustrySlug, Project, ProjectCategory } from '@/types'
  * WordPress REST API). Titles were normalised to "Client – System"; `scope` keeps ESI's own
  * wording. Fields marked "to confirm" are inferred (mostly locations).
  *
- * Photos: 8 projects use ESI's own uploads from the old site, re-encoded to WebP 3:2 in
- * public/images/projects/. The rest keep the navy placeholder because the old site either
- * hotlinked a THIRD-PARTY image (henkel.co.th, kaohoon.com, LinkedIn, Google …  — not ESI's to
- * reuse) or only had a thumbnail under 450px. See PLAN.md D6 for the list ESI still needs to
- * supply.
+ * Photos: the old site's media library holds 18 files, 12 of which are project photos — ALL 12
+ * are now used here, re-encoded to WebP 3:2 in public/images/projects/. Three of them
+ * (Senior Aerospace, SCG Kaeng Khoi, Edehege) are only ~300px wide; they are kept because a real
+ * site photo beats a placeholder, but ESI should send the originals.
+ * The remaining 10 projects keep the navy placeholder: the old site hotlinked a THIRD-PARTY
+ * image for each (henkel.co.th, kaohoon.com, ggcplc.com, LinkedIn, Google …) which is not ESI's
+ * to reuse. See PLAN.md D6.
  *
  * Array order = display order (newest first). `id` is stable and chronological — a new
  * project gets the next id and goes at the TOP of the array (spec §50).
@@ -59,7 +61,7 @@ export const projects: Project[] = [
     categories: ['access-control'],
     industry: 'manufacturing',
     location: 'Rayong, Thailand', // to confirm
-    image: '/images/placeholders/project-senior-aerospace-access-control.svg',
+    image: '/images/projects/senior-aerospace-access-control.webp',
     description:
       'Consultancy and installation of an access control system for an aerospace manufacturing facility.',
     scope: ['Access control system – consultancy', 'Access control system – installation'],
@@ -277,7 +279,7 @@ export const projects: Project[] = [
     categories: ['access-control'],
     industry: 'manufacturing',
     location: 'Kaeng Khoi, Saraburi, Thailand',
-    image: '/images/placeholders/project-scg-kaeng-khoi-access-control.svg',
+    image: '/images/projects/scg-kaeng-khoi-access-control.webp',
     description: 'Access control system for the Kaeng Khoi cement plant.',
     scope: ['Access control system'],
     year: 2018,
@@ -321,7 +323,7 @@ export const projects: Project[] = [
     categories: ['network', 'cybersecurity'],
     industry: 'manufacturing',
     location: 'Thailand', // to confirm
-    image: '/images/placeholders/project-edehege-factory-network-security.svg',
+    image: '/images/projects/edehege-factory-network-security.webp',
     description: 'Enterprise network and security system for a packaging and manufacturing plant.',
     scope: ['Enterprise network system', 'Network security system'],
     year: 2017,
