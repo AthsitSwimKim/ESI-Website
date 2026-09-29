@@ -53,7 +53,7 @@ export function SolutionDetailPage() {
       {/* Overview */}
       <section aria-labelledby="solution-overview-title" className="py-14 md:py-20">
         <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <Reveal>
+          <Reveal immediate>
             <div className="flex size-14 items-center justify-center rounded-[4px] bg-esi-light text-esi-blue">
               <Icon name={service.icon} size={32} strokeWidth={1.25} />
             </div>
@@ -68,7 +68,7 @@ export function SolutionDetailPage() {
               {l(service.description)}
             </p>
           </Reveal>
-          <Reveal variants={scaleIn}>
+          <Reveal variants={scaleIn} immediate>
             <img
               src={service.image}
               alt=""

@@ -29,10 +29,10 @@ export function ContactPage() {
 
       <section aria-label={t('nav.contact')} className="py-14 md:py-20">
         <Container className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          <Reveal>
+          <Reveal immediate>
             <ContactInfo />
           </Reveal>
-          <Reveal delay={0.1}>
+          <Reveal immediate delay={0.1}>
             <MapEmbed />
           </Reveal>
         </Container>

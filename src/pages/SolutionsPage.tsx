@@ -31,11 +31,15 @@ export function SolutionsPage() {
       >
         <DiagonalLines className="absolute bottom-6 -left-4" />
         <Container className="relative">
-          <Reveal className="mb-10 max-w-[70ch] text-base leading-[1.7] text-esi-text md:text-lg">
+          <Reveal
+            immediate
+            className="mb-10 max-w-[70ch] text-base leading-[1.7] text-esi-text md:text-lg"
+          >
             {l(solutionsIntro)}
           </Reveal>
           <Reveal
             as="ul"
+            immediate
             staggerChildren={0.08}
             className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
           >

@@ -397,6 +397,10 @@ export const stagger = (delay = .08) => ({ hidden: {}, show: { transition: { sta
 ```
 
 - A `<Reveal>` wrapper applies `fadeUp` + viewport-once so sections don't hand-roll it.
+- **The first block under a page hero passes `immediate`** so it renders already revealed.
+  Fading in content that sits in the first viewport makes the page read as empty for a few
+  hundred milliseconds after a route change (client feedback 2026-09-29). Everything below
+  the fold still reveals on scroll.
 - Hover transitions 200–250ms ease-out; hero zoom 20s; navbar 250ms; timeline line 900ms.
 - Animate only `transform` and `opacity` (no layout-shifting properties). No spring/bounce, no
   parallax, no scroll-jacking, no marquee. The brand feeling is "precise", not "playful".

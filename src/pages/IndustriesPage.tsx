@@ -45,7 +45,12 @@ export function IndustriesPage() {
       <section aria-label={t('nav.industries')} className="py-14 md:py-20">
         <Container className="space-y-16 md:space-y-24">
           {industries.map((industry, i) => (
-            <IndustryShowcase key={industry.slug} industry={industry} reverse={i % 2 === 1} />
+            <IndustryShowcase
+              key={industry.slug}
+              industry={industry}
+              reverse={i % 2 === 1}
+              immediate={i === 0}
+            />
           ))}
         </Container>
       </section>

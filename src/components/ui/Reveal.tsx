@@ -23,6 +23,11 @@ interface RevealProps {
   /** Stagger direct <RevealItem> children by this many seconds (e.g. 0.08). */
   staggerChildren?: number
   delay?: number
+  /**
+   * Render already revealed. Use it for the first block under a page hero: it sits in the first
+   * viewport, and fading it in makes the page look empty for the first few hundred milliseconds.
+   */
+  immediate?: boolean
   id?: string
   'aria-labelledby'?: string
 }
@@ -38,6 +43,7 @@ export function Reveal({
   variants,
   staggerChildren,
   delay = 0,
+  immediate = false,
   ...rest
 }: RevealProps) {
   const reduce = useReducedMotion()
@@ -60,7 +66,7 @@ export function Reveal({
   return (
     <MotionTag
       className={className}
-      initial="hidden"
+      initial={immediate ? 'show' : 'hidden'}
       whileInView="show"
       viewport={viewportOnce}
       variants={resolved}

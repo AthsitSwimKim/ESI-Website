@@ -14,6 +14,8 @@ interface IndustryShowcaseProps {
   industry: Industry
   /** Alternate the photo side down the page (design-spec §5 Industries). */
   reverse?: boolean
+  /** First block on the page — show it straight away instead of fading in. */
+  immediate?: boolean
 }
 
 /**
@@ -21,7 +23,11 @@ interface IndustryShowcaseProps {
  * display type, description, "Typical scope" chips (spec §25) and a link to its projects.
  * `id` = industry slug so Home cards can deep-link (`/industries#oil-gas`).
  */
-export function IndustryShowcase({ industry, reverse = false }: IndustryShowcaseProps) {
+export function IndustryShowcase({
+  industry,
+  reverse = false,
+  immediate = false,
+}: IndustryShowcaseProps) {
   const { t, l } = useT()
   const related = getProjectsByIndustry(industry.slug)
 
@@ -31,7 +37,11 @@ export function IndustryShowcase({ industry, reverse = false }: IndustryShowcase
       aria-labelledby={`industry-${industry.slug}`}
       className="grid scroll-mt-24 items-center gap-8 lg:grid-cols-2 lg:gap-16"
     >
-      <Reveal variants={scaleIn} className={cn('relative', reverse && 'lg:order-2')}>
+      <Reveal
+        variants={scaleIn}
+        immediate={immediate}
+        className={cn('relative', reverse && 'lg:order-2')}
+      >
         <img
           src={industry.image}
           alt=""
@@ -45,7 +55,7 @@ export function IndustryShowcase({ industry, reverse = false }: IndustryShowcase
         />
       </Reveal>
 
-      <Reveal staggerChildren={0.08} className={cn(reverse && 'lg:order-1')}>
+      <Reveal staggerChildren={0.08} immediate={immediate} className={cn(reverse && 'lg:order-1')}>
         <RevealItem className="flex items-center gap-3">
           <span className="flex size-12 shrink-0 items-center justify-center rounded-[4px] bg-esi-light text-esi-blue">
             <Icon name={industry.icon} size={26} strokeWidth={1.5} />

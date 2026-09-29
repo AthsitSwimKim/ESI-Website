@@ -40,7 +40,7 @@ export function AboutPage() {
       {/* Company Introduction */}
       <section aria-labelledby="about-intro-title" className="py-14 md:py-20">
         <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <Reveal staggerChildren={0.1}>
+          <Reveal staggerChildren={0.1} immediate>
             <RevealItem>
               <SectionTitle
                 id="about-intro-title"
@@ -57,7 +57,7 @@ export function AboutPage() {
               </p>
             </RevealItem>
           </Reveal>
-          <Reveal variants={scaleIn}>
+          <Reveal variants={scaleIn} immediate>
             <img
               src={aboutImage}
               alt=""

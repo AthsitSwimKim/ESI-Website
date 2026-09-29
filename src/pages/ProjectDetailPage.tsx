@@ -89,7 +89,7 @@ export function ProjectDetailPage() {
       >
         <DiagonalLines className="absolute -right-4 bottom-6" />
         <Container className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
-          <Reveal>
+          <Reveal immediate>
             <SectionTitle id="project-overview-title" title={t('projects.overview')} />
             <p className="max-w-[60ch] text-base leading-[1.7] text-esi-text md:text-lg">
               {project.description}
