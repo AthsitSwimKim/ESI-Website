@@ -26,5 +26,16 @@ export const stagger = (staggerChildren = 0.08, delayChildren = 0): Variants => 
   show: { transition: { staggerChildren, delayChildren } },
 })
 
+/**
+ * Entrance animation for content that should animate as soon as the page mounts (heroes), as
+ * opposed to <Reveal>, which waits for the element to scroll into view.
+ * Spread onto a motion element: `<motion.h1 {...enter(0.12)}>`.
+ */
+export const enter = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: EASE_ESI },
+})
+
 /** Reveal once, when a quarter of the element is in view. */
 export const viewportOnce = { once: true, amount: 0.25, margin: '-80px' } as const

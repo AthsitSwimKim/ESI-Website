@@ -1,5 +1,12 @@
+import { motion } from 'motion/react'
 import { Suspense } from 'react'
-import { isRouteErrorResponse, Outlet, useMatches, useRouteError } from 'react-router-dom'
+import {
+  isRouteErrorResponse,
+  Outlet,
+  useLocation,
+  useMatches,
+  useRouteError,
+} from 'react-router-dom'
 
 import { Container } from '@/components/ui/Container'
 import { useT } from '@/i18n'
@@ -55,6 +62,7 @@ function RouteError() {
  */
 export function RootLayout({ errorBoundary = false }: { errorBoundary?: boolean }) {
   const matches = useMatches()
+  const { pathname } = useLocation()
   const { t } = useT()
   const hideCta =
     errorBoundary || matches.some((m) => (m.handle as RouteHandle | undefined)?.hideCta)
@@ -74,7 +82,16 @@ export function RootLayout({ errorBoundary = false }: { errorBoundary?: boolean 
           <RouteError />
         ) : (
           <Suspense fallback={<PageSkeleton />}>
-            <Outlet />
+            {/* Short fade on every route change so navigation feels the same everywhere.
+                Keyed by pathname; no exit animation, so the new page is never held back. */}
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            >
+              <Outlet />
+            </motion.div>
           </Suspense>
         )}
       </main>

@@ -405,7 +405,13 @@ export const stagger = (delay = .08) => ({ hidden: {}, show: { transition: { sta
 - Animate only `transform` and `opacity` (no layout-shifting properties). No spring/bounce, no
   parallax, no scroll-jacking, no marquee. The brand feeling is "precise", not "playful".
 - `useReducedMotion()` → transforms disabled, opacity-only fades; hero zoom and node pulse off.
-- Route change: scroll to top instantly (`<ScrollToTop>`); optional 200ms page fade.
+- Route change: scroll to top instantly (`<ScrollToTop>`) + a 180ms fade of `<main>` keyed by
+  pathname (`RootLayout`), so every navigation feels the same. No exit animation — the new
+  page is never held back waiting for the old one.
+- **Heroes animate on mount, not on scroll.** `HeroSection` and `PageHero` share `enter(delay)`
+  from `lib/motion.ts`: breadcrumb 0.05s → title 0.12s → lead 0.22s → extra content 0.3s,
+  each a 600ms fade-up, plus a slow background zoom (Home 20s / page hero 18s). Client asked
+  for every page to feel like Home on navigation (2026-09-29).
 
 ---
 

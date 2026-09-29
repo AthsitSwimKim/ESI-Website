@@ -6,13 +6,7 @@ import { Container } from '@/components/ui/Container'
 import { NetworkGraphic } from '@/components/ui/NetworkGraphic'
 import { hero } from '@/data/home'
 import { useT } from '@/i18n'
-import { EASE_ESI } from '@/lib/motion'
-
-const enter = (delay: number) => ({
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: EASE_ESI },
-})
+import { enter } from '@/lib/motion'
 
 /**
  * Home hero (spec §14, design-spec §4.1): industrial photo with the navy gradient overlay,
