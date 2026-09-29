@@ -10,9 +10,13 @@ import type { IndustrySlug, Project, ProjectCategory } from '@/types'
  * are now used here, re-encoded to WebP 3:2 in public/images/projects/. Three of them
  * (Senior Aerospace, SCG Kaeng Khoi, Edehege) are only ~300px wide; they are kept because a real
  * site photo beats a placeholder, but ESI should send the originals.
- * The remaining 10 projects keep the navy placeholder: the old site hotlinked a THIRD-PARTY
- * image for each (henkel.co.th, kaohoon.com, ggcplc.com, LinkedIn, Google …) which is not ESI's
- * to reuse. See PLAN.md D6.
+ * ESI authorised reusing what their reference page showed, including the images it loaded from
+ * other companies' sites (2026-09-29), so three more are in use — each marked with its source
+ * above. Note the copyright in those stays with the original site, so swap them for ESI's own
+ * photos when available.
+ * Seven projects still show the navy placeholder: their source URL is dead (LinkedIn tokens
+ * expired, 404s, site gone) or the image was another vendor's marketing banner / a 225px video
+ * thumbnail, too small and too branded to put on an ESI card. See PLAN.md D6.
  *
  * Array order = display order (newest first). `id` is stable and chronological — a new
  * project gets the next id and goes at the TOP of the array (spec §50).
@@ -26,7 +30,8 @@ export const projects: Project[] = [
     categories: ['cctv'],
     industry: 'oil-gas',
     location: 'Map Ta Phut, Rayong, Thailand',
-    image: '/images/placeholders/project-map-ta-phut-tank-terminal-cctv.svg',
+    // photo source: Google Maps place photo used by the old site — replace with ESI's own
+    image: '/images/projects/map-ta-phut-tank-terminal-cctv.webp',
     description:
       'Design, supply, and installation of explosion-proof CCTV system for hazardous area monitoring.',
     scope: [
@@ -91,7 +96,8 @@ export const projects: Project[] = [
     categories: ['access-control'],
     industry: 'manufacturing',
     location: 'Bang Pakong, Chonburi, Thailand',
-    image: '/images/placeholders/project-henkel-thailand-access-control.svg',
+    // photo source: henkel.co.th (the client’s own plant photo) used by the old site — replace with ESI's own
+    image: '/images/projects/henkel-thailand-access-control.webp',
     description: 'Integrated access control system enhancing security and operational efficiency.',
     scope: ['Access control system'],
     featured: true,
@@ -155,7 +161,8 @@ export const projects: Project[] = [
     categories: ['network', 'communication'],
     industry: 'petrochemical',
     location: 'Map Ta Phut, Rayong, Thailand',
-    image: '/images/placeholders/project-mocd2-map-ta-phut-olefins-network-telephone.svg',
+    // photo source: kaohoon.com via the old site; TTCL watermark cropped out — replace with ESI's own
+    image: '/images/projects/mocd2-map-ta-phut-olefins-network-telephone.webp',
     description:
       'Network system and IP telephone system for the MOCD2 petrochemical and refinery project.',
     scope: ['Network system', 'IP telephone system'],
