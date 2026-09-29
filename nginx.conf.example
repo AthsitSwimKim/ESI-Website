@@ -1,0 +1,25 @@
+# Nginx — example server block for the built site (copy the contents of dist/ to /var/www/esi)
+server {
+    listen 80;
+    server_name esi-th.com www.esi-th.com;
+    root /var/www/esi;
+    index index.html;
+
+    # SPA fallback: unknown paths are React Router routes, not 404s
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Vite fingerprints these, so they can be cached forever
+    location /assets/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+}

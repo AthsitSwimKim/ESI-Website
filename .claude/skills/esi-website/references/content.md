@@ -30,7 +30,12 @@ fall back to English until ESI supplies Thai copy — see `architecture.md` § i
 | Social | Facebook `https://www.facebook.com/engineeringsystemintegration` · LinkedIn / YouTube not published → empty (icon hidden) |
 | Certifications | none published — keep `[]` (see design-spec § Footer) |
 | Site URL | `https://esi-th.com` (the existing domain; old site is WordPress) |
-| Office location | 12.68721, 101.2745016 — map link `https://goo.gl/maps/QZkF68qDPFv`; embed uses the coordinates |
+| Office location | 12.68721, 101.2745016 — map link `https://goo.gl/maps/QZkF68qDPFv`; the embed uses ESI's official Google "Embed a map" URL (carries their Business place ID, satellite view) |
+
+> ✅ **Address confirmed (D24, 2026-09-29):** ESI confirmed **69/13 Chanthaudom Road, Choengnoen
+> Subdistrict** is correct — the data files are right and must not be changed. Their Google
+> Business listing still shows an old address ("ถนนสุขุมวิท นครระยอง 45 ตำบลท่าประดู่"), which is
+> why the map's info card disagrees with the page text; ESI fixes that on Google's side.
 
 > ✅ Confirmed 2026-09-22 against the existing website esi-th.com (Home / Contact / Reference
 > pages). The mockup footer's different address/phone/email (55/9 Moo 3, Pluak Daeng ·
@@ -116,8 +121,14 @@ industry links are ✏️ draft.
   Troubleshooting · System Support · Training · Technical Support
 - Category: `maintenance` · Industries ✏️: all five
 
-Solutions overview page intro ✏️: *From network backbone to lifecycle support, ESI delivers
-the systems that keep industrial operations connected, secure and running.*
+Solutions page-hero lead ✏️ (`pages.ts`): *From network backbone to lifecycle support, ESI
+delivers the systems that keep industrial operations connected, secure and running.*
+Solutions overview intro paragraph ✏️ (`services.ts › solutionsIntro`, must NOT repeat the
+lead): *ESI covers six solution areas that most industrial sites need together: the network
+that carries everything, the surveillance and access systems that protect it, the communication
+people rely on, the security that keeps it isolated from threats, and the maintenance that keeps
+it running. We design, supply, install, commission and support each of them — so one partner is
+accountable from the first drawing to the next service visit.*
 
 ## 5. Industries (`src/data/industries.ts`)
 
@@ -157,6 +168,18 @@ Klongluang Utilities 120 MW SPP (WAN/LAN, CCTV, firewall, PABX; owner EGCO, EPC 
 
 Clients outside the five spec industries (resort, offices, government) are filed under
 `industrial-infrastructure` — the spec's industry list is fixed (D8).
+
+**Photos (2026-09-29).** Eight projects use ESI's own photos from the old site, re-encoded to
+WebP 3:2 in `public/images/projects/`: PTT GC5 Aromatics, Government House, Klongluang Utilities,
+Orisma office, Solar Center (+ a second shot in its gallery), Greenlake Resort, Linde ASU3, IRPC.
+The other fourteen keep the navy placeholder — the old site hotlinked someone else's image
+(Henkel, kaohoon, LinkedIn, Google, ggcplc …) which is not ESI's to reuse (D22), or only had a
+thumbnail under 450px. Ask ESI for those originals.
+
+**Verified 2026-09-29:** every reference post's full text was re-read through the WordPress REST
+API — the data file already carries everything they contain (title, owner/EPC/contractor, system
+list). Nothing further to extract. ⚠️ Those posts also contain injected malware scripts (D23);
+only plain text and ESI-hosted images were taken.
 
 Filter categories ✅: All · Network · CCTV · Access Control · Communication · Cybersecurity ·
 Maintenance → slugs `network` `cctv` `access-control` `communication` `cybersecurity` `maintenance`.

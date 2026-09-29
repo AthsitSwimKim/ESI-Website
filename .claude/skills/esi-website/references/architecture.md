@@ -18,7 +18,7 @@ if a task seems to need one, it is out of scope (spec §7); solve it with static
 | SEO | React 19 native `<title>` / `<meta>` / `<link>` hoisting via a `<Seo>` component | replaces the optional React Helmet Async — no extra dependency |
 | Carousel | none — CSS `scroll-snap` | replaces the optional Swiper |
 | Lint/format | **oxlint** (what create-vite 9 ships instead of ESLint; config `.oxlintrc.json`) + Prettier with `prettier-plugin-tailwindcss` | keep defaults; no custom rule wars |
-| Tests | Vitest (optional, Phase 6+) for **data integrity only** | unique slugs, categories valid, image paths exist |
+| Tests | **Vitest** — data integrity only (`src/data/data.test.ts`, `npm test`) | unique slugs/ids, kebab-case, valid categories/industries/icons, image files exist, featured 3–6, related excludes self |
 
 Installed on 2026-09-22 (Phase 1): React 19.3 · Vite 8.3 · TypeScript 6.0 · Tailwind 4.3 ·
 react-router-dom 7.18 · motion 13.4 · lucide-react 1.47 · oxlint 1.85 · Node 22 / npm 10.
@@ -32,7 +32,8 @@ npm i -D tailwindcss @tailwindcss/vite prettier prettier-plugin-tailwindcss
 ```
 
 `package.json` scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `typecheck`
-(`tsc -b --noEmit`), `lint` (`oxlint`), `format` / `format:check` (Prettier).
+(`tsc -b --noEmit`), `lint` (`oxlint`), `format` / `format:check` (Prettier), `test` / `test:watch`
+(Vitest), `screenshot` (visual QA).
 TypeScript 6 notes: `strict` is on; `erasableSyntaxOnly` forbids `enum`/namespaces (use
 `as const` unions — see `src/types`); `baseUrl` is deprecated, so the alias is
 `"paths": { "@/*": ["./src/*"] }` alone.
@@ -103,16 +104,17 @@ esi-website/
 │   │   │                     RootLayout, ScrollToTop                                   (Phase 2 ✅)
 │   │   ├── ui/               Button, Container, SectionTitle, PageHero, Breadcrumb, DiagonalLines, NetworkGraphic,
 │   │   │                     Reveal/RevealItem, LangSwitch, Seo, SocialIcon, Icon, Chip  (Phase 2 ✅)
-│   │   │                     FilterTabs, EmptyState                                     (Phase 6)
-│   │   ├── cards/            SolutionCard, IndustryCard, ProjectCard, FeatureItem, ProcessStep
+│   │   │                     FilterTabs, EmptyState                                     (Phase 6 ✅)
+│   │   ├── cards/            SolutionCard, IndustryCard, ProjectCard, FeatureItem
 │   │   └── sections/
 │   │       ├── home/         HeroSection, SolutionsSection, AboutSection, IndustriesSection,
 │   │       │                 FeaturedProjectsSection, WhyEsiSection, ProcessSection
-│   │       └── shared/       RelatedProjects, SolutionFeatures, ContactInfo, MapEmbed
+│   │       └── shared/       IndustryShowcase, SolutionFeatures, RelatedProjects   (Phases 4–6 ✅)
+│   │                             ContactInfo, MapEmbed                             (Phase 7)
 │   ├── pages/                HomePage, AboutPage, SolutionsPage, SolutionDetailPage, IndustriesPage,
 │   │                         ProjectsPage, ProjectDetailPage, ContactPage, NotFoundPage
 │   │                         (PageStub.tsx is Phase-1 scaffolding — delete when no page imports it)
-│   ├── data/                 company (incl. map coords/embedUrl), navigation, services, industries, projects, process,
+│   ├── data/                 company (incl. map coords/embedUrl), navigation, services, industries, projects (+ data.test.ts), process,
 │   │                         about (aboutFeatures, whyEsi, aboutPage), home (hero, homeSections, ctaBand),
 │   │                         pages (pageHeroes, notFound), seo, icons (iconMap)
 │   ├── types/                index.ts (all interfaces + PROJECT_CATEGORIES / INDUSTRY_SLUGS consts)
@@ -122,7 +124,9 @@ esi-website/
 │   ├── routes/               index.tsx (router)
 │   ├── styles/index.css
 │   ├── App.tsx  main.tsx
-├── index.html  package.json  tsconfig*.json  vite.config.ts  .oxlintrc.json  .prettierrc  README.md
+├── scripts/screenshot.mjs    (visual QA — see §12)
+├── index.html  package.json  tsconfig*.json (app/node/test)  vite.config.ts  vitest.config.ts
+├── .oxlintrc.json  .prettierrc  .gitattributes  README.md
 ```
 
 Content lives in `src/data/*.ts`; the `// DRAFT – ESI to approve` and `// to confirm` comments
@@ -259,8 +263,11 @@ export function Seo({ title, description, path, image = '/og-cover.jpg', type = 
 ```
 
 React 19 hoists these into `<head>` from anywhere in the tree. Every page renders `<Seo>` first.
-`public/robots.txt` + `public/sitemap.xml` (static list of routes + project/solution slugs —
-regenerate with a small `scripts/sitemap.mjs` when data changes). Semantic landmarks:
+`public/robots.txt` + `public/sitemap.xml` are **generated** by `scripts/sitemap.mjs` (reads the
+slugs straight out of `src/data/services.ts` and `projects.ts` and the `siteUrl` from
+`company.ts`); it runs as the first step of `npm run build`, so the sitemap can never drift from
+the data. `index.html` also carries static `og:*` fallbacks for crawlers that don't run JS —
+`<Seo>` overrides them per page. Social preview image: `public/og-cover.jpg` (1200×630). Semantic landmarks:
 `header > nav`, `main`, `section` (each with an `aria-labelledby` pointing to its h2),
 `article` for cards/detail bodies, `footer`.
 
@@ -305,7 +312,14 @@ Vite cache the *empty* file (it reads at truncation time and the watcher misses 
 — the browser then shows "does not provide an export named …" or a blank page. Write files with
 the Write tool / Python instead, and if it happens, `touch` the file or restart the dev server.
 
-## 11. Visual QA screenshots (Phase 3+)
+## 11. Tests
+
+`npm test` (Vitest, `vitest.config.ts`) runs `src/data/*.test.ts`. Test files are excluded from
+`tsconfig.app.json` and typechecked by their own `tsconfig.test.json` (node + vitest types), so
+`npm run typecheck` covers them without pulling node types into the app bundle. These tests are
+the safety net for hand-edited data — run them after touching anything in `src/data/`.
+
+## 12. Visual QA screenshots (Phase 3+)
 
 `npm run screenshot -- <path> <widths> [outDir]` (`scripts/screenshot.mjs`, Playwright package
 driving the **system Chrome/Edge** — no browser download) saves full-page PNGs of the running
@@ -318,7 +332,7 @@ Lighthouse: `npm run build && npx vite preview --port 4173`, then
 `CHROME_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npx lighthouse http://localhost:4173/ --output=json --form-factor=mobile --chrome-flags="--headless=new"`.
 Baseline after Phase 3: 86 / 100 / 100 / 92.
 
-## 12. Verification before calling anything done
+## 13. Verification before calling anything done
 
 ```bash
 npm run typecheck && npm run lint && npm run build

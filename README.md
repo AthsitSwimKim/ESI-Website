@@ -1,76 +1,104 @@
 # ESI Website
 
-Corporate website for **Engineering System Integration Co., Ltd. (ESI)**, Rayong — a
-frontend-only static site (no backend, database, CMS or login).
+Corporate website for **Engineering System Integration Co., Ltd. (ESI)**, Rayong — industrial
+communication and system integration. A **frontend-only static site**: no backend, database,
+CMS or login. All content lives in typed data files, so adding a project or service is a data
+edit, not a code change.
 
-**Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · motion · lucide-react
+**Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · Motion · lucide-react
 
-## Run
+---
+
+## Quick start
 
 ```bash
 npm install
 npm run dev          # http://localhost:5173
 ```
 
-## Check & build
+## Scripts
 
-```bash
-npm run typecheck    # tsc
-npm run lint         # oxlint
-npm run format       # prettier
-npm run build        # → dist/  (static, upload to any host — see SPA rewrite notes below)
-npm run preview      # serve dist/ locally
-```
+| Command                                            | What it does                                                                                                                                                                                                                         |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm run dev`                                      | Dev server with hot reload                                                                                                                                                                                                           |
+| `npm run build`                                    | Regenerates the sitemap, typechecks, then builds to `dist/`                                                                                                                                                                          |
+| `npm run preview`                                  | Serves the production build locally (port 4173)                                                                                                                                                                                      |
+| `npm run typecheck`                                | TypeScript, all projects (app + tests)                                                                                                                                                                                               |
+| `npm run lint`                                     | oxlint                                                                                                                                                                                                                               |
+| `npm run format`                                   | Prettier (incl. Tailwind class sorting)                                                                                                                                                                                              |
+| `npm test`                                         | Vitest — data integrity (slugs, categories, image files exist …)                                                                                                                                                                     |
+| `npm run audit`                                    | Full QA sweep of every route: accessibility (axe WCAG 2 A/AA), SEO tags, horizontal overflow at 375/768/1024/1440, broken images and links, console errors. Needs the dev server (or `BASE_URL=http://localhost:4173` for the build) |
+| `npm run screenshot -- /projects 1440,375 ./shots` | Full-page screenshots via the system Chrome — used for visual review                                                                                                                                                                 |
+| `npm run sitemap`                                  | Regenerates `public/sitemap.xml` + `robots.txt` (runs inside `build`)                                                                                                                                                                |
+
+Before pushing anything: `npm run typecheck && npm run lint && npm test && npm run build`.
+
+## Editing content — no code required
+
+| What                      | Where                                                                                                                                                                                                                                              |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Add a project**         | Append an object to `src/data/projects.ts` (give it the next `id`, a kebab-case `slug`) and drop its photo in `public/images/projects/`. It appears in the grid, the filters, its own detail page, related projects and the sitemap automatically. |
+| **Add / edit a solution** | `src/data/services.ts` — the header dropdown, mobile menu, footer, overview page and solution detail page all derive from this file.                                                                                                               |
+| **Company details**       | `src/data/company.ts` (address, phone, email, social, map embed). One edit updates the footer, Contact page and SEO.                                                                                                                               |
+| **Home / page copy**      | `src/data/home.ts`, `src/data/about.ts`, `src/data/pages.ts`, `src/data/industries.ts`                                                                                                                                                             |
+| **Thai UI strings**       | `src/i18n/th.ts` (missing keys fall back to English)                                                                                                                                                                                               |
+| **Colours / fonts**       | `src/styles/index.css` — the `@theme` block is the single source of design tokens                                                                                                                                                                  |
+
+Comments `// DRAFT – ESI to approve` and `// to confirm` mark copy and values that still need
+ESI's sign-off. `npm test` catches broken slugs, unknown categories and missing image files.
+
+### Image sizes
+
+hero 1920×1080 · page hero 1920×640 · project card 1200×800 (3:2) · industry 800×600 ·
+about 1200×900 · OG cover 1200×630. Export WebP, keep hero images under ~350 KB.
 
 ## Project layout
 
 ```
 src/
-├── components/   layout (Header, Footer, CtaBand, RootLayout) · ui · cards · sections
-├── pages/        one component per route
-├── data/         ALL site content (company, services, industries, projects, …)
-├── i18n/         TH / EN UI strings and the language switch
-├── routes/       React Router configuration
-├── styles/       index.css — Tailwind v4 @theme design tokens
-└── types/        TypeScript interfaces
-public/images/    photos (placeholders in public/images/placeholders/)
+├── components/
+│   ├── layout/    Header, SolutionsMenu, MobileMenu, Footer, CtaBand, RootLayout, ScrollToTop
+│   ├── ui/        Button, Container, SectionTitle, PageHero, Breadcrumb, FilterTabs, EmptyState,
+│   │              DiagonalLines, NetworkGraphic, Reveal, Seo, Icon, Chip, LangSwitch …
+│   ├── cards/     SolutionCard, IndustryCard, ProjectCard, FeatureItem
+│   └── sections/  home/* (7 home sections) · shared/* (IndustryShowcase, SolutionFeatures,
+│                  RelatedProjects, ContactInfo, MapEmbed)
+├── pages/         one component per route
+├── data/          ALL site content + data.test.ts
+├── i18n/          TH / EN strings and the language switch
+├── routes/        React Router configuration (lazy pages, 404 via loaders)
+├── styles/        index.css — Tailwind v4 @theme design tokens
+└── types/         TypeScript interfaces
+public/images/     photos (navy SVG placeholders in public/images/placeholders/)
+scripts/           sitemap.mjs · audit.mjs · screenshot.mjs
 ```
 
-## Editing content (no code changes needed)
+## Deploying
 
-- **Add a project:** append an object to `src/data/projects.ts` and put its image in
-  `public/images/projects/`. It appears in the grid, filters and detail page automatically.
-- **Add / edit a solution:** `src/data/services.ts` — the header menu, footer and overview
-  page derive from this file.
-- **Company details:** `src/data/company.ts`. **Thai UI strings:** `src/i18n/th.ts`.
+`npm run build` produces a static `dist/` — upload it anywhere. Because routes are client-side,
+the host must serve `index.html` for unknown paths. The config for each option is already in the
+repo:
 
-Comments `// DRAFT – ESI to approve` and `// to confirm` mark copy that still needs sign-off.
+| Host                       | File                 | Notes                                                                                      |
+| -------------------------- | -------------------- | ------------------------------------------------------------------------------------------ |
+| Netlify / Cloudflare Pages | `public/_redirects`  | Copied into `dist/` automatically. Build command `npm run build`, publish directory `dist` |
+| Vercel                     | `vercel.json`        | Rewrites + cache headers                                                                   |
+| Apache / shared hosting    | `public/.htaccess`   | Copied into `dist/`. Needs `mod_rewrite`; upload the contents of `dist/` to the web root   |
+| Nginx                      | `nginx.conf.example` | Copy the `server` block into your site config                                              |
 
-## Deploying (SPA)
+Hosting under a sub-path (e.g. `example.com/esi/`)? Set `base: '/esi/'` in `vite.config.ts` and
+pass the same value as `basename` to `createBrowserRouter` in `src/routes/index.tsx`.
 
-`npm run build` outputs `dist/`. Because routes are client-side, the host must serve
-`index.html` for unknown paths: Netlify/Cloudflare → `_redirects` (`/* /index.html 200`),
-Vercel → `vercel.json` rewrites, Apache → `.htaccess` rewrite, Nginx → `try_files $uri /index.html`.
-The matching file is added in Phase 8 once the host is chosen.
+**Before the first deploy:** confirm `siteUrl` in `src/data/company.ts` — canonical URLs, the
+sitemap and Open Graph tags are all built from it.
 
-## Branching & Git graph
+## Quality gates
 
-Work never lands on `main` directly — every phase/feature gets its own branch and comes back
-through a merge commit, so the history shows real branch lines:
-
-```bash
-git switch -c feat/phase-5-solutions     # branch from main (feat/…, fix/…, chore/…)
-# …commits…
-git switch main
-git merge feat/phase-5-solutions         # merge.ff=false → always a merge commit (visible line)
-git push
-```
-
-View the graph in the terminal (`git graph` / `git lg` aliases are set for this repo) or in
-VS Code with the recommended **Git Graph** extension (`.vscode/extensions.json`). Run
-`git fetch --all` first to see everyone's remote branches.
+Current state of the production build (Lighthouse mobile): **Performance 89–92 · Accessibility
+100 · Best Practices 100 · SEO 100**, above the project targets of 85/90/90/90.
+`npm run audit` reports zero accessibility violations across all 16 routes.
 
 ## For contributors using Claude Code
 
-Project skill: `.claude/skills/esi-website/` (design spec, content, architecture).
-Plan and status: `PLAN.md`.
+Project skill: `.claude/skills/esi-website/` (design spec, content, architecture, the approved
+mockup). Plan, phase checklists and decisions: `PLAN.md`.
