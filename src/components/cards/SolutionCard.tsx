@@ -26,7 +26,7 @@ export function SolutionCard({ service, variant = 'compact', className }: Soluti
       to={`/solutions/${service.slug}`}
       aria-label={name}
       className={cn(
-        'group flex h-full flex-col items-center rounded-[4px] border border-esi-border bg-white text-center shadow-card transition-[transform,box-shadow,border-color] duration-250 hover:-translate-y-1.5 hover:border-esi-accent hover:shadow-card-hover',
+        'group flex h-full flex-col items-center rounded-[4px] border border-esi-border bg-white text-center shadow-card transition-[translate,box-shadow,border-color] duration-250 hover:-translate-y-1.5 hover:border-esi-accent hover:shadow-card-hover',
         rich ? 'px-6 py-8' : 'min-h-[200px] px-4 py-7',
         className,
       )}

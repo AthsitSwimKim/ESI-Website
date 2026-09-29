@@ -41,7 +41,7 @@ export function IndustryCard({ industry, className }: { industry: Industry; clas
           aria-hidden
           size={20}
           strokeWidth={2}
-          className="absolute top-3 right-3 translate-x-2 opacity-0 transition-[transform,opacity] duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+          className="absolute top-3 right-3 translate-x-2 opacity-0 transition-[translate,opacity] duration-300 group-hover:translate-x-0 group-hover:opacity-100"
         />
       </div>
     </Link>

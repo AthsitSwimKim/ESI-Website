@@ -20,7 +20,7 @@ export function FeatureItem({ feature, variant = 'inline', className }: FeatureI
     return (
       <div
         className={cn(
-          'h-full rounded-[4px] border border-white/10 bg-white/5 p-6 transition-[transform,border-color] duration-250 hover:-translate-y-1 hover:border-esi-accent/60',
+          'h-full rounded-[4px] border border-white/10 bg-white/5 p-6 transition-[translate,border-color] duration-250 hover:-translate-y-1 hover:border-esi-accent/60',
           className,
         )}
       >

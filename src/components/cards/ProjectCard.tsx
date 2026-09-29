@@ -1,4 +1,4 @@
-import { ChevronRight } from 'lucide-react'
+import { ArrowUpRight, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { Chip } from '@/components/ui/Chip'
@@ -25,7 +25,7 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
   return (
     <article
       className={cn(
-        'group relative flex h-full overflow-hidden rounded-[4px] border border-esi-border bg-white shadow-card transition-[transform,box-shadow] duration-250 hover:-translate-y-1 hover:shadow-card-hover',
+        'group relative flex h-full overflow-hidden rounded-[4px] border border-esi-border bg-white shadow-card transition-[translate,box-shadow] duration-250 hover:-translate-y-1 hover:shadow-card-hover',
         horizontal ? 'flex-col sm:grid sm:grid-cols-[45%_1fr]' : 'flex-col',
         className,
       )}
@@ -42,8 +42,19 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
           loading="lazy"
           width={1200}
           height={800}
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
         />
+        {/* Same hover language as the industry cards: a blue wash and an arrow sliding in */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-esi-blue/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        />
+        <span
+          aria-hidden
+          className="absolute top-3 right-3 flex size-9 translate-y-1 items-center justify-center rounded-full bg-white/95 text-esi-blue opacity-0 shadow-card transition-[translate,opacity] duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          <ArrowUpRight size={18} strokeWidth={2.25} />
+        </span>
       </div>
 
       <div className={cn('flex flex-1 flex-col', horizontal ? 'p-5' : 'p-6')}>

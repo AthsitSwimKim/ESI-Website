@@ -82,8 +82,11 @@ React 19 · TypeScript strict · Vite · Tailwind **v4** (`@tailwindcss/vite`, `
 `lucide-react` (56px / strokeWidth 1.25 for card icons; social marks as inline SVG) ·
 React 19 native `<title>/<meta>` hoisting for SEO (no Helmet) · CSS scroll-snap (no Swiper).
 
-Pitfalls seen with this stack: forgetting the SPA rewrite on Apache/Nginx/Netlify (deep links
-404 after deploy); using `framer-motion` and `motion` together; Tailwind v3 syntax
+Pitfalls seen with this stack: **Tailwind v4 compiles `translate-*` / `scale-*` to the individual
+`translate` / `scale` CSS properties, so `transition-[transform,…]` never animates them — name
+`translate` in the list (or use plain `transition-transform`, which v4 expands correctly)**;
+`<AnimatePresence initial={false}>` silently disables the entrance animation of its children;
+forgetting the SPA rewrite on Apache/Nginx/Netlify (deep links 404 after deploy); using `framer-motion` and `motion` together; Tailwind v3 syntax
 (`tailwind.config.js`, `@tailwind base`) with v4; `esi-accent` used as body text on white
 (fails contrast); centred titles; hero text without overlay; hardcoding the solutions list in
 the nav instead of deriving it from `services.ts`; a Button's own `inline-flex` overriding a
