@@ -1,12 +1,13 @@
 import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { ProjectCard } from '@/components/cards/ProjectCard'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { FilterTabs, type FilterOption } from '@/components/ui/FilterTabs'
 import { Icon } from '@/components/ui/Icon'
 import { PageHero } from '@/components/ui/PageHero'
@@ -35,6 +36,12 @@ const isIndustry = (v: string | null): v is IndustrySlug =>
 export function ProjectsPage() {
   const { t, l } = useT()
   const [params, setParams] = useSearchParams()
+  // The entrance stagger should play once on arrival, not every time the filter changes.
+  const [staggerIn, setStaggerIn] = useState(true)
+  useEffect(() => {
+    const id = window.setTimeout(() => setStaggerIn(false), 1200)
+    return () => window.clearTimeout(id)
+  }, [])
   const hero = pageHeroes.projects
 
   const category: CategoryValue = isCategory(params.get('category'))
@@ -93,12 +100,14 @@ export function ProjectsPage() {
           <h2 id="projects-results-title" className="sr-only">
             {t('nav.projects')}
           </h2>
-          <FilterTabs
-            options={options}
-            value={category}
-            onChange={(value) => update({ category: value })}
-            label={t('projects.filterLabel')}
-          />
+          <Reveal immediate delay={0.3}>
+            <FilterTabs
+              options={options}
+              value={category}
+              onChange={(value) => update({ category: value })}
+              label={t('projects.filterLabel')}
+            />
+          </Reveal>
 
           {industry && (
             <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-esi-muted">
@@ -116,22 +125,33 @@ export function ProjectsPage() {
             </div>
           )}
 
-          <p aria-live="polite" className="mt-6 text-sm text-esi-muted">
+          <Reveal
+            as="p"
+            immediate
+            delay={0.4}
+            aria-live="polite"
+            className="mt-6 text-sm text-esi-muted"
+          >
             {results.length} / {projects.length} {t('projects.shown')}
-          </p>
+          </Reveal>
 
           <div className="mt-4">
             {results.length > 0 ? (
               <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout" initial={false}>
-                  {results.map((project) => (
+                  {results.map((project, i) => (
                     <motion.li
                       key={project.slug}
                       layout
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2, ease: EASE_ESI }}
+                      transition={{
+                        duration: 0.35,
+                        ease: EASE_ESI,
+                        // stagger only the first paint; re-filtering should feel instant
+                        delay: staggerIn ? Math.min(i, 8) * 0.05 + 0.45 : 0,
+                      }}
                     >
                       <ProjectCard project={project} variant="vertical" />
                     </motion.li>
@@ -159,11 +179,11 @@ export function ProjectsPage() {
               <p className="text-[13px] font-semibold tracking-[.08em] text-esi-muted uppercase">
                 {t('nav.industries')}
               </p>
-              <ul className="mt-3 flex flex-wrap gap-2">
+              <Reveal as="ul" staggerChildren={0.05} className="mt-3 flex flex-wrap gap-2">
                 {industries
                   .filter((i) => i.slug !== industry)
                   .map((i) => (
-                    <li key={i.slug}>
+                    <RevealItem key={i.slug} as="li">
                       <button
                         type="button"
                         onClick={() => update({ industry: i.slug })}
@@ -177,9 +197,9 @@ export function ProjectsPage() {
                         />
                         {l(i.name)}
                       </button>
-                    </li>
+                    </RevealItem>
                   ))}
-              </ul>
+              </Reveal>
             </nav>
           )}
         </Container>

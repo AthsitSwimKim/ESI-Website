@@ -1,5 +1,6 @@
 import { IndustryShowcase } from '@/components/sections/shared/IndustryShowcase'
 import { Container } from '@/components/ui/Container'
+import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { Icon } from '@/components/ui/Icon'
 import { PageHero } from '@/components/ui/PageHero'
 import { Seo } from '@/components/ui/Seo'
@@ -26,9 +27,9 @@ export function IndustriesPage() {
       {/* Jump links — the five industries are one long page, so give readers a way in */}
       <nav aria-label={t('nav.industries')} className="border-b border-esi-border bg-white">
         <Container>
-          <ul className="-mx-5 scrollbar-none flex gap-2 overflow-x-auto px-5 py-4 lg:-mx-8 lg:px-8">
+          <Reveal as="ul" immediate staggerChildren={0.05} delay={0.35} className="-mx-5 scrollbar-none flex gap-2 overflow-x-auto px-5 py-4 lg:-mx-8 lg:px-8">
             {industries.map((i) => (
-              <li key={i.slug} className="shrink-0">
+              <RevealItem key={i.slug} as="li" className="shrink-0">
                 <a
                   href={`#${i.slug}`}
                   className="inline-flex h-10 items-center gap-2 rounded-[4px] border border-esi-border bg-white px-4 text-sm font-semibold text-esi-navy transition-colors hover:border-esi-accent hover:text-esi-blue"
@@ -36,9 +37,9 @@ export function IndustriesPage() {
                   <Icon name={i.icon} size={18} strokeWidth={1.75} className="text-esi-blue" />
                   {l(i.name)}
                 </a>
-              </li>
+              </RevealItem>
             ))}
-          </ul>
+          </Reveal>
         </Container>
       </nav>
 

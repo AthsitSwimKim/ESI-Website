@@ -397,10 +397,13 @@ export const stagger = (delay = .08) => ({ hidden: {}, show: { transition: { sta
 ```
 
 - A `<Reveal>` wrapper applies `fadeUp` + viewport-once so sections don't hand-roll it.
-- **The first block under a page hero passes `immediate`** so it renders already revealed.
-  Fading in content that sits in the first viewport makes the page read as empty for a few
-  hundred milliseconds after a route change (client feedback 2026-09-29). Everything below
-  the fold still reveals on scroll.
+- **Every content block gets motion** (client asked for it 2026-09-29): sections, cards, chips,
+  filter rows, meta strips, prev/next links and the CTA band are all wrapped in `<Reveal>` /
+  `<RevealItem>`. Only the header and footer stay static — they are chrome, not content.
+- **The first block under a page hero passes `immediate`**: it still plays the same fade-up, but
+  on mount rather than on scroll, because waiting for a scroll that may never come left it
+  looking empty. Give it a `delay` (0.3–0.45s) so it follows the hero rather than racing it.
+  Everything below the fold reveals on scroll as before.
 - Hover transitions 200–250ms ease-out; hero zoom 20s; navbar 250ms; timeline line 900ms.
 - Animate only `transform` and `opacity` (no layout-shifting properties). No spring/bounce, no
   parallax, no scroll-jacking, no marquee. The brand feeling is "precise", not "playful".

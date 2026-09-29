@@ -7,7 +7,7 @@ import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { Icon } from '@/components/ui/Icon'
 import { PageHero } from '@/components/ui/PageHero'
-import { Reveal } from '@/components/ui/Reveal'
+import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Seo } from '@/components/ui/Seo'
 import { getIndustry } from '@/data/industries'
@@ -131,45 +131,51 @@ export function SolutionDetailPage() {
 
       {/* Previous / next solution */}
       <nav aria-label={t('nav.solutions')} className="border-t border-esi-border bg-white py-8">
-        <Container className="grid gap-4 sm:grid-cols-2">
-          <Link
-            to={`/solutions/${prev.slug}`}
-            className="group flex items-center gap-3 rounded-[4px] border border-esi-border p-4 transition-colors hover:border-esi-accent"
-          >
-            <ChevronLeft
-              aria-hidden
-              size={20}
-              strokeWidth={2}
-              className="shrink-0 text-esi-blue transition-transform duration-200 group-hover:-translate-x-1"
-            />
-            <span className="min-w-0">
-              <span className="block text-[12px] font-semibold tracking-[.08em] text-esi-muted uppercase">
-                {t('solutions.previous')}
-              </span>
-              <span className="block truncate text-[15px] font-semibold text-esi-navy group-hover:text-esi-blue">
-                {l(prev.name)}
-              </span>
-            </span>
-          </Link>
-          <Link
-            to={`/solutions/${next.slug}`}
-            className="group flex items-center justify-end gap-3 rounded-[4px] border border-esi-border p-4 text-right transition-colors hover:border-esi-accent"
-          >
-            <span className="min-w-0">
-              <span className="block text-[12px] font-semibold tracking-[.08em] text-esi-muted uppercase">
-                {t('solutions.next')}
-              </span>
-              <span className="block truncate text-[15px] font-semibold text-esi-navy group-hover:text-esi-blue">
-                {l(next.name)}
-              </span>
-            </span>
-            <ChevronRight
-              aria-hidden
-              size={20}
-              strokeWidth={2}
-              className="shrink-0 text-esi-blue transition-transform duration-200 group-hover:translate-x-1"
-            />
-          </Link>
+        <Container>
+          <Reveal as="ul" staggerChildren={0.08} className="grid gap-4 sm:grid-cols-2">
+            <RevealItem as="li">
+              <Link
+                to={`/solutions/${prev.slug}`}
+                className="group flex items-center gap-3 rounded-[4px] border border-esi-border p-4 transition-colors hover:border-esi-accent"
+              >
+                <ChevronLeft
+                  aria-hidden
+                  size={20}
+                  strokeWidth={2}
+                  className="shrink-0 text-esi-blue transition-transform duration-200 group-hover:-translate-x-1"
+                />
+                <span className="min-w-0">
+                  <span className="block text-[12px] font-semibold tracking-[.08em] text-esi-muted uppercase">
+                    {t('solutions.previous')}
+                  </span>
+                  <span className="block truncate text-[15px] font-semibold text-esi-navy group-hover:text-esi-blue">
+                    {l(prev.name)}
+                  </span>
+                </span>
+              </Link>
+            </RevealItem>
+            <RevealItem as="li">
+              <Link
+                to={`/solutions/${next.slug}`}
+                className="group flex h-full items-center justify-end gap-3 rounded-[4px] border border-esi-border p-4 text-right transition-colors hover:border-esi-accent"
+              >
+                <span className="min-w-0">
+                  <span className="block text-[12px] font-semibold tracking-[.08em] text-esi-muted uppercase">
+                    {t('solutions.next')}
+                  </span>
+                  <span className="block truncate text-[15px] font-semibold text-esi-navy group-hover:text-esi-blue">
+                    {l(next.name)}
+                  </span>
+                </span>
+                <ChevronRight
+                  aria-hidden
+                  size={20}
+                  strokeWidth={2}
+                  className="shrink-0 text-esi-blue transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </Link>
+            </RevealItem>
+          </Reveal>
         </Container>
       </nav>
     </>

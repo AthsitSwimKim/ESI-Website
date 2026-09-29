@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { NetworkGraphic } from '@/components/ui/NetworkGraphic'
+import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { ctaBand } from '@/data/home'
 import { useT } from '@/i18n'
 
@@ -28,20 +29,24 @@ export function CtaBand() {
         className="absolute right-6 -bottom-2 hidden md:block"
       />
       <Container className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-10">
-        <div>
-          <p className="text-sm font-medium tracking-[.04em] text-white/85 uppercase italic md:text-base">
-            {ctaBand.line1}
-          </p>
-          <h2
-            id="cta-title"
-            className="mt-1 display-title text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight"
-          >
-            {ctaBand.line2}
-          </h2>
-        </div>
-        <Button variant="light" to={ctaBand.button.to} className="w-full shrink-0 md:w-auto">
-          {t('cta.contact')}
-        </Button>
+        <Reveal staggerChildren={0.1}>
+          <RevealItem>
+            <p className="text-sm font-medium tracking-[.04em] text-white/85 uppercase italic md:text-base">
+              {ctaBand.line1}
+            </p>
+            <h2
+              id="cta-title"
+              className="mt-1 display-title text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight"
+            >
+              {ctaBand.line2}
+            </h2>
+          </RevealItem>
+        </Reveal>
+        <Reveal delay={0.2} className="w-full shrink-0 md:w-auto">
+          <Button variant="light" to={ctaBand.button.to} className="w-full md:w-auto">
+            {t('cta.contact')}
+          </Button>
+        </Reveal>
       </Container>
     </section>
   )

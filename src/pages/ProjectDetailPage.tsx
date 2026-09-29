@@ -61,24 +61,31 @@ export function ProjectDetailPage() {
       {/* Meta strip */}
       <section aria-label={t('projects.overview')} className="bg-esi-light">
         <Container>
-          <dl className="grid gap-x-8 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
+          {/* <div> wrappers are valid inside <dl>, so each dt/dd pair can animate on its own */}
+          <Reveal
+            as="dl"
+            immediate
+            staggerChildren={0.06}
+            delay={0.3}
+            className="grid gap-x-8 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-4"
+          >
             {meta.map((item) => (
-              <div key={item.label}>
+              <RevealItem key={item.label}>
                 <dt className="text-[13px] font-semibold tracking-[.08em] text-esi-muted uppercase">
                   {item.label}
                 </dt>
                 <dd className="mt-1.5 text-base font-semibold text-esi-navy">{item.value}</dd>
-              </div>
+              </RevealItem>
             ))}
             {project.year && (
-              <div>
+              <RevealItem>
                 <dt className="text-[13px] font-semibold tracking-[.08em] text-esi-muted uppercase">
                   {t('projects.year')}
                 </dt>
                 <dd className="mt-1.5 text-base font-semibold text-esi-navy">{project.year}</dd>
-              </div>
+              </RevealItem>
             )}
-          </dl>
+          </Reveal>
         </Container>
       </section>
 

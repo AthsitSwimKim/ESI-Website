@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 import { EASE_ESI, fadeIn, fadeUp, stagger, viewportOnce } from '@/lib/motion'
 
-type Tag = 'div' | 'section' | 'article' | 'ul' | 'ol' | 'li' | 'span'
+type Tag = 'div' | 'section' | 'article' | 'ul' | 'ol' | 'li' | 'span' | 'dl' | 'p'
 
 const tags = {
   div: motion.div,
@@ -12,6 +12,8 @@ const tags = {
   ul: motion.ul,
   ol: motion.ol,
   li: motion.li,
+  dl: motion.dl,
+  p: motion.p,
   span: motion.span,
 } as const
 
@@ -24,8 +26,9 @@ interface RevealProps {
   staggerChildren?: number
   delay?: number
   /**
-   * Render already revealed. Use it for the first block under a page hero: it sits in the first
-   * viewport, and fading it in makes the page look empty for the first few hundred milliseconds.
+   * Animate on mount instead of waiting to be scrolled into view. Use it for the first block
+   * under a page hero: it is already on screen, so waiting for a scroll that may never come
+   * left it looking empty. It still gets the same fade-up — it just starts straight away.
    */
   immediate?: boolean
   id?: string
@@ -66,9 +69,10 @@ export function Reveal({
   return (
     <MotionTag
       className={className}
-      initial={immediate ? 'show' : 'hidden'}
-      whileInView="show"
-      viewport={viewportOnce}
+      initial="hidden"
+      {...(immediate
+        ? { animate: 'show' }
+        : { whileInView: 'show' as const, viewport: viewportOnce })}
       variants={resolved}
       {...rest}
     >
