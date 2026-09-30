@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { ProjectCard } from '@/components/cards/ProjectCard'
@@ -11,6 +11,7 @@ import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { FilterTabs, type FilterOption } from '@/components/ui/FilterTabs'
 import { Icon } from '@/components/ui/Icon'
 import { PageHero } from '@/components/ui/PageHero'
+import { Pagination } from '@/components/ui/Pagination'
 import { Seo } from '@/components/ui/Seo'
 import { getIndustry, industries } from '@/data/industries'
 import { pageHeroes } from '@/data/pages'
@@ -18,9 +19,13 @@ import { projectFilters, projects } from '@/data/projects'
 import { pageTitle } from '@/data/seo'
 import { useT } from '@/i18n'
 import { EASE_ESI } from '@/lib/motion'
+import { clampPage } from '@/lib/pagination'
 import { INDUSTRY_SLUGS, type IndustrySlug, type ProjectCategory } from '@/types'
 
 type CategoryValue = ProjectCategory | 'all'
+
+/** 3 full rows of the 3-column grid, so a page never ends on a ragged half-row. */
+const PER_PAGE = 9
 
 const CATEGORY_VALUES = projectFilters.map((f) => f.value)
 const isCategory = (v: string | null): v is CategoryValue =>
@@ -50,6 +55,8 @@ export function ProjectsPage() {
   const industry = isIndustry(params.get('industry'))
     ? (params.get('industry') as IndustrySlug)
     : null
+  // Where to scroll back to after a page change — the filters, not the top of the document.
+  const resultsTop = useRef<HTMLDivElement>(null)
 
   const byIndustry = useMemo(
     () => (industry ? projects.filter((p) => p.industry === industry) : projects),
@@ -60,6 +67,15 @@ export function ProjectsPage() {
       category === 'all' ? byIndustry : byIndustry.filter((p) => p.categories.includes(category)),
     [byIndustry, category],
   )
+
+  const totalPages = Math.ceil(results.length / PER_PAGE)
+  // A stale or hand-typed ?page= (filter first, then page 3 of a 1-page result) falls back to 1.
+  const page = clampPage(params.get('page'), totalPages)
+  const visible = results.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+  const first = (page - 1) * PER_PAGE + 1
+  // One page of results needs no range, just the count: "Showing 5 projects".
+  const rangeLabel =
+    totalPages > 1 ? `${first}–${first + visible.length - 1}` : String(results.length)
 
   /** Counts reflect the industry filter so a tab never promises results it cannot show. */
   const options: FilterOption<CategoryValue>[] = projectFilters.map((f) => ({
@@ -80,12 +96,31 @@ export function ProjectsPage() {
     else search.set('category', nextCategory)
     if (!nextIndustry) search.delete('industry')
     else search.set('industry', nextIndustry)
+    // A new filter means a new result set — page 3 of the old one is meaningless.
+    search.delete('page')
     setParams(search, { replace: true, preventScrollReset: true })
+  }
+
+  /**
+   * Paging pushes a history entry (back / forward walk through the pages) and scrolls the
+   * filters back into view, so the new first row is on screen instead of the old last row.
+   */
+  const goToPage = (next: number) => {
+    const search = new URLSearchParams(params)
+    if (next === 1) search.delete('page')
+    else search.set('page', String(next))
+    setParams(search, { preventScrollReset: true })
+    resultsTop.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
     <>
-      <Seo title={pageTitle('Projects')} description={l(hero.lead!)} path="/projects" />
+      {/* Each page of the series canonicalises to itself, so pages 2+ stay indexable. */}
+      <Seo
+        title={pageTitle('Projects')}
+        description={l(hero.lead!)}
+        path={page > 1 ? `/projects?page=${page}` : '/projects'}
+      />
       <PageHero
         title={l(hero.title)}
         lead={l(hero.lead!)}
@@ -100,7 +135,8 @@ export function ProjectsPage() {
           <h2 id="projects-results-title" className="sr-only">
             {t('nav.projects')}
           </h2>
-          <Reveal immediate delay={0.2}>
+          <div ref={resultsTop} className="scroll-mt-28" />
+          <Reveal immediate delay={0.12}>
             <FilterTabs
               options={options}
               value={category}
@@ -125,34 +161,30 @@ export function ProjectsPage() {
             </div>
           )}
 
-          <Reveal
-            as="p"
-            immediate
-            delay={0.28}
-            aria-live="polite"
-            className="mt-6 text-sm text-esi-muted"
-          >
-            {results.length} / {projects.length} {t('projects.shown')}
-          </Reveal>
-
-          <div className="mt-4">
+          <div className="mt-6">
             {results.length > 0 ? (
               <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <AnimatePresence mode="popLayout">
-                  {results.map((project, i) => (
+                  {visible.map((project, i) => (
                     <motion.li
                       key={project.slug}
                       layout
                       initial={{ opacity: 0, y: 20 }}
-                      // Reveal as the row scrolls in, so the whole 22-card grid keeps some life
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.15, margin: '-40px' }}
+                      // The first row sits in the opening viewport, so it animates on mount —
+                      // waiting for a scroll left the grid looking empty. The rest reveal as
+                      // they scroll in, which keeps the long 22-card grid alive.
+                      {...(i < 3
+                        ? { animate: { opacity: 1, y: 0 } }
+                        : {
+                            whileInView: { opacity: 1, y: 0 },
+                            viewport: { once: true, amount: 0.15, margin: '-40px' },
+                          })}
                       exit={{ opacity: 0, transition: { duration: 0.15 } }}
                       transition={{
-                        duration: 0.4,
+                        duration: 0.35,
                         ease: EASE_ESI,
                         // wave across each row on arrival; re-filtering stays snappy
-                        delay: (staggerIn ? 0.3 : 0) + (i % 3) * 0.07,
+                        delay: (staggerIn ? 0.22 : 0) + (i % 3) * 0.06,
                       }}
                     >
                       <ProjectCard project={project} variant="vertical" />
@@ -174,6 +206,23 @@ export function ProjectsPage() {
               />
             )}
           </div>
+
+          {results.length > 0 && (
+            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-esi-border pt-6">
+              <p aria-live="polite" className="text-sm text-esi-muted">
+                {t('projects.showing')}{' '}
+                <span className="font-semibold text-esi-navy">{rangeLabel}</span>{' '}
+                {totalPages > 1 && (
+                  <>
+                    {t('projects.rangeOf')}{' '}
+                    <span className="font-semibold text-esi-navy">{results.length}</span>{' '}
+                  </>
+                )}
+                {t('projects.items')}
+              </p>
+              <Pagination page={page} totalPages={totalPages} onChange={goToPage} />
+            </div>
+          )}
 
           {/* Quick jump to the other industries — keeps deep-linked views navigable */}
           {industry && (

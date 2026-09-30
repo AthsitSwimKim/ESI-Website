@@ -58,7 +58,9 @@ export const th: DeepPartial<Dictionary> = {
     filterLabel: 'กรองผลงานตามหมวด',
     empty: 'ยังไม่มีผลงานในหมวดนี้',
     showAll: 'แสดงผลงานทั้งหมด',
-    shown: 'ผลงานที่แสดง',
+    showing: 'แสดง',
+    rangeOf: 'จาก',
+    items: 'ผลงาน',
     clearIndustry: 'ล้างตัวกรองอุตสาหกรรม',
     client: 'ลูกค้า',
     industry: 'อุตสาหกรรม',
@@ -70,6 +72,12 @@ export const th: DeepPartial<Dictionary> = {
     solution: 'โซลูชัน',
     gallery: 'ภาพโครงการ',
     related: 'ผลงานที่เกี่ยวข้อง',
+  },
+  pagination: {
+    label: 'การแบ่งหน้า',
+    previous: 'หน้าก่อนหน้า',
+    next: 'หน้าถัดไป',
+    goTo: 'ไปหน้าที่',
   },
   solutions: {
     overview: 'ภาพรวม',

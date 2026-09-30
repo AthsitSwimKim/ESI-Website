@@ -367,6 +367,14 @@ Every inner page = `<Seo>` + `<PageHero>` + sections + (CTA band + footer from t
   mobile. Grid: **vertical** project card variant — image 16:10 on top, body: chips, title,
   1-line client/location in muted, `View Project ›`; 3 / 2 / 1 columns; results animate with
   `AnimatePresence` (fade, 200ms). Empty state: centred message + "Show all projects" button.
+  **Pagination** (`ui/Pagination.tsx`, D26): 9 cards per page = 3 full rows. Under the grid, a
+  rule then a row with the range ("Showing 1–9 of 22 projects") on the left and the control on
+  the right; it stacks centred on mobile. Buttons are the filter pills' size and colours but
+  **circular** (`size-10 rounded-full`) — the one round element on the page, deliberately.
+  Current page `bg-esi-blue text-white` + `aria-current="page"`; prev/next are icon-only with
+  `aria-label`, really `disabled` at the ends; more than 7 pages collapses the middle to `…`.
+  Page lives in the URL (`?page=2`, pushed so back/forward walks the pages), a filter change
+  clears it, and each page canonicalises to itself. Hidden entirely when there is one page.
 - **Project detail** (`/projects/:slug`): PageHero using the project image (title, breadcrumb
   Home › Projects › Title) → meta strip (`bg-esi-light`, 4 cells: Client · Industry · Location ·
   Services, 13px uppercase labels + 16px/600 values) → Project Overview (description) → Scope of

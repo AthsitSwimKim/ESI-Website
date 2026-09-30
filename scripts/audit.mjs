@@ -34,6 +34,7 @@ const routes = [
   '/industries',
   '/projects',
   '/projects?category=cctv',
+  '/projects?page=3',
   '/projects/map-ta-phut-tank-terminal-cctv',
   '/projects/klongluang-utilities-spp-systems',
   '/contact',

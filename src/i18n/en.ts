@@ -54,7 +54,9 @@ export const en = {
     filterLabel: 'Filter projects by category',
     empty: 'No projects in this category yet.',
     showAll: 'Show all projects',
-    shown: 'projects shown',
+    showing: 'Showing',
+    rangeOf: 'of',
+    items: 'projects',
     clearIndustry: 'Remove industry filter',
     client: 'Client',
     industry: 'Industry',
@@ -66,6 +68,12 @@ export const en = {
     solution: 'Solution',
     gallery: 'Project Gallery',
     related: 'Related Projects',
+  },
+  pagination: {
+    label: 'Pagination',
+    previous: 'Previous page',
+    next: 'Next page',
+    goTo: 'Go to page',
   },
   solutions: {
     overview: 'Overview',
