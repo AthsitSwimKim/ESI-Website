@@ -84,9 +84,12 @@ export function ContactInfo() {
           variant="outline"
           href={`tel:${company.phoneHref}`}
           leadingIcon={<Phone size={18} strokeWidth={2} />}
+          // The icon carries the meaning visually; the label keeps it for screen readers,
+          // which would otherwise announce a bare string of digits.
+          aria-label={`${t('cta.call')} ${company.phone}`}
           className="w-full sm:w-auto"
         >
-          {t('cta.call')} {company.phone}
+          {company.phone}
         </Button>
       </div>
 
