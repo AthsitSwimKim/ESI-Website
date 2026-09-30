@@ -9,9 +9,8 @@ import { PageHero } from '@/components/ui/PageHero'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Seo } from '@/components/ui/Seo'
-import { aboutFeatures, aboutPage } from '@/data/about'
+import { aboutFeatures, aboutIntroImage, aboutPage } from '@/data/about'
 import { company } from '@/data/company'
-import { aboutImage } from '@/data/home'
 import { pageHeroes } from '@/data/pages'
 import { pageTitle } from '@/data/seo'
 import { services } from '@/data/services'
@@ -59,7 +58,7 @@ export function AboutPage() {
           </Reveal>
           <Reveal variants={scaleIn} immediate>
             <img
-              src={aboutImage}
+              src={aboutIntroImage}
               alt=""
               loading="lazy"
               width={1200}

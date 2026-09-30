@@ -1,5 +1,12 @@
 import type { Feature, Localized } from '@/types'
 
+/**
+ * Image beside "Company Introduction" on /about. Until ESI supplies a real control-room photo
+ * this is a brand panel (navy gradient + network graphic + the ESI mark) rather than a generic
+ * placeholder, so the section looks finished.
+ */
+export const aboutIntroImage = '/images/about/esi-brand-panel.webp'
+
 /** Home "About ESI" feature grid (spec §22) — copy from the mockup. */
 export const aboutFeatures: Feature[] = [
   {
