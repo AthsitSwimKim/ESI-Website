@@ -12,6 +12,8 @@ interface CommonProps {
   size?: ButtonSize
   /** Trailing icon. Defaults to the brand chevron; pass `null` to hide it. */
   icon?: ReactNode | null
+  /** Icon before the label, for actions whose medium is worth naming (mail, phone, download). */
+  leadingIcon?: ReactNode
   className?: string
   children: ReactNode
 }
@@ -49,7 +51,15 @@ const sizeClasses: Record<ButtonSize, string> = {
  * hover — the spec's "arrow movement". Renders a real <Link>, <a> or <button> depending on props.
  */
 export function Button(props: ButtonProps) {
-  const { variant = 'primary', size = 'md', icon, className, children, ...rest } = props
+  const {
+    variant = 'primary',
+    size = 'md',
+    icon,
+    leadingIcon,
+    className,
+    children,
+    ...rest
+  } = props
   const isLink = variant === 'link'
 
   const classes = cn(
@@ -72,6 +82,12 @@ export function Button(props: ButtonProps) {
 
   const content = (
     <>
+      {/* Static: only the trailing chevron does the spec's arrow movement on hover. */}
+      {leadingIcon && (
+        <span aria-hidden className="inline-flex shrink-0">
+          {leadingIcon}
+        </span>
+      )}
       <span>{children}</span>
       {trailing}
     </>

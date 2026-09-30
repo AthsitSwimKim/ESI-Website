@@ -75,11 +75,17 @@ export function ContactInfo() {
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Button
           href={`mailto:${company.email}?subject=${mailSubject}`}
+          leadingIcon={<Mail size={18} strokeWidth={2} />}
           className="w-full sm:w-auto"
         >
           {t('cta.emailUs')}
         </Button>
-        <Button variant="outline" href={`tel:${company.phoneHref}`} className="w-full sm:w-auto">
+        <Button
+          variant="outline"
+          href={`tel:${company.phoneHref}`}
+          leadingIcon={<Phone size={18} strokeWidth={2} />}
+          className="w-full sm:w-auto"
+        >
           {t('cta.call')} {company.phone}
         </Button>
       </div>
