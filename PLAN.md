@@ -1,8 +1,8 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
-> **สถานะปัจจุบัน:** Phase 8 เกือบเสร็จ 🟡 — QA/a11y/SEO/performance/deploy config/README ครบแล้ว · **เหลือรอจาก ESI: รูปจริง (D6), เลือก hosting, อนุมัติ copy ✏️, copy ภาษาไทย** จากนั้น deploy จริงแล้วปิดโครงการ
-> **อัปเดตล่าสุด:** 2026-09-22
-> **Skill:** `.claude/skills/esi-website/` (โหลดอัตโนมัติเมื่อทำงานในโปรเจกต์นี้)
+> **สถานะปัจจุบัน:** ครบทั้ง 8 Phase แล้ว 🟡 — QA/a11y/SEO/performance/deploy config/README ผ่านหมด · หลังจากนั้นเก็บงานเพิ่ม: ลูกเล่น motion ทุกหน้า, รูปโครงการจริง 17/22, pagination หน้า Projects (D26), icon ปุ่มหน้า Contact · **เหลือรอจาก ESI: รูปจริงที่ยังขาด (D6), เลือก hosting + โดเมน, อนุมัติ copy ✏️, copy ภาษาไทย** จากนั้น deploy จริงแล้วปิดโครงการ
+> **อัปเดตล่าสุด:** 2026-09-30
+> **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
 
 ---

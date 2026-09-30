@@ -98,7 +98,11 @@ Current state of the production build (Lighthouse mobile): **Performance 89–92
 100 · Best Practices 100 · SEO 100**, above the project targets of 85/90/90/90.
 `npm run audit` reports zero accessibility violations across all 16 routes.
 
-## For contributors using Claude Code
+## For AI coding agents
 
-Project skill: `.claude/skills/esi-website/` (design spec, content, architecture, the approved
-mockup). Plan, phase checklists and decisions: `PLAN.md`.
+Start with [`AGENTS.md`](AGENTS.md) — the single set of project instructions (constraints,
+sources of truth, conventions, verification, git workflow). `CLAUDE.md` points to the same file.
+
+Reference material lives in `.claude/skills/esi-website/`: the design spec, content,
+architecture notes and the approved mockup crops. Plan, phase checklists and the decision
+log (D1–D26) are in [`PLAN.md`](PLAN.md).
