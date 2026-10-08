@@ -19,7 +19,7 @@ export function NotFoundPage() {
         <NetworkGraphic seed={17} opacity={0.3} className="absolute inset-0 -z-10 h-full w-full" />
         <Container className="relative text-center">
           <p className="text-[13px] font-semibold tracking-[.1em] text-esi-accent uppercase">
-            {notFound.eyebrow}
+            {l(notFound.eyebrow)}
           </p>
           <h1
             id="nf-title"

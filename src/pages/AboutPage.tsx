@@ -2,6 +2,7 @@ import { FeatureItem } from '@/components/cards/FeatureItem'
 import { SolutionCard } from '@/components/cards/SolutionCard'
 import { IndustriesSection } from '@/components/sections/home/IndustriesSection'
 import { WhyEsiSection } from '@/components/sections/home/WhyEsiSection'
+import { TrustEvidence } from '@/components/sections/shared/TrustEvidence'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { Icon } from '@/components/ui/Icon'
@@ -10,7 +11,6 @@ import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { Seo } from '@/components/ui/Seo'
 import { aboutFeatures, aboutIntroImage, aboutPage } from '@/data/about'
-import { company } from '@/data/company'
 import { pageHeroes } from '@/data/pages'
 import { pageTitle } from '@/data/seo'
 import { services } from '@/data/services'
@@ -28,7 +28,7 @@ export function AboutPage() {
 
   return (
     <>
-      <Seo title={pageTitle('About ESI')} description={l(hero.lead!)} path="/about" />
+      <Seo title={pageTitle(l(hero.title))} description={l(hero.lead!)} path="/about" />
       <PageHero
         title={l(hero.title)}
         lead={l(hero.lead!)}
@@ -51,9 +51,6 @@ export function AboutPage() {
               <p className="max-w-[60ch] text-base leading-[1.7] text-esi-text">
                 {l(aboutPage.introduction)}
               </p>
-              <p className="mt-5 max-w-[60ch] text-base leading-[1.7] text-esi-text">
-                {l(company.description)}
-              </p>
             </RevealItem>
           </Reveal>
           <Reveal variants={scaleIn} immediate>
@@ -68,6 +65,8 @@ export function AboutPage() {
           </Reveal>
         </Container>
       </section>
+
+      <TrustEvidence />
 
       {/* Company Overview + the four pillars */}
       <section

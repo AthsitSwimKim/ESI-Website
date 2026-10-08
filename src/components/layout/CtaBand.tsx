@@ -11,7 +11,7 @@ import { useT } from '@/i18n'
  * network graphic, italic display copy and a white "Contact ESI" button.
  */
 export function CtaBand() {
-  const { t } = useT()
+  const { t, l } = useT()
   return (
     <section
       aria-labelledby="cta-title"
@@ -32,13 +32,13 @@ export function CtaBand() {
         <Reveal staggerChildren={0.1}>
           <RevealItem>
             <p className="text-sm font-medium tracking-[.04em] text-white/85 uppercase italic md:text-base">
-              {ctaBand.line1}
+              {l(ctaBand.line1)}
             </p>
             <h2
               id="cta-title"
               className="mt-1 display-title text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight"
             >
-              {ctaBand.line2}
+              {l(ctaBand.line2)}
             </h2>
           </RevealItem>
         </Reveal>

@@ -64,10 +64,15 @@ export const en = {
     services: 'Services',
     year: 'Year',
     overview: 'Project Overview',
-    scope: 'Scope of Work',
+    scope: 'Work Delivered',
     solution: 'Solution',
     gallery: 'Project Gallery',
     related: 'Related Projects',
+    partners: 'Project parties',
+    referenceRecord: 'Reference published by ESI',
+    illustrativeImage: 'Illustrative image',
+    illustrativeNote:
+      'This AI-generated illustration represents the type of work delivered; it is not a photograph of the client site.',
   },
   pagination: {
     label: 'Pagination',
@@ -82,7 +87,7 @@ export const en = {
     relatedProjects: 'Related Projects',
     previous: 'Previous solution',
     next: 'Next solution',
-    typicalScope: 'Typical scope',
+    typicalScope: 'Related Systems & Services',
   },
   about: {
     introduction: 'Company Introduction',

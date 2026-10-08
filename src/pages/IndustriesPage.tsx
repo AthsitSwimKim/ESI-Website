@@ -16,7 +16,7 @@ export function IndustriesPage() {
 
   return (
     <>
-      <Seo title={pageTitle('Industries')} description={l(hero.lead!)} path="/industries" />
+      <Seo title={pageTitle(l(hero.title))} description={l(hero.lead!)} path="/industries" />
       <PageHero
         title={l(hero.title)}
         lead={l(hero.lead!)}
@@ -27,7 +27,13 @@ export function IndustriesPage() {
       {/* Jump links — the five industries are one long page, so give readers a way in */}
       <nav aria-label={t('nav.industries')} className="border-b border-esi-border bg-white">
         <Container>
-          <Reveal as="ul" immediate staggerChildren={0.05} delay={0.35} className="-mx-5 scrollbar-none flex gap-2 overflow-x-auto px-5 py-4 lg:-mx-8 lg:px-8">
+          <Reveal
+            as="ul"
+            immediate
+            staggerChildren={0.05}
+            delay={0.35}
+            className="-mx-5 scrollbar-none flex gap-2 overflow-x-auto px-5 py-4 lg:-mx-8 lg:px-8"
+          >
             {industries.map((i) => (
               <RevealItem key={i.slug} as="li" className="shrink-0">
                 <a

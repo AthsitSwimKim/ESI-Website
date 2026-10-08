@@ -154,6 +154,35 @@ for (const href of hrefs) {
   if (!r.ok()) note(href, 'link', `HTTP ${r.status()}`)
 }
 
+// --- language switching keeps revealed content visible --------------------
+const i18nRoute = '/projects/map-ta-phut-tank-terminal-cctv'
+await page.goto(baseUrl + i18nRoute, { waitUntil: 'networkidle' })
+const scopeList = page.locator('#project-scope-list')
+await scopeList.scrollIntoViewIfNeeded()
+await page.waitForTimeout(700)
+for (const lang of ['th', 'en']) {
+  await page.locator(`button[lang="${lang}"]`).first().click()
+  await page.waitForTimeout(150)
+  const state = await scopeList.locator(':scope > li').evaluateAll((items) => ({
+    count: items.length,
+    hidden: items.filter((item) => {
+      const style = getComputedStyle(item)
+      return (
+        style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) < 0.9
+      )
+    }).length,
+    lang: document.documentElement.lang,
+  }))
+  if (state.lang !== lang)
+    note(i18nRoute, 'i18n', `language switch expected ${lang}, got ${state.lang}`)
+  if (state.count === 0 || state.hidden > 0)
+    note(
+      i18nRoute,
+      'i18n',
+      `${lang}: ${state.hidden}/${state.count} project scope item(s) hidden after switching`,
+    )
+}
+
 await browser.close()
 
 console.log('\nSEO summary')

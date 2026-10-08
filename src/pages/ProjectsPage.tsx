@@ -117,7 +117,7 @@ export function ProjectsPage() {
     <>
       {/* Each page of the series canonicalises to itself, so pages 2+ stay indexable. */}
       <Seo
-        title={pageTitle('Projects')}
+        title={pageTitle(l(hero.title))}
         description={l(hero.lead!)}
         path={page > 1 ? `/projects?page=${page}` : '/projects'}
       />

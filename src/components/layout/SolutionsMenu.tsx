@@ -150,13 +150,19 @@ export function SolutionsMenu({ label, to }: { label: string; to: string }) {
             <ul
               ref={listRef}
               onKeyDown={onListKeyDown}
-              className="grid grid-cols-2 gap-1 rounded-[4px] border border-esi-border bg-white p-3 shadow-card-hover"
+              className="grid grid-cols-2 rounded-[4px] border border-esi-border bg-white p-2 shadow-card-hover"
             >
-              {services.map((s) => (
-                <li key={s.slug}>
+              {services.map((s, index) => (
+                <li
+                  key={s.slug}
+                  className={cn(
+                    index % 2 === 1 && 'border-l border-esi-border',
+                    index >= 2 && 'border-t border-esi-border',
+                  )}
+                >
                   <Link
                     to={`/solutions/${s.slug}`}
-                    className="flex items-center gap-3 rounded-[4px] px-3 py-2.5 text-sm font-medium text-esi-navy transition-colors hover:bg-esi-light focus-visible:bg-esi-light"
+                    className="flex h-full items-center gap-3 rounded-[2px] px-4 py-3 text-sm font-medium text-esi-navy transition-colors hover:bg-esi-light focus-visible:bg-esi-light"
                   >
                     <Icon
                       name={s.icon}
