@@ -17,8 +17,8 @@ export const th: DeepPartial<Dictionary> = {
   },
   cta: {
     contact: 'ติดต่อ ESI',
-    exploreSolutions: 'ดูโซลูชัน',
-    viewProjects: 'ดูผลงาน',
+    exploreSolutions: 'บริการของเรา',
+    viewProjects: 'ผลงานของเรา',
     viewProject: 'ดูรายละเอียด',
     viewAllProjects: 'ดูผลงานทั้งหมด',
     learnMore: 'ดูเพิ่มเติม',
@@ -30,7 +30,7 @@ export const th: DeepPartial<Dictionary> = {
   },
   footer: {
     contactUs: 'ติดต่อเรา',
-    quickLinks: 'ลิงก์ด่วน',
+    quickLinks: 'เมนูหลัก',
     solutions: 'โซลูชัน',
     certifications: 'การรับรอง',
     rights: 'สงวนลิขสิทธิ์',
@@ -68,7 +68,7 @@ export const th: DeepPartial<Dictionary> = {
     services: 'บริการ',
     year: 'ปี',
     overview: 'ภาพรวมโครงการ',
-    scope: 'ขอบเขตงาน',
+    scope: 'งานที่ดำเนินการ',
     solution: 'โซลูชัน',
     gallery: 'ภาพโครงการ',
     related: 'ผลงานที่เกี่ยวข้อง',
@@ -76,7 +76,7 @@ export const th: DeepPartial<Dictionary> = {
     referenceRecord: 'ผลงานอ้างอิงที่เผยแพร่โดย ESI',
     illustrativeImage: 'ภาพประกอบ',
     illustrativeNote:
-      'ภาพนี้สร้างด้วย AI เพื่อสื่อถึงขอบเขตงาน ไม่ใช่ภาพถ่ายจากสถานที่จริงของลูกค้า',
+      'ภาพนี้สร้างด้วย AI เพื่อสื่อถึงลักษณะงานที่ดำเนินการ ไม่ใช่ภาพถ่ายจากสถานที่จริงของลูกค้า',
   },
   pagination: {
     label: 'การแบ่งหน้า',
@@ -91,7 +91,7 @@ export const th: DeepPartial<Dictionary> = {
     relatedProjects: 'ผลงานที่เกี่ยวข้อง',
     previous: 'โซลูชันก่อนหน้า',
     next: 'โซลูชันถัดไป',
-    typicalScope: 'ขอบเขตงานทั่วไป',
+    typicalScope: 'ระบบและบริการที่เกี่ยวข้อง',
   },
   about: {
     introduction: 'แนะนำบริษัท',

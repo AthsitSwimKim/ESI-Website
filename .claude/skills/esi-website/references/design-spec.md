@@ -143,8 +143,9 @@ components/utilities and reuse them:
   `Contact ESI` button beside it is the contact affordance (client decision D19; the mockup
   shows both). Use `headerNav` from `navigation.ts`; the footer's Quick Links keep Contact.
 - **Solutions dropdown** (desktop): opens on hover *and* focus/click; white panel, 1px border,
-  4px radius, shadow, 12px padding, 2 columns × 3 items; each item = 20px icon + name, hover
-  `bg-esi-light`. Keyboard: Escape closes, arrow keys move.
+  4px radius, shadow, 8px padding, 2 columns × 3 items; use subtle 1px `esi-border` dividers
+  between columns and rows so the six choices scan as distinct cells; each item = 20px icon +
+  name, hover `bg-esi-light`. Keyboard: Escape closes, arrow keys move.
 - Right: `Contact ESI` primary button (sm) with chevron, then the language switch
   `TH | EN` — 13px semibold, inactive `esi-muted`, active `esi-navy`, 1px `esi-border`
   separator; `role="group"`, `aria-pressed` on the active button.

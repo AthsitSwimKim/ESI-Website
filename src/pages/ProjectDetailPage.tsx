@@ -32,14 +32,17 @@ export function ProjectDetailPage() {
   const copy = projectText(project, lang)
 
   const meta = [
-    { label: t('projects.client'), value: project.client },
-    { label: t('projects.industry'), value: l(industry.name) },
-    { label: t('projects.location'), value: copy.location },
+    { key: 'client', label: t('projects.client'), value: project.client },
+    { key: 'industry', label: t('projects.industry'), value: l(industry.name) },
+    { key: 'location', label: t('projects.location'), value: copy.location },
     {
+      key: 'services',
       label: t('projects.services'),
       value: project.categories.map((c) => t(`categories.${c}`)).join(' · '),
     },
-    ...(project.year ? [{ label: t('projects.year'), value: String(project.year) }] : []),
+    ...(project.year
+      ? [{ key: 'year', label: t('projects.year'), value: String(project.year) }]
+      : []),
   ]
 
   return (
@@ -54,6 +57,8 @@ export function ProjectDetailPage() {
       <PageHero
         title={copy.title}
         image={project.image}
+        imageAlt={copy.title}
+        imageMode="split"
         breadcrumb={[
           { label: t('nav.home'), to: '/' },
           { label: t('nav.projects'), to: '/projects' },
@@ -86,7 +91,7 @@ export function ProjectDetailPage() {
             className="grid gap-x-8 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-5"
           >
             {meta.map((item) => (
-              <RevealItem key={item.label}>
+              <RevealItem key={item.key}>
                 <dt className="text-[13px] font-semibold tracking-[.08em] text-esi-muted uppercase">
                   {item.label}
                 </dt>
@@ -138,14 +143,23 @@ export function ProjectDetailPage() {
           {copy.scope && copy.scope.length > 0 && (
             <Reveal staggerChildren={0.06}>
               <RevealItem>
-                <h2 className="display-title text-[clamp(1.125rem,1.6vw,1.375rem)] text-esi-blue">
+                <h2
+                  id="project-scope-title"
+                  className="display-title text-[clamp(1.125rem,1.6vw,1.375rem)] text-esi-blue"
+                >
                   {t('projects.scope')}
                 </h2>
                 <span aria-hidden className="mt-2.5 mb-6 block h-[3px] w-10 bg-esi-blue" />
               </RevealItem>
-              <ul className="space-y-3">
-                {copy.scope.map((item) => (
-                  <RevealItem key={item} as="li">
+              <ul
+                id="project-scope-list"
+                aria-labelledby="project-scope-title"
+                className="space-y-3"
+              >
+                {copy.scope.map((item, index) => (
+                  // Keep the key independent of translated copy. Otherwise a language switch
+                  // remounts the item after the viewport-once parent has already animated.
+                  <RevealItem key={`${project.slug}-scope-${index}`} as="li">
                     <div className="flex items-start gap-3 rounded-[4px] bg-esi-light px-4 py-3.5">
                       <CircleCheck
                         aria-hidden

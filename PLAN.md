@@ -161,7 +161,7 @@
 
 - [x] `ProjectsPage`: PageHero → `FilterTabs` (All + 6 categories พร้อมจำนวน, state ใน URL `?category=`) → grid การ์ดแนวตั้ง 3/2/1 → `AnimatePresence` ตอนกรอง → `EmptyState` · รองรับ `?industry=<slug>` (chip ถอดได้ + ปุ่มสลับอุตสาหกรรมอื่น) · param ที่ไม่รู้จักถูกมองข้าม
 - [x] `ProjectCard` variants `horizontal` (Home/related) / `vertical` (grid — chips, ชื่อ, client·location, คำอธิบาย)
-- [x] `ProjectDetailPage`: PageHero (รูปโครงการ) → meta strip (Client/Industry/Location/Services/Year) → Overview (+ partners) → Scope → Solution cards → Gallery (ถ้ามี) → Related Projects → CTA; slug ไม่ถูกต้อง → 404
+- [x] `ProjectDetailPage`: PageHero แบบ split (ชื่อ/สถานะทางซ้าย + รูปโครงการสีจริงขนาดใหญ่ทางขวา; Mobile แสดงรูปก่อน) → meta strip (Client/Industry/Location/Services/Year) → Overview (+ partners) → Scope → Solution cards → Gallery (ถ้ามี) → Related Projects → CTA; slug ไม่ถูกต้อง → 404
 - [x] Data helpers: `getProjectBySlug`, `getFeaturedProjects`, `getProjectsByCategory`, `getProjectsByIndustry`, `getRelatedProjects`
 - [x] Vitest data-integrity test (`src/data/data.test.ts`, `npm test`): slug/id ไม่ซ้ำ + เป็น kebab-case, category/industry ถูกต้อง, ไอคอนมีจริง, ไฟล์รูปมีจริงใน `public/`, featured 3–6, related ไม่รวมตัวเอง, filter ครบทุก category — 10 tests
 
