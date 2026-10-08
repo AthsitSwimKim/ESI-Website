@@ -17,7 +17,7 @@ export function SolutionsPage() {
 
   return (
     <>
-      <Seo title={pageTitle('Solutions')} description={l(hero.lead!)} path="/solutions" />
+      <Seo title={pageTitle(l(hero.title))} description={l(hero.lead!)} path="/solutions" />
       <PageHero
         title={l(hero.title)}
         lead={l(hero.lead!)}

@@ -18,11 +18,12 @@ export const company: Company = {
   shortName: 'ESI',
   tagline: {
     en: 'Reliable Industrial Communication & System Integration Solutions.',
+    th: 'โซลูชันระบบสื่อสารและการบูรณาการระบบอุตสาหกรรมที่เชื่อถือได้',
   },
   description: {
-    en: 'Engineering System Integration Co., Ltd. (ESI) delivers reliable industrial communication and system integration solutions for mission-critical environments. With proven engineering expertise and deep industry experience, we design, build, and support systems that keep your operations connected, secure, and performing at their best.',
+    en: 'Engineering System Integration Co., Ltd. (ESI) specialises in industrial communication and system integration. We consult, engineer, supply, commission and support reliable systems for oil & gas and industrial operations.',
     // ESI's own words from the previous website (About us), typos corrected.
-    th: 'ปัจจุบันการสื่อสารด้านต่าง ๆ มีความจำเป็นอย่างมากสำหรับทุกองค์กร เราซึ่งมีประสบการณ์และความเชี่ยวชาญในระบบสื่อสารทุกด้าน จึงต้องการเป็นส่วนหนึ่งร่วมกับลูกค้า เพื่อนำเสนอโซลูชันและแนวทางที่สอดคล้องกับความต้องการของธุรกิจ ให้ได้ประโยชน์สูงสุดอย่างมืออาชีพ',
+    th: 'บริษัท เอ็นจิเนียริ่ง ซิสเต็ม อินทีเกรชั่น จำกัด (ESI) เชี่ยวชาญด้านระบบสื่อสารและการบูรณาการระบบสำหรับภาคอุตสาหกรรม เราให้บริการตั้งแต่ให้คำปรึกษา ออกแบบ จัดหา ติดตั้ง ทดสอบระบบ ไปจนถึงบำรุงรักษา เพื่อให้ระบบของลูกค้าเชื่อมต่อได้อย่างมั่นคง ปลอดภัย และพร้อมใช้งาน',
   },
   address:
     '69/13 Chanthaudom Road, Choengnoen Subdistrict, Muang Rayong District, Rayong 21000, Thailand',

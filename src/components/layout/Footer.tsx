@@ -34,7 +34,7 @@ function FooterColumn({ children, className }: { children: ReactNode; className?
  * Certifications render only when real ones exist (D2). No calendar / search / "powered by".
  */
 export function Footer() {
-  const { t, l, label } = useT()
+  const { t, l, label, lang } = useT()
   const socials = (Object.keys(socialLabels) as SocialNetwork[]).filter((n) => company.social[n])
   const year = new Date().getFullYear()
 
@@ -60,7 +60,9 @@ export function Footer() {
               height={312}
               loading="lazy"
             />
-            <p className="mt-4 text-[15px] font-bold">{company.name}</p>
+            <p className="mt-4 text-[15px] font-bold">
+              {lang === 'th' ? company.nameTh : company.name}
+            </p>
             <p className="mt-2 max-w-[30ch] text-[14px] leading-relaxed text-white/75">
               {l(company.tagline)}
             </p>
@@ -102,11 +104,13 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin aria-hidden size={18} className="mt-0.5 shrink-0 text-white/70" />
                 <address className="leading-relaxed not-italic">
-                  {company.addressLines.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
+                  {lang === 'th'
+                    ? company.addressTh
+                    : company.addressLines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
                 </address>
               </li>
             </ul>
@@ -156,7 +160,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col-reverse items-center gap-2 border-t border-white/12 pt-5 text-[13px] text-white/60 md:flex-row md:justify-between">
           <p>
-            {company.nameTh} · Tax ID {company.taxId}
+            {company.nameTh} · {t('contact.taxId')} {company.taxId}
           </p>
           <p>
             © {year} {company.name} {t('footer.rights')}

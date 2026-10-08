@@ -34,20 +34,27 @@ export interface Project {
   id: number
   slug: string
   title: string
+  titleTh?: string
   client: string
   categories: ProjectCategory[]
   industry: IndustrySlug
   location: string
+  locationTh?: string
   /** Public path, e.g. '/images/projects/<slug>.webp' */
   image: string
   description: string
+  descriptionTh?: string
   scope?: string[]
+  scopeTh?: string[]
   gallery?: string[]
   /** Shown in the Home "Featured Projects" section (3–6 projects). */
   featured?: boolean
   year?: number
   /** Other parties on the project, e.g. 'EPC: TTCL Public Company Limited'. */
   partners?: string[]
+  partnersTh?: string[]
+  /** Generated replacements are labelled in the UI so they cannot be mistaken for site photos. */
+  imageKind?: 'photo' | 'illustration'
   /** Where this reference was published before (old esi-th.com site) — for content tracing. */
   source?: string
 }
@@ -60,7 +67,7 @@ export interface Service {
   tagline: Localized
   description: Localized
   icon: IconName
-  features: string[]
+  features: Localized[]
   image: string
   /** Links this solution to project cards with the same category. */
   category: ProjectCategory
@@ -72,7 +79,7 @@ export interface Industry {
   name: Localized
   description: Localized
   /** "Typical scope" chips (spec §25). */
-  scope: string[]
+  scope: Localized[]
   icon: IconName
   image: string
 }

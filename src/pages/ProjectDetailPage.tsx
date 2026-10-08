@@ -1,4 +1,4 @@
-import { CircleCheck } from 'lucide-react'
+import { BadgeCheck, CircleCheck, Info } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
 import { SolutionCard } from '@/components/cards/SolutionCard'
@@ -14,6 +14,7 @@ import { getProjectBySlug, getRelatedProjects } from '@/data/projects'
 import { pageTitle } from '@/data/seo'
 import { getServiceByCategory } from '@/data/services'
 import { useT } from '@/i18n'
+import { projectText } from '@/lib/projectText'
 
 /**
  * /projects/:slug (spec §30, design-spec §5): hero → meta strip → overview → scope →
@@ -21,42 +22,57 @@ import { useT } from '@/i18n'
  */
 export function ProjectDetailPage() {
   const { slug } = useParams()
-  const { t, l } = useT()
+  const { t, l, lang } = useT()
   const project = getProjectBySlug(slug)
   if (!project) return null
 
   const industry = getIndustry(project.industry)
   const services = project.categories.map(getServiceByCategory).filter((s) => s !== undefined)
   const related = getRelatedProjects(project, 3)
+  const copy = projectText(project, lang)
 
   const meta = [
     { label: t('projects.client'), value: project.client },
     { label: t('projects.industry'), value: l(industry.name) },
-    { label: t('projects.location'), value: project.location },
+    { label: t('projects.location'), value: copy.location },
     {
       label: t('projects.services'),
       value: project.categories.map((c) => t(`categories.${c}`)).join(' · '),
     },
+    ...(project.year ? [{ label: t('projects.year'), value: String(project.year) }] : []),
   ]
 
   return (
     <>
       <Seo
-        title={pageTitle(project.title)}
-        description={project.description.slice(0, 160)}
+        title={pageTitle(copy.title)}
+        description={copy.description.slice(0, 160)}
         path={`/projects/${project.slug}`}
         image={project.image}
         type="article"
       />
       <PageHero
-        title={project.title}
+        title={copy.title}
         image={project.image}
         breadcrumb={[
           { label: t('nav.home'), to: '/' },
           { label: t('nav.projects'), to: '/projects' },
-          { label: project.title },
+          { label: copy.title },
         ]}
-      />
+      >
+        <div className="mt-5 flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] border border-white/25 bg-esi-navy/45 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">
+            <BadgeCheck aria-hidden size={16} />
+            {t('projects.referenceRecord')}
+          </span>
+          {project.imageKind === 'illustration' && (
+            <span className="inline-flex items-center gap-1.5 rounded-[3px] border border-white/25 bg-esi-navy/45 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">
+              <Info aria-hidden size={16} />
+              {t('projects.illustrativeImage')}
+            </span>
+          )}
+        </div>
+      </PageHero>
 
       {/* Meta strip */}
       <section aria-label={t('projects.overview')} className="bg-esi-light">
@@ -67,7 +83,7 @@ export function ProjectDetailPage() {
             immediate
             staggerChildren={0.06}
             delay={0.3}
-            className="grid gap-x-8 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid gap-x-8 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-5"
           >
             {meta.map((item) => (
               <RevealItem key={item.label}>
@@ -77,17 +93,21 @@ export function ProjectDetailPage() {
                 <dd className="mt-1.5 text-base font-semibold text-esi-navy">{item.value}</dd>
               </RevealItem>
             ))}
-            {project.year && (
-              <RevealItem>
-                <dt className="text-[13px] font-semibold tracking-[.08em] text-esi-muted uppercase">
-                  {t('projects.year')}
-                </dt>
-                <dd className="mt-1.5 text-base font-semibold text-esi-navy">{project.year}</dd>
-              </RevealItem>
-            )}
           </Reveal>
         </Container>
       </section>
+
+      {project.imageKind === 'illustration' && (
+        <aside
+          className="border-b border-esi-border bg-white"
+          aria-label={t('projects.illustrativeImage')}
+        >
+          <Container className="flex items-start gap-3 py-4 text-sm text-esi-muted">
+            <Info aria-hidden size={18} className="mt-0.5 shrink-0 text-esi-blue" />
+            <p>{t('projects.illustrativeNote')}</p>
+          </Container>
+        </aside>
+      )}
 
       {/* Overview + scope */}
       <section
@@ -99,18 +119,23 @@ export function ProjectDetailPage() {
           <Reveal immediate>
             <SectionTitle id="project-overview-title" title={t('projects.overview')} />
             <p className="max-w-[60ch] text-base leading-[1.7] text-esi-text md:text-lg">
-              {project.description}
+              {copy.description}
             </p>
-            {project.partners && project.partners.length > 0 && (
-              <ul className="mt-6 space-y-1 text-sm text-esi-muted">
-                {project.partners.map((partner) => (
-                  <li key={partner}>{partner}</li>
-                ))}
-              </ul>
+            {copy.partners && copy.partners.length > 0 && (
+              <div className="mt-7 border-l-2 border-esi-accent pl-4">
+                <p className="text-[12px] font-semibold tracking-[.08em] text-esi-muted uppercase">
+                  {t('projects.partners')}
+                </p>
+                <ul className="mt-2 space-y-1 text-sm text-esi-text">
+                  {copy.partners.map((partner) => (
+                    <li key={partner}>{partner}</li>
+                  ))}
+                </ul>
+              </div>
             )}
           </Reveal>
 
-          {project.scope && project.scope.length > 0 && (
+          {copy.scope && copy.scope.length > 0 && (
             <Reveal staggerChildren={0.06}>
               <RevealItem>
                 <h2 className="display-title text-[clamp(1.125rem,1.6vw,1.375rem)] text-esi-blue">
@@ -119,7 +144,7 @@ export function ProjectDetailPage() {
                 <span aria-hidden className="mt-2.5 mb-6 block h-[3px] w-10 bg-esi-blue" />
               </RevealItem>
               <ul className="space-y-3">
-                {project.scope.map((item) => (
+                {copy.scope.map((item) => (
                   <RevealItem key={item} as="li">
                     <div className="flex items-start gap-3 rounded-[4px] bg-esi-light px-4 py-3.5">
                       <CircleCheck
@@ -172,7 +197,7 @@ export function ProjectDetailPage() {
                 <RevealItem key={src} as="li">
                   <img
                     src={src}
-                    alt={`${project.title} — ${i + 1}`}
+                    alt={`${copy.title} — ${i + 1}`}
                     loading="lazy"
                     width={1600}
                     height={1200}

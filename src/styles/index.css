@@ -110,6 +110,15 @@
   }
 }
 
+/* Show that horizontally scrollable filter rows continue beyond a phone viewport. */
+@utility scroll-fade-inline {
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 44px), transparent 100%);
+
+  @media (min-width: 64rem) {
+    mask-image: none;
+  }
+}
+
 /* Slow node pulse for <NetworkGraphic> (disabled by the component under reduced motion) */
 @keyframes esi-node-pulse {
   0%,

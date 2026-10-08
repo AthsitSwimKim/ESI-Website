@@ -68,6 +68,11 @@ export const en = {
     solution: 'Solution',
     gallery: 'Project Gallery',
     related: 'Related Projects',
+    partners: 'Project parties',
+    referenceRecord: 'Reference published by ESI',
+    illustrativeImage: 'Illustrative image',
+    illustrativeNote:
+      'This image is an AI-generated illustration of the project scope, not a photograph of the client site.',
   },
   pagination: {
     label: 'Pagination',

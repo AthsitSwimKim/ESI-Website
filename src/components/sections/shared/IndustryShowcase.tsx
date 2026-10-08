@@ -79,8 +79,8 @@ export function IndustryShowcase({
           </p>
           <ul className="mt-2.5 flex flex-wrap gap-2">
             {industry.scope.map((item) => (
-              <li key={item}>
-                <Chip>{item}</Chip>
+              <li key={item.en}>
+                <Chip>{l(item)}</Chip>
               </li>
             ))}
           </ul>

@@ -5,6 +5,7 @@ import { Chip } from '@/components/ui/Chip'
 import { getIndustry } from '@/data/industries'
 import { useT } from '@/i18n'
 import { cn } from '@/lib/utils'
+import { projectText } from '@/lib/projectText'
 import type { Project } from '@/types'
 
 interface ProjectCardProps {
@@ -18,32 +19,38 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, variant = 'horizontal', className }: ProjectCardProps) {
-  const { t, l } = useT()
+  const { t, l, lang } = useT()
   const horizontal = variant === 'horizontal'
   const industry = getIndustry(project.industry)
+  const copy = projectText(project, lang)
 
   return (
     <article
       className={cn(
         'group relative flex h-full overflow-hidden rounded-[4px] border border-esi-border bg-white shadow-card transition-[translate,box-shadow] duration-250 hover:-translate-y-1 hover:shadow-card-hover',
-        horizontal ? 'flex-col sm:grid sm:grid-cols-[45%_1fr]' : 'flex-col',
+        horizontal ? 'grid grid-cols-[38%_1fr] sm:grid-cols-[45%_1fr]' : 'flex-col',
         className,
       )}
     >
       <div
         className={cn(
           'relative overflow-hidden',
-          horizontal ? 'aspect-[16/10] sm:aspect-auto sm:min-h-[220px]' : 'aspect-[16/10]',
+          horizontal ? 'min-h-[190px] sm:min-h-[220px]' : 'aspect-[16/10]',
         )}
       >
         <img
           src={project.image}
-          alt={project.title}
+          alt={copy.title}
           loading="lazy"
           width={1200}
           height={800}
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
         />
+        {project.imageKind === 'illustration' && (
+          <span className="absolute bottom-2 left-2 rounded-[3px] bg-esi-navy/85 px-2 py-1 text-[10px] font-semibold tracking-wide text-white uppercase backdrop-blur-sm">
+            {t('projects.illustrativeImage')}
+          </span>
+        )}
         {/* Same hover language as the industry cards: a blue wash and an arrow sliding in */}
         <div
           aria-hidden
@@ -57,7 +64,7 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
         </span>
       </div>
 
-      <div className={cn('flex flex-1 flex-col', horizontal ? 'p-5' : 'p-6')}>
+      <div className={cn('flex min-w-0 flex-1 flex-col', horizontal ? 'p-4 sm:p-5' : 'p-6')}>
         {/* The mockup's home card has no chips — they only help scanning in the filterable grid */}
         {!horizontal && (
           <div className="mb-3 flex flex-wrap gap-1.5">
@@ -70,7 +77,9 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
         <h3
           className={cn(
             'leading-snug font-bold text-esi-blue',
-            horizontal ? 'line-clamp-4 text-[15px]' : 'line-clamp-3 text-[17px]',
+            horizontal
+              ? 'line-clamp-3 text-[14px] sm:line-clamp-4 sm:text-[15px]'
+              : 'line-clamp-3 text-[17px]',
           )}
         >
           {/* Stretched link: the whole card is clickable, the title is the accessible link */}
@@ -78,12 +87,12 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
             to={`/projects/${project.slug}`}
             className="after:absolute after:inset-0 after:content-['']"
           >
-            {project.title}
+            {copy.title}
           </Link>
         </h3>
         {!horizontal && (
           <p className="mt-1 line-clamp-2 text-[13px] text-esi-muted">
-            {project.client} · {project.location}
+            {project.client} · {copy.location}
           </p>
         )}
         <p
@@ -92,7 +101,7 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
             horizontal ? 'text-[13px]' : 'text-sm',
           )}
         >
-          {project.description}
+          {copy.description}
         </p>
         <span className="mt-auto inline-flex items-center gap-1 pt-4 text-[13px] font-semibold text-esi-blue">
           {t('cta.viewProject')}

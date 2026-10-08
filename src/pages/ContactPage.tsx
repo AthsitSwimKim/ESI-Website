@@ -19,7 +19,7 @@ export function ContactPage() {
 
   return (
     <>
-      <Seo title={pageTitle('Contact')} description={l(hero.lead!)} path="/contact" />
+      <Seo title={pageTitle(l(hero.title))} description={l(hero.lead!)} path="/contact" />
       <PageHero
         title={l(hero.title)}
         lead={l(hero.lead!)}

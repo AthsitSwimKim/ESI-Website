@@ -7,7 +7,11 @@ import { iconMap } from './icons'
 import { industries } from './industries'
 import { getRelatedProjects, projectFilters, projects } from './projects'
 import { services } from './services'
+import { aboutFeatures, aboutPage, whyEsi } from './about'
+import { pageHeroes } from './pages'
+import { processSteps } from './process'
 import { INDUSTRY_SLUGS, PROJECT_CATEGORIES } from '@/types'
+import type { Localized } from '@/types'
 
 /**
  * Data-integrity tests (PLAN Phase 6). ESI edits `src/data/*.ts` by hand to add projects and
@@ -17,6 +21,7 @@ import { INDUSTRY_SLUGS, PROJECT_CATEGORIES } from '@/types'
 const publicDir = path.resolve(import.meta.dirname, '../../public')
 const imageExists = (src: string) => existsSync(path.join(publicDir, src))
 const isKebab = (s: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)
+const hasThai = (value: Localized) => Boolean(value.th?.trim())
 
 describe('projects', () => {
   it('has unique slugs and ids', () => {
@@ -60,6 +65,16 @@ describe('projects', () => {
   it('offers a filter tab for every category', () => {
     expect(projectFilters.map((f) => f.value)).toEqual(['all', ...PROJECT_CATEGORIES])
   })
+
+  it('has complete Thai case-study copy', () => {
+    for (const p of projects) {
+      expect(p.titleTh?.trim(), `${p.slug}: titleTh`).toBeTruthy()
+      expect(p.descriptionTh?.trim(), `${p.slug}: descriptionTh`).toBeTruthy()
+      expect(p.locationTh?.trim(), `${p.slug}: locationTh`).toBeTruthy()
+      expect(p.scopeTh?.length, `${p.slug}: scopeTh`).toBe(p.scope?.length)
+      if (p.partners) expect(p.partnersTh?.length, `${p.slug}: partnersTh`).toBe(p.partners.length)
+    }
+  })
 })
 
 describe('services', () => {
@@ -77,6 +92,11 @@ describe('services', () => {
       for (const i of s.industries) expect(INDUSTRY_SLUGS).toContain(i)
       expect(imageExists(s.image), `${s.slug}: ${s.image}`).toBe(true)
       expect(s.features.length, `${s.slug} has no features`).toBeGreaterThan(0)
+      expect(hasThai(s.name), `${s.slug}: Thai name`).toBe(true)
+      expect(hasThai(s.tagline), `${s.slug}: Thai tagline`).toBe(true)
+      expect(hasThai(s.description), `${s.slug}: Thai description`).toBe(true)
+      for (const feature of s.features)
+        expect(hasThai(feature), `${s.slug}: ${feature.en}`).toBe(true)
     }
   })
 })
@@ -88,6 +108,34 @@ describe('industries', () => {
       expect(Object.keys(iconMap)).toContain(i.icon)
       expect(imageExists(i.image), `${i.slug}: ${i.image}`).toBe(true)
       expect(i.scope.length, `${i.slug} has no scope`).toBeGreaterThan(0)
+      expect(hasThai(i.name), `${i.slug}: Thai name`).toBe(true)
+      expect(hasThai(i.description), `${i.slug}: Thai description`).toBe(true)
+      for (const item of i.scope) expect(hasThai(item), `${i.slug}: ${item.en}`).toBe(true)
+    }
+  })
+})
+
+describe('bilingual corporate copy', () => {
+  it('keeps every major content block complete in Thai', () => {
+    for (const hero of Object.values(pageHeroes)) {
+      expect(hasThai(hero.title)).toBe(true)
+      if (hero.lead) expect(hasThai(hero.lead)).toBe(true)
+    }
+    for (const step of processSteps) {
+      expect(hasThai(step.name)).toBe(true)
+      expect(hasThai(step.description)).toBe(true)
+    }
+    for (const feature of [...aboutFeatures, ...whyEsi, ...aboutPage.coreValues]) {
+      expect(hasThai(feature.title)).toBe(true)
+      expect(hasThai(feature.description)).toBe(true)
+    }
+    for (const value of [
+      aboutPage.introduction,
+      aboutPage.overview,
+      aboutPage.mission,
+      aboutPage.vision,
+    ]) {
+      expect(hasThai(value)).toBe(true)
     }
   })
 })

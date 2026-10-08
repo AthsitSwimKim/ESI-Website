@@ -72,6 +72,11 @@ export const th: DeepPartial<Dictionary> = {
     solution: 'โซลูชัน',
     gallery: 'ภาพโครงการ',
     related: 'ผลงานที่เกี่ยวข้อง',
+    partners: 'ผู้เกี่ยวข้องในโครงการ',
+    referenceRecord: 'ผลงานอ้างอิงที่เผยแพร่โดย ESI',
+    illustrativeImage: 'ภาพประกอบ',
+    illustrativeNote:
+      'ภาพนี้สร้างด้วย AI เพื่อสื่อถึงขอบเขตงาน ไม่ใช่ภาพถ่ายจากสถานที่จริงของลูกค้า',
   },
   pagination: {
     label: 'การแบ่งหน้า',

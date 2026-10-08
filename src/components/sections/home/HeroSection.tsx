@@ -62,8 +62,8 @@ export function HeroSection() {
             {...enter(0.1)}
           >
             {lines.map((line, i) => (
-              <Fragment key={line}>
-                {line}
+              <Fragment key={line.en}>
+                {l(line)}
                 {i < lines.length - 1 && (
                   <>
                     <br className="hidden md:block" />{' '}
