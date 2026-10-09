@@ -7,6 +7,7 @@ import { iconMap } from './icons'
 import { industries } from './industries'
 import { getRelatedProjects, projectFilters, projects } from './projects'
 import { services } from './services'
+import { brandPartners } from './profileAssets'
 import { aboutFeatures, aboutPage, whyEsi } from './about'
 import { pageHeroes } from './pages'
 import { processSteps } from './process'
@@ -82,13 +83,14 @@ describe('services', () => {
     expect(new Set(services.map((s) => s.slug)).size).toBe(services.length)
     for (const s of services) expect(isKebab(s.slug), s.slug).toBe(true)
     // Solution ↔ project linking assumes one service per category.
-    expect(new Set(services.map((s) => s.category)).size).toBe(services.length)
+    const mapped = services.filter((s) => s.category)
+    expect(new Set(mapped.map((s) => s.category)).size).toBe(mapped.length)
   })
 
   it('uses known icons, categories, industries and existing images', () => {
     for (const s of services) {
       expect(Object.keys(iconMap)).toContain(s.icon)
-      expect(PROJECT_CATEGORIES).toContain(s.category)
+      if (s.category) expect(PROJECT_CATEGORIES).toContain(s.category)
       for (const i of s.industries) expect(INDUSTRY_SLUGS).toContain(i)
       expect(imageExists(s.image), `${s.slug}: ${s.image}`).toBe(true)
       expect(s.features.length, `${s.slug} has no features`).toBeGreaterThan(0)
@@ -99,9 +101,46 @@ describe('services', () => {
         expect(hasThai(feature), `${s.slug}: ${feature.en}`).toBe(true)
     }
   })
+
+  it('keeps profile media and brand references valid', () => {
+    expect(services.map((s) => s.sourceSlide)).toEqual([5, 6, 7, 8, 9, 10, 11])
+    const ids = brandPartners.map((brand) => brand.id)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const brand of brandPartners) {
+      expect(imageExists(brand.image), brand.id).toBe(true)
+      expect(brand.width).toBeGreaterThan(0)
+      expect(brand.height).toBeGreaterThan(0)
+    }
+    for (const service of services) {
+      for (const id of service.brandIds) expect(ids).toContain(id)
+      expect(service.gallery.some((image) => image.src === service.image)).toBe(true)
+      for (const image of service.gallery) {
+        expect(imageExists(image.src), image.src).toBe(true)
+        expect(image.width).toBeGreaterThan(0)
+        expect(image.height).toBeGreaterThan(0)
+        expect(hasThai(image.caption), image.src).toBe(true)
+      }
+    }
+  })
 })
 
 describe('industries', () => {
+  it('keeps source attribution and commercial-use licenses for all real photographs', () => {
+    for (const industry of industries) {
+      expect(industry.image).toContain('-photo.webp')
+      expect(industry.imageWidth).toBeGreaterThan(0)
+      expect(industry.imageHeight).toBeGreaterThan(0)
+      expect(industry.imageCredit.author.trim()).toBeTruthy()
+      expect(industry.imageCredit.title.trim()).toBeTruthy()
+      expect(industry.imageCredit.sourceUrl).toMatch(
+        /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/,
+      )
+      expect(industry.imageCredit.licenseUrl).toMatch(
+        /^https:\/\/creativecommons\.org\/licenses\/by(?:-sa)?\//,
+      )
+      expect(industry.imageCredit.license).not.toMatch(/NC|ND/)
+    }
+  })
   it('covers every industry slug exactly once with valid icons and images', () => {
     expect(industries.map((i) => i.slug).sort()).toEqual([...INDUSTRY_SLUGS].sort())
     for (const i of industries) {

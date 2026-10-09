@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Chip } from '@/components/ui/Chip'
 import { Icon } from '@/components/ui/Icon'
+import { IndustryPhotoCredit } from '@/components/ui/IndustryPhotoCredit'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { getProjectsByIndustry } from '@/data/projects'
 import { useT } from '@/i18n'
@@ -42,17 +43,25 @@ export function IndustryShowcase({
         immediate={immediate}
         className={cn('relative', reverse && 'lg:order-2')}
       >
-        <img
-          src={industry.image}
-          alt=""
-          loading="lazy"
-          width={800}
-          height={600}
-          className={cn(
-            'aspect-[4/3] w-full object-cover',
-            reverse ? 'lg:clip-slant-img-left' : 'lg:clip-slant-img',
-          )}
-        />
+        <figure>
+          <img
+            src={industry.image}
+            alt=""
+            loading="lazy"
+            width={industry.imageWidth}
+            height={industry.imageHeight}
+            className={cn(
+              'aspect-[4/3] w-full object-cover',
+              reverse ? 'lg:clip-slant-img-left' : 'lg:clip-slant-img',
+            )}
+          />
+          <figcaption className="mt-3 space-y-1">
+            <p>
+              <IndustryPhotoCredit industry={industry} />
+            </p>
+            <p className="text-xs leading-relaxed text-esi-muted">{t('images.photoChanges')}</p>
+          </figcaption>
+        </figure>
       </Reveal>
 
       <Reveal staggerChildren={0.08} immediate={immediate} className={cn(reverse && 'lg:order-1')}>

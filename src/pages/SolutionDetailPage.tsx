@@ -2,6 +2,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 
 import { RelatedProjects } from '@/components/sections/shared/RelatedProjects'
+import { BrandPartners } from '@/components/sections/shared/BrandPartners'
+import { SolutionGallery } from '@/components/sections/shared/SolutionGallery'
 import { SolutionFeatures } from '@/components/sections/shared/SolutionFeatures'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
@@ -18,7 +20,7 @@ import { useT } from '@/i18n'
 import { scaleIn } from '@/lib/motion'
 
 /**
- * /solutions/:slug — one template for all six solutions (spec §16–21, design-spec §5):
+ * /solutions/:slug — one template for the seven Company Profile solutions:
  * hero → overview → what we deliver → industries served → related projects → prev/next → CTA.
  * The route loader already 404s unknown slugs, so `service` is always defined here.
  */
@@ -29,8 +31,9 @@ export function SolutionDetailPage() {
   if (!service) return null
 
   const { prev, next } = getAdjacentServices(service.slug)
-  const related = getProjectsByCategory(service.category).slice(0, 3)
+  const related = service.category ? getProjectsByCategory(service.category).slice(0, 3) : []
   const name = l(service.name)
+  const primaryImage = service.gallery.find((image) => image.src === service.image)!
 
   return (
     <>
@@ -69,14 +72,22 @@ export function SolutionDetailPage() {
             </p>
           </Reveal>
           <Reveal variants={scaleIn} immediate>
-            <img
-              src={service.image}
-              alt=""
-              loading="lazy"
-              width={1200}
-              height={800}
-              className="aspect-[3/2] w-full object-cover lg:clip-slant-img-left"
-            />
+            <a
+              href={service.image}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${l(primaryImage.caption)} — ${t('solutions.viewImage')}`}
+              className="block rounded-[4px] border border-esi-border bg-white p-4"
+            >
+              <img
+                src={service.image}
+                alt={l(primaryImage.caption)}
+                loading="lazy"
+                width={primaryImage.width}
+                height={primaryImage.height}
+                className="aspect-[3/2] w-full object-contain"
+              />
+            </a>
           </Reveal>
         </Container>
       </section>
@@ -92,6 +103,9 @@ export function SolutionDetailPage() {
           <SolutionFeatures features={service.features} />
         </Container>
       </section>
+
+      <SolutionGallery service={service} />
+      <BrandPartners ids={service.brandIds} id="solution-brand-partners" />
 
       {/* Industries served */}
       <section aria-labelledby="solution-industries-title" className="bg-esi-light py-14 md:py-20">

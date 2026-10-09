@@ -6,8 +6,10 @@ import { ProcessSection } from '@/components/sections/home/ProcessSection'
 import { SolutionsSection } from '@/components/sections/home/SolutionsSection'
 import { WhyEsiSection } from '@/components/sections/home/WhyEsiSection'
 import { TrustEvidence } from '@/components/sections/shared/TrustEvidence'
+import { BrandPartners } from '@/components/sections/shared/BrandPartners'
 import { Seo } from '@/components/ui/Seo'
 import { seo } from '@/data/seo'
+import { featuredBrandIds } from '@/data/partners'
 import { useT } from '@/i18n'
 
 /** Home (spec §13): Hero → Solutions → About → Industries → Featured Projects → Why ESI → Process → CTA (layout) → Footer. */
@@ -22,6 +24,7 @@ export function HomePage() {
       <TrustEvidence />
       <IndustriesSection />
       <FeaturedProjectsSection />
+      <BrandPartners ids={featuredBrandIds} overviewLink />
       <WhyEsiSection />
       <ProcessSection />
     </>

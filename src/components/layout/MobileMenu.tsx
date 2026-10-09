@@ -154,7 +154,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                                   to={`/solutions/${s.slug}`}
                                   className={({ isActive }) =>
                                     cn(
-                                      'flex h-11 items-center gap-3 pr-5 pl-10 text-base transition-colors',
+                                      'flex min-h-11 items-center gap-3 py-2 pr-5 pl-10 text-base leading-relaxed transition-colors',
                                       isActive
                                         ? 'text-esi-blue'
                                         : 'text-esi-navy hover:text-esi-blue',

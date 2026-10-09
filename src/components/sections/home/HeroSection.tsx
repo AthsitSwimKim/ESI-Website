@@ -24,7 +24,7 @@ export function HeroSection() {
       {/* Background photo with a slow, one-off zoom (MotionConfig disables it under reduced motion) */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 -z-30"
+        className="absolute inset-0 -z-30 lg:-right-[12%] lg:left-[12%]"
         initial={{ scale: 1 }}
         animate={{ scale: 1.08 }}
         transition={{ duration: 20, ease: 'easeOut' }}
@@ -32,11 +32,11 @@ export function HeroSection() {
         <img
           src={hero.image}
           alt=""
-          width={1920}
-          height={1080}
+          width={hero.imageWidth}
+          height={hero.imageHeight}
           fetchPriority="high"
           decoding="async"
-          className="h-full w-full object-cover object-[70%_center]"
+          className="h-full w-full object-cover object-[70%_center] lg:[mask-image:linear-gradient(to_right,transparent,black_12%)]"
         />
       </motion.div>
       <div aria-hidden className="absolute inset-0 -z-20 bg-gradient-hero" />

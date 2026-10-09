@@ -17,7 +17,7 @@ const MENU_ID = 'solutions-menu'
 /**
  * Desktop "Solutions" nav item with its dropdown (design-spec §3 Header).
  * Opens on hover; the chevron button opens it for keyboard users (Enter / ArrowDown).
- * Escape closes and returns focus; arrow keys move between the six solutions.
+ * Escape closes and returns focus; arrow keys move between solutions.
  * The list is derived from services.ts, so a new service appears here automatically.
  */
 export function SolutionsMenu({ label, to }: { label: string; to: string }) {
@@ -156,6 +156,7 @@ export function SolutionsMenu({ label, to }: { label: string; to: string }) {
                 <li
                   key={s.slug}
                   className={cn(
+                    index === services.length - 1 && services.length % 2 === 1 && 'col-span-2',
                     index % 2 === 1 && 'border-l border-esi-border',
                     index >= 2 && 'border-t border-esi-border',
                   )}

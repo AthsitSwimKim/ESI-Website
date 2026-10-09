@@ -1,5 +1,6 @@
 import { SolutionCard } from '@/components/cards/SolutionCard'
 import { ProcessSection } from '@/components/sections/home/ProcessSection'
+import { BrandPartners } from '@/components/sections/shared/BrandPartners'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { PageHero } from '@/components/ui/PageHero'
@@ -41,10 +42,14 @@ export function SolutionsPage() {
             as="ul"
             immediate
             staggerChildren={0.08}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            className="flex flex-wrap justify-center gap-6"
           >
             {services.map((service) => (
-              <RevealItem key={service.slug} as="li">
+              <RevealItem
+                key={service.slug}
+                as="li"
+                className="w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+              >
                 <SolutionCard service={service} variant="rich" />
               </RevealItem>
             ))}
@@ -52,6 +57,7 @@ export function SolutionsPage() {
         </Container>
       </section>
 
+      <BrandPartners />
       <ProcessSection />
     </>
   )

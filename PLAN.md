@@ -1,7 +1,7 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-09-30
+> **อัปเดตล่าสุด:** 2026-10-09 — ปรับ Solutions ตาม Company Profile เพิ่ม Brand Partners/ภาพต้นฉบับจากสไลด์ เปลี่ยน Hero เป็นภาพแท่นขุดเจาะที่เจ้าของให้ และใช้ภาพถ่ายจริงพร้อม license ใน Industries · เจ้าของอนุมัติ commit/push ไปที่ `SolFrontend` (ไม่ deploy)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
 
@@ -18,7 +18,7 @@
 | ข้อมูล  | Static data ใน `src/data/*.ts` — เพิ่ม Project/Service โดยแก้ไฟล์ data (spec §50–51)                                |
 | ภาษา    | EN เป็นหลัก + สวิตช์ TH/EN — copy อังกฤษและไทยครบทั้ง site แล้ว รอ ESI ตรวจอนุมัติถ้อยคำขั้นสุดท้าย                 |
 | หน้าตา  | **ยึดตาม mockup หน้า Home** ทุก section แล้วขยาย design language เดียวกันไปหน้าอื่น (รายละเอียดใน `design-spec.md`) |
-| หน้า    | Home, About, Solutions (+6 detail), Industries, Projects (+detail), Contact, 404 — route ตาม spec §9                |
+| หน้า    | Home, About, Solutions (+7 detail ตาม Company Profile), Industries, Projects (+detail), Contact, 404               |
 | Deploy  | `npm run build` → `dist/` ขึ้น Vercel / Netlify / Cloudflare Pages / Apache / Nginx ได้ทันที                        |
 
 ## 2. หลักการทำงานทุก Phase
@@ -65,6 +65,18 @@
 | D28 | Trust evidence ต้องมีน้ำหนักแต่ห้ามสร้างตัวเลข/ใบรับรองที่ ESI ยังไม่ยืนยัน                                                                                                                                           | แสดงเฉพาะหลักฐานที่คำนวณย้อนกลับได้จากข้อมูลจริงใน repo: 22 project references, 6 solution areas, 5 industry groups และช่วงผลงานที่เผยแพร่ 2017–2024; ไม่ใส่ ISO, จำนวนลูกค้า, uptime หรือจำนวนปีประสบการณ์ที่ไม่มีเอกสารรองรับ                                                                                                                                                                 | ✅ ตัดสินใจแล้ว (2026-09-30)             |
 
 ### ข้อมูลที่ต้องขอจาก ESI (content needed)
+
+**D29 (2026-10-09):** เจ้าของให้ยึด `ESi Profile Company_R7 copy.pptx` สไลด์ 5–11 เป็นข้อมูล Solutions: PA/GA, LAN/WAN, PABX/Telephone, CCTV, Access Control, Radio และ Video Wall รวม 7 กลุ่ม; ถอด Cybersecurity/Maintenance จากหน้า Solution แต่เก็บประวัติผลงานเดิมไว้ ใช้รูปต้นฉบับ 35 ภาพและโลโก้ 51 แบรนด์จากสไลด์ ไม่เพิ่ม dealer/certification claims หน้า Video Wall ไม่มี Brand Partners เพราะสไลด์ไม่ระบุ · รายละเอียดที่ `docs/company-profile-solutions.md`
+
+**D30 (2026-10-09):** เจ้าของให้เปลี่ยนภาพ Hero หน้าแรกเป็นแท่นขุดเจาะจากไฟล์ `maros_1680x645.jpg` ที่ส่งมา ใช้ภาพต้นฉบับ 1680×645 เก็บที่ `/images/hero/maros-offshore.jpg` คง navy gradient/ข้อความ/CTA เดิม และไม่เปลี่ยนภาพพื้นหลังหน้าอื่น ภาพนี้ใช้สื่อบริบทอุตสาหกรรม ไม่อ้างว่าเป็นโครงการของ ESI
+
+> ✅ ตรวจ Hero ใหม่ TH/EN ที่ 375/768/1024/1440 แล้ว ภาพโหลดครบและข้อความอ่านชัด · typecheck/lint/20 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง (axe WCAG 2 A/AA 0 violations) · ยังไม่ได้ commit/deploy การเปลี่ยนแปลงนี้
+
+> ปรับตำแหน่งตามเจ้าของเพิ่มเติม: Desktop ตั้งแต่ 1024px เลื่อนชั้นภาพไปขวา 12% พร้อม mask ไล่ขอบซ้ายให้กลืนกับพื้น navy; Tablet/Mobile คงตำแหน่งเดิม ตรวจภาพจริง TH/EN เพิ่มที่ 1900px ด้วย
+
+**D31 (2026-10-09):** เจ้าของให้เปลี่ยนภาพอุตสาหกรรม 5 ช่องเป็นภาพถ่ายจริงจากตะวันตกที่ได้รับอนุญาต ใช้ภาพทะเลเหนือ, BASF Ludwigshafen, Rostock power station, BMW Leipzig และ Rotterdam Container Terminal ภายใต้ CC BY/CC BY-SA พร้อมเครดิต/แหล่งที่มา/license ใน Home, About และ Industries; asset WebP เก็บในเว็บ ไม่ hotlink และไม่สื่อว่าเป็นภาพหน้างาน ESI · รายการสิทธิ์ที่ `public/images/industries/LICENSES.md`
+
+> ✅ ตรวจภาพ/เครดิต TH/EN ใน Home และ Industries ที่ 375/768/1024/1440 ผ่าน รวม mobile horizontal scroll และ disclosure เครดิต · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง · ยังไม่ได้ commit/deploy รอบนี้
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว
@@ -148,12 +160,16 @@
 
 ### Phase 5 — Solutions (≈ 1–2 sessions)
 
-- [x] `SolutionsPage` (overview): PageHero + intro + 6 rich cards (icon, ชื่อ, คำอธิบาย, Learn more) + Process (reuse) + CTA
+- [x] อัปเดตตาม Company Profile (2026-10-09): 7 Solution พร้อม copy TH/EN, ภาพจากสไลด์/gallery ดูภาพเต็ม, Brand Partners บน Home/overview/detail และปรับ nav/footer/sitemap ตาม data; บริการเดิม Cybersecurity/Maintenance ถูกถอดตามคำสั่งเจ้าของ
+
+- [x] `SolutionsPage` (overview): PageHero + intro + 7 rich cards (ภาพจากสไลด์, icon, ชื่อ, คำอธิบาย, Learn more) + Brand Partners + Process (reuse) + CTA
 - [x] `SolutionCard` variant `rich` (ทำไว้ตั้งแต่ Phase 3) · `SolutionFeatures` (checklist grid) · `RelatedProjects` (shared, ซ่อนเองเมื่อไม่มีผลงาน — ใช้ต่อใน Phase 6)
-- [x] `SolutionDetailPage` template: PageHero + breadcrumb → Overview (2 คอลัมน์ + ภาพ mask เฉียง) → What we deliver (features จาก spec §16–21) → Industries served (ลิงก์ไป `/industries#slug`) → `RelatedProjects` (ตาม category, สูงสุด 3) → prev/next solution (วนรอบ) → CTA; slug ไม่ถูกต้อง → 404
+- [x] `SolutionDetailPage` template: PageHero + breadcrumb → Overview (2 คอลัมน์ + รูปต้นฉบับเต็มสัดส่วน) → What we deliver (features จาก Company Profile) → Systems & Equipment gallery → Brand Partners ตามสไลด์ → Industries served → `RelatedProjects` (เฉพาะ category ที่ตรง, สูงสุด 3) → prev/next solution → CTA; slug ไม่ถูกต้อง → 404
 - [x] Nav dropdown / mobile submenu / footer / overview ดึงรายการจาก `services.ts` โดยอัตโนมัติ (ทดสอบด้วยการเพิ่ม service ชั่วคราวแล้วลบออก)
 
-**เกณฑ์ผ่าน:** ทั้ง 6 route `/solutions/*` เปิดได้และเนื้อหาถูกต้อง · related projects แสดงเฉพาะที่มี category ตรง (ซ่อนถ้าไม่มี) · การเพิ่ม service ใหม่ใน data ทำให้ nav/footer/overview อัปเดตเอง
+**เกณฑ์ผ่าน:** ทั้ง 7 route `/solutions/*` เปิดได้และเนื้อหาถูกต้อง · related projects แสดงเฉพาะที่มี category ตรง (ซ่อนถ้าไม่มี) · การเพิ่ม service ใหม่ใน data ทำให้ nav/footer/overview อัปเดตเอง
+
+> ✅ **อัปเดตผ่านแล้ว 2026-10-09** — typecheck/lint/20 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง (375/768/1024/1440), axe WCAG 2 A/AA 0 violations · ตรวจภาพจริง Desktop และ Mobile 375×667, สลับ TH/EN, ภาพต้นฉบับ/โลโก้โหลดครบ, dropdown keyboard/Escape และ route ที่ถอดออกเป็น 404 · เวอร์ชันนี้ยังไม่ได้ commit หรืออัปเดต Vercel Demo
 
 > ✅ **ผ่านแล้ว 2026-09-29** — ทดสอบใน headless Chrome ครบ 6 route: title/breadcrumb/h1 ถูกต้อง, จำนวน features ตรง spec (9/8/7/7/7/8), industries chips, related projects 3 รายการต่อหน้า, prev/next วนรอบ, CTA band ครบ · slug มั่ว → 404 (ไม่มี CTA) · เพิ่ม service ที่ 7 ชั่วคราว → dropdown/drawer/footer/overview ขึ้นเป็น 7 และ route ใหม่เปิดได้ แล้วลบออก · ไม่มี console error · typecheck/lint/build ผ่าน · แก้ระหว่างทาง: intro หน้า overview ซ้ำกับ lead ใน hero (เขียนใหม่ให้ต่างกัน), หัวข้อ Overview เคยซ้ำชื่อ solution, placeholder SVG ย้าย label ไปมุมบนซ้ายให้เล็กลงเพราะทับ h1 ใน PageHero
 

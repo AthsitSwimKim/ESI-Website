@@ -25,8 +25,8 @@ export function IndustryCard({ industry, className }: { industry: Industry; clas
           src={industry.image}
           alt=""
           loading="lazy"
-          width={800}
-          height={600}
+          width={industry.imageWidth}
+          height={industry.imageHeight}
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
         />
         <div

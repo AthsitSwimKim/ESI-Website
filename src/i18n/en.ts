@@ -81,6 +81,12 @@ export const en = {
     goTo: 'Go to page',
   },
   solutions: {
+    brandPartners: 'Brand Partners',
+    viewAllBrands: 'View all brands',
+    brandPartnersNote: 'Equipment and software brands featured in ESI’s company profile.',
+    gallery: 'Systems & Equipment',
+    galleryNote: 'System diagrams and product images from ESI’s company profile.',
+    viewImage: 'View full image (opens in a new tab)',
     overview: 'Overview',
     whatWeDeliver: 'What we deliver',
     industriesServed: 'Industries served',
@@ -97,6 +103,13 @@ export const en = {
     vision: 'Vision',
     coreValues: 'Core Values',
     industriesServed: 'Industries Served',
+  },
+  images: {
+    photoCredits: 'Photo credits & licenses',
+    industryPhotoNote:
+      'Licensed photographs illustrating industry sectors. These are not ESI project photographs and do not imply endorsement by the pictured companies or photographers.',
+    photoChanges:
+      'Resized and converted to WebP; cropped to fit the layout. Each photograph retains its listed license.',
   },
   a11y: {
     skipToContent: 'Skip to content',

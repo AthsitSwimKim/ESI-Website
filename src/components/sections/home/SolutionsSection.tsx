@@ -6,7 +6,7 @@ import { SectionTitle } from '@/components/ui/SectionTitle'
 import { homeSections } from '@/data/home'
 import { services } from '@/data/services'
 
-/** "Our Solutions" (spec §15, design-spec §4.2): six compact cards on the light surface. */
+/** Seven solutions from the supplied Company Profile, with balanced 4 + 3 rows on desktop. */
 export function SolutionsSection() {
   return (
     <section
@@ -17,13 +17,13 @@ export function SolutionsSection() {
       <DiagonalLines className="absolute -right-4 bottom-6" />
       <Container className="relative">
         <SectionTitle id="solutions-title" title={homeSections.solutions} />
-        <Reveal
-          as="ul"
-          staggerChildren={0.08}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-3 xl:grid-cols-6"
-        >
+        <Reveal as="ul" staggerChildren={0.08} className="flex flex-wrap justify-center gap-6">
           {services.map((s) => (
-            <RevealItem key={s.slug} as="li">
+            <RevealItem
+              key={s.slug}
+              as="li"
+              className="w-full sm:w-[calc((100%-3rem)/3)] xl:w-[calc((100%-4.5rem)/4)]"
+            >
               <SolutionCard service={s} />
             </RevealItem>
           ))}

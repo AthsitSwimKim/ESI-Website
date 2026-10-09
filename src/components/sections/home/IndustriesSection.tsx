@@ -1,4 +1,5 @@
 import { IndustryCard } from '@/components/cards/IndustryCard'
+import { IndustryPhotoCredits } from '@/components/sections/shared/IndustryPhotoCredits'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
@@ -22,7 +23,7 @@ export function IndustriesSection({
       aria-labelledby={`${id}-title`}
       className="relative isolate overflow-hidden bg-white py-14 md:py-20"
     >
-      <DiagonalLines className="absolute bottom-6 -left-4" />
+      <DiagonalLines className="absolute -bottom-8 -left-4" />
       <Container className="relative">
         <SectionTitle id={`${id}-title`} title={title} />
       </Container>
@@ -37,6 +38,9 @@ export function IndustriesSection({
           </RevealItem>
         ))}
       </Reveal>
+      <Container className="relative">
+        <IndustryPhotoCredits />
+      </Container>
     </section>
   )
 }

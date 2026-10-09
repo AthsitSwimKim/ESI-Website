@@ -16,8 +16,8 @@ export const pageHeroes: Record<
   solutions: {
     title: { en: 'Solutions', th: 'โซลูชัน' },
     lead: {
-      en: 'From network backbone to lifecycle support, ESI delivers the systems that keep industrial operations connected, secure and running.',
-      th: 'ตั้งแต่โครงข่ายหลักไปจนถึงการดูแลระยะยาว ESI ส่งมอบระบบที่ช่วยให้การดำเนินงานเชื่อมต่อ ปลอดภัย และต่อเนื่อง',
+      en: 'Industrial communication systems for plant operations, safety and security, from PA/GA and networks to telephony, surveillance, radio and video walls.',
+      th: 'ระบบสื่อสารสำหรับการปฏิบัติงานและความปลอดภัยในโรงงาน ครอบคลุม PA/GA เครือข่าย โทรศัพท์ กล้องวงจรปิด ระบบควบคุมการเข้าออก วิทยุสื่อสาร และ Video Wall',
     }, // DRAFT
     image: '/images/hero/esi-industrial-hero.webp',
   },

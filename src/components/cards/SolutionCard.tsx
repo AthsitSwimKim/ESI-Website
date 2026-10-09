@@ -28,27 +28,42 @@ export function SolutionCard({ service, variant = 'compact', className }: Soluti
       className={cn(
         'group flex h-full rounded-[4px] border border-esi-border bg-white shadow-card transition-[translate,box-shadow,border-color] duration-250 hover:-translate-y-1.5 hover:border-esi-accent hover:shadow-card-hover',
         rich
-          ? 'flex-col items-center px-6 py-8 text-center'
+          ? 'flex-col items-center overflow-hidden pb-7 text-center'
           : 'min-h-0 flex-row items-center gap-4 px-5 py-5 text-left sm:min-h-[200px] sm:flex-col sm:gap-0 sm:px-4 sm:py-7 sm:text-center',
         className,
       )}
     >
+      {rich && (
+        <img
+          src={service.image}
+          alt=""
+          loading="lazy"
+          width={service.gallery.find((image) => image.src === service.image)?.width}
+          height={service.gallery.find((image) => image.src === service.image)?.height}
+          className="aspect-[16/10] w-full border-b border-esi-border bg-white object-contain p-5"
+        />
+      )}
       <Icon
         name={service.icon}
         size={56}
         strokeWidth={1.25}
-        className="size-12 shrink-0 text-esi-blue transition-transform duration-250 group-hover:scale-110 sm:size-14"
+        className={cn(
+          'size-12 shrink-0 text-esi-blue transition-transform duration-250 group-hover:scale-110 sm:size-14',
+          rich && 'mt-6 size-8 sm:size-8',
+        )}
       />
       <h3
         className={cn(
           'font-semibold text-esi-navy',
           rich || 'mt-0 sm:mt-4',
-          rich ? 'text-[17px]' : 'text-base leading-snug',
+          rich ? 'mt-3 px-6 text-[17px]' : 'text-base leading-snug',
         )}
       >
         {name}
       </h3>
-      {rich && <p className="mt-2 text-sm leading-relaxed text-esi-muted">{l(service.tagline)}</p>}
+      {rich && (
+        <p className="mt-2 px-6 text-sm leading-relaxed text-esi-muted">{l(service.tagline)}</p>
+      )}
       {/* Bottom bar = the link affordance on the compact card (design-spec §2 element 4) */}
       <div
         className={cn(

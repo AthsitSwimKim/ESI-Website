@@ -94,21 +94,21 @@ export function AboutPage() {
         </Container>
       </section>
 
-      {/* Expertise — the six solutions */}
+      {/* Expertise — the seven Company Profile solutions */}
       <section aria-labelledby="about-expertise-title" className="py-14 md:py-20">
         <Container>
           <SectionTitle id="about-expertise-title" title={t('about.expertise')} />
-          <Reveal
-            as="ul"
-            staggerChildren={0.08}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-          >
+          <ul className="flex flex-wrap justify-center gap-6">
             {services.map((s) => (
-              <RevealItem key={s.slug} as="li">
+              <Reveal
+                key={s.slug}
+                as="li"
+                className="w-full sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]"
+              >
                 <SolutionCard service={s} variant="rich" />
-              </RevealItem>
+              </Reveal>
             ))}
-          </Reveal>
+          </ul>
         </Container>
       </section>
 

@@ -59,76 +59,48 @@ Footer quick links = full main nav (incl. Contact); footer solutions = the six s
 
 ## 3. Hero (Home) ✅
 
+- Image: owner-supplied `maros_1680x645.jpg` (2026-10-09), copied unchanged to
+  `public/images/hero/maros-offshore.jpg`. Offshore platform context; no claim that this is
+  an ESI project. Replaces the Home image only; inner-page backgrounds stay unchanged.
 - H1: `ENGINEERING THE CONNECTION THAT INDUSTRY RELIES ON.`
 - Sub: `Reliable Industrial Communication & System Integration Solutions.`
 - Primary CTA: `Explore Solutions` → `/solutions` · Secondary: `View Projects` → `/projects`
 
 ## 4. Solutions / Services (`src/data/services.ts`)
 
-Six services. Names, slugs, routes and feature lists are ✅; card taglines, descriptions and
-industry links are ✏️ draft.
+Updated 2026-10-09. The owner supplied **ESi Profile Company_R7 copy.pptx** and explicitly
+requested the seven solution groups from slides 5–11, with Cybersecurity and Maintenance
+removed as solution pages. This replaces the former six-service drafts.
 
-### 4.1 Industrial Network — `industrial-network` — `/solutions/industrial-network`
-- Tagline ✏️: Resilient plant-wide connectivity, engineered for uptime.
-- Description ✏️: We design and deliver industrial network infrastructure — from fibre backbones
-  and industrial Ethernet to redundant switching and monitoring — so control, safety and
-  business systems stay connected across the whole site.
-- Features ✅: Network Infrastructure · Industrial Ethernet · Fiber Optic Network · LAN / WAN ·
-  Network Switching · Network Redundancy · Industrial Communication · Network Monitoring ·
-  Network Integration
-- Project category: `network` · Industries ✏️: all five
+| Slide | English | Thai | Slug |
+| --- | --- | --- | --- |
+| 5 | Public Address & General Alarm | ระบบประกาศเสียงและสัญญาณเตือนภัย | `paga` |
+| 6 | Industrial LAN/WAN Networks | ระบบเครือข่ายอุตสาหกรรม LAN/WAN | `industrial-network` |
+| 7 | PABX & Telephone Systems | ระบบตู้สาขาโทรศัพท์ PABX และโทรศัพท์ IP | `communication` |
+| 8 | CCTV & Surveillance | ระบบกล้องวงจรปิดและเฝ้าระวัง | `cctv-security` |
+| 9 | Access Control Systems | ระบบควบคุมการเข้าออก | `access-control` |
+| 10 | Radio Communication Systems | ระบบวิทยุสื่อสาร | `radio` |
+| 11 | Video Wall | ระบบจอภาพ Video Wall | `video-wall` |
 
-### 4.2 CCTV & Security — `cctv-security` — `/solutions/cctv-security`
-- Tagline ✏️: Surveillance built for hazardous and mission-critical areas.
-- Description ✏️: Industrial and IP CCTV systems, including explosion-proof cameras for
-  hazardous areas, integrated with video management and remote monitoring — designed, installed
-  and maintained by our engineers.
-- Features ✅: Industrial CCTV · IP CCTV · Explosion-Proof CCTV · Hazardous Area CCTV · Video
-  Management System · Remote Monitoring · CCTV Installation · CCTV Maintenance
-- Category: `cctv` · Industries ✏️: Oil & Gas, Petrochemical, Power & Energy, Manufacturing, Industrial Infrastructure
+Descriptions, taglines and features in `services.ts` are edited from the slide prose and
+diagrams with complete Thai translations. `sourceSlide` records the source. Do not restore
+the former generic draft copy. The overview includes the profile's core-business references
+to hazardous-area hardware, engineering management and communication consultation (slide 3).
 
-### 4.3 Access Control — `access-control` — `/solutions/access-control`
-- Tagline ✏️: Secure, auditable access for plants and facilities.
-- Description ✏️: Door access, RFID and card systems, biometrics and visitor management —
-  integrated into one platform that fits industrial operations and security policies.
-- Features ✅: Door Access Control · RFID · Card Access · Biometric · Visitor Access · Industrial
-  Access Control · Access Control Integration
-- Category: `access-control` · Industries ✏️: Petrochemical, Manufacturing, Industrial Infrastructure
+Images: 35 original system diagrams/product images from slides 5–11. They are shown whole
+with `object-contain` and linked to the full image. Video Wall's example photo comes from
+slide 11. These source images are not presented as new ESI project evidence.
 
-### 4.4 Communication System — `communication` — `/solutions/communication`
-- Tagline ✏️: Clear, dependable communication across the site.
-- Description ✏️: IP telephony, PABX, industrial telephones, intercom and PA systems — with the
-  infrastructure and integration to keep operations, safety and emergency communication reliable.
-- Features ✅: IP Telephone · PABX · Industrial Telephone · Intercom · Communication
-  Infrastructure · PA System · Communication Integration
-- Category: `communication` · Industries ✏️: all five
+Brand Partners: 51 distinct logos from the profile, deduplicated across solutions and shown
+in their original colours. Source filenames/slides/dimensions are in `profileAssets.ts`.
+Home displays 12 representative brands, Solutions displays all, and detail pages display
+their slide's branding-family list. Video Wall has no brand list in the deck, so none is added.
 
-### 4.5 Cybersecurity — `cybersecurity` — `/solutions/cybersecurity`
-- Tagline ✏️: Protecting industrial networks and remote access.
-- Description ✏️: Firewalls, VPN and site-to-site connectivity, secure remote access and
-  industrial network security — implemented with the operational constraints of plant
-  environments in mind.
-- Features ✅: Firewall · VPN · Site-to-Site VPN · Network Security · Remote Access · Industrial
-  Network Security · Security Integration
-- Category: `cybersecurity` · Industries ✏️: Petrochemical, Manufacturing, Power & Energy
+Historical project categories remain intact. Only four existing categories map directly to
+current solutions (network, communication, CCTV, access-control); PA/GA, Radio and Video Wall
+do not automatically inherit unrelated project references. The old service routes render 404.
 
-### 4.6 Maintenance & Support — `maintenance` — `/solutions/maintenance`
-- Tagline ✏️: Keeping your systems reliable for the long run.
-- Description ✏️: Preventive and corrective maintenance, MA contracts, inspections,
-  troubleshooting, training and technical support — so the systems we integrate keep performing
-  years after commissioning.
-- Features ✅: Preventive Maintenance · Corrective Maintenance · MA Contract · System Inspection ·
-  Troubleshooting · System Support · Training · Technical Support
-- Category: `maintenance` · Industries ✏️: all five
-
-Solutions page-hero lead ✏️ (`pages.ts`): *From network backbone to lifecycle support, ESI
-delivers the systems that keep industrial operations connected, secure and running.*
-Solutions overview intro paragraph ✏️ (`services.ts › solutionsIntro`, must NOT repeat the
-lead): *ESI covers six solution areas that most industrial sites need together: the network
-that carries everything, the surveillance and access systems that protect it, the communication
-people rely on, the security that keeps it isolated from threats, and the maintenance that keeps
-it running. We design, supply, install, commission and support each of them — so one partner is
-accountable from the first drawing to the next service visit.*
+See `docs/company-profile-solutions.md` for the detailed source record.
 
 ## 5. Industries (`src/data/industries.ts`)
 
@@ -143,6 +115,12 @@ Names, slugs and typical scope are ✅ (spec §24–25); descriptions are ✏️
 | Industrial Infrastructure | `industrial-infrastructure` | Communication, Network, Security, Monitoring | Communication, networking and security systems for ports, utilities, industrial estates and large facilities. |
 
 Section title ✅: `INDUSTRIES WE SERVE`.
+
+Industry images updated 2026-10-09 at the owner's request: real licensed European photographs
+replace the five generated industry illustrations. Sources, authors and licenses are recorded
+in `src/data/industryPhotos.ts` and `public/images/industries/LICENSES.md`. All derivatives keep
+the listed CC BY/CC BY-SA license. Show credits wherever the photos are used; do not claim the
+pictured facilities are ESI projects, customers or endorsements.
 
 ## 6. Projects (`src/data/projects.ts`) ✅
 

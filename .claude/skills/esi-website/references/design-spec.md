@@ -252,6 +252,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
   mount (the spec's "slow background zoom"). Above it: `--gradient-hero` then
   `--gradient-hero-bottom`; `<NetworkGraphic>` covering the right ~55% at opacity .35; a single
   thin diagonal line decoration top-left (white/30).
+- Owner adjustment (2026-10-09): the supplied offshore Home photo is offset right by 12% at
+  `lg` and above, with a soft left-edge mask. Below `lg`, retain the original full-bleed
+  positioning. The existing navy overlays and text layout stay unchanged.
 - Content: container, `max-w-[640px]`, vertically centred. `h1` on three lines —
   `ENGINEERING THE / CONNECTION THAT / INDUSTRY RELIES ON.` (use `<br className="hidden md:block">`;
   natural wrap on mobile). Sub-line 18–20px/400 `white/90`, `mt-5`:
@@ -300,6 +303,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
   white (two lines allowed: "INDUSTRIAL / INFRASTRUCTURE").
 - Hover: image `scale-[1.06]` (500ms), an `esi-blue/35` overlay fades over the image, an
   `ArrowUpRight` slides in at the label bar's right edge.
+- Owner update (2026-10-09): use real licensed European photographs from `industryPhotos.ts`.
+  Keep a compact native photo-credit disclosure below the card row, and creator/source/license
+  captions under the images on Industries. Do not remove credits when reusing the photographs.
 
 ### 4.5 Featured Projects (`sections/home/FeaturedProjectsSection.tsx`)
 
@@ -342,6 +348,16 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
 ---
 
 ## 5. Inner pages
+
+**Company Profile update (owner request, 2026-10-09):** Solutions now use the seven groups
+from slides 5–11. Home compact cards wrap into balanced 4+3 rows on desktop; overview rich
+cards include full original slide images on white using `object-contain` (3+3+1, centred).
+Detail overview images and galleries also show the complete source image, with full-image
+links. Brand Partners use a white-cell ruled grid, original-colour logos and visible names:
+2 / 3 / 6 columns. Each logo/gallery cell reveals independently so long lists still appear
+on small phone viewports. Home shows 12 brands; overview all 51; details only the slide's
+brands. This owner-supplied content/layout update supersedes the former six-card counts
+and photographic slanted-mask requirement for solution product images/diagrams.
 
 Every inner page = `<Seo>` + `<PageHero>` + sections + (CTA band + footer from the layout).
 

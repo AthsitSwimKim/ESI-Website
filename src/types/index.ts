@@ -69,9 +69,12 @@ export interface Service {
   icon: IconName
   features: Localized[]
   image: string
-  /** Links this solution to project cards with the same category. */
-  category: ProjectCategory
+  /** Only set when an existing project category directly matches this solution. */
+  category?: ProjectCategory
   industries: IndustrySlug[]
+  brandIds: string[]
+  sourceSlide: number
+  gallery: { src: string; width: number; height: number; caption: Localized }[]
 }
 
 export interface Industry {
@@ -82,6 +85,15 @@ export interface Industry {
   scope: Localized[]
   icon: IconName
   image: string
+  imageWidth: number
+  imageHeight: number
+  imageCredit: {
+    title: string
+    author: string
+    sourceUrl: string
+    license: string
+    licenseUrl: string
+  }
 }
 
 export interface ProcessStep {
