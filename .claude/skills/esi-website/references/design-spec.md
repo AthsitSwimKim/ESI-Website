@@ -304,8 +304,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
 - Hover: image `scale-[1.06]` (500ms), an `esi-blue/35` overlay fades over the image, an
   `ArrowUpRight` slides in at the label bar's right edge.
 - Owner update (2026-10-09): use real licensed European photographs from `industryPhotos.ts`.
-  Keep a compact native photo-credit disclosure below the card row, and creator/source/license
-  captions under the images on Industries. Do not remove credits when reusing the photographs.
+  Keep a compact native photo-credit disclosure below the card row and at the end of Industries;
+  do not show creator/source/license captions directly under each image. Do not remove the
+  consolidated credits when reusing the photographs.
 
 ### 4.5 Featured Projects (`sections/home/FeaturedProjectsSection.tsx`)
 

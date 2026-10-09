@@ -78,6 +78,10 @@
 
 > ✅ ตรวจภาพ/เครดิต TH/EN ใน Home และ Industries ที่ 375/768/1024/1440 ผ่าน รวม mobile horizontal scroll และ disclosure เครดิต · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง · ยังไม่ได้ commit/deploy รอบนี้
 
+**D32 (2026-10-09):** เจ้าของให้ลบเครดิตและหมายเหตุการปรับภาพที่แสดงใต้รูปแต่ละใบในหน้า Industries เพราะรบกวน layout; คง disclosure “Photo credits & licenses” แบบพับได้ท้ายหน้าและรายการสิทธิ์ใน `public/images/industries/LICENSES.md` ไว้
+
+> ✅ ตรวจหน้า Industries ที่ 1440px และ 375px แล้ว layout เรียบร้อย · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง
+
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว
 - [x] รูปภาพสำหรับเปิดใช้: Hero, About, Industries 5 ภาพ, Project cover และ page hero ครบแล้ว
