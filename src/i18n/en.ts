@@ -83,7 +83,7 @@ export const en = {
   solutions: {
     brandPartners: 'Brand Partners',
     viewAllBrands: 'View all brands',
-    brandPartnersNote: 'Equipment and software brands featured in ESI’s company profile.',
+    brandPartnersNote: 'Equipment and software brands for communication and security systems.',
     gallery: 'Systems & Equipment',
     galleryNote: 'System diagrams and product images from ESI’s company profile.',
     viewImage: 'View full image (opens in a new tab)',
@@ -103,13 +103,6 @@ export const en = {
     vision: 'Vision',
     coreValues: 'Core Values',
     industriesServed: 'Industries Served',
-  },
-  images: {
-    photoCredits: 'Photo credits & licenses',
-    industryPhotoNote:
-      'Licensed photographs illustrating industry sectors. These are not ESI project photographs and do not imply endorsement by the pictured companies or photographers.',
-    photoChanges:
-      'Resized and converted to WebP; cropped to fit the layout. Each photograph retains its listed license.',
   },
   a11y: {
     skipToContent: 'Skip to content',

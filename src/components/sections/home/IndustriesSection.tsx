@@ -1,5 +1,4 @@
 import { IndustryCard } from '@/components/cards/IndustryCard'
-import { IndustryPhotoCredits } from '@/components/sections/shared/IndustryPhotoCredits'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
@@ -38,9 +37,6 @@ export function IndustriesSection({
           </RevealItem>
         ))}
       </Reveal>
-      <Container className="relative">
-        <IndustryPhotoCredits />
-      </Container>
     </section>
   )
 }

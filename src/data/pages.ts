@@ -38,8 +38,7 @@ export const pageHeroes: Record<
       en: 'Selected references from the industrial sites we have connected, secured and supported.',
       th: 'ผลงานอ้างอิงด้านระบบเครือข่าย การสื่อสาร ความปลอดภัย และการบำรุงรักษาจากหลากหลายอุตสาหกรรม',
     }, // DRAFT
-    image: industryPhotos['industrial-infrastructure'].image,
-    imageCredit: industryPhotos['industrial-infrastructure'].imageCredit,
+    image: '/images/hero/projects-refinery.png',
   },
   contact: {
     title: { en: 'Contact', th: 'ติดต่อเรา' },

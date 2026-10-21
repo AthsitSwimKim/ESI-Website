@@ -85,9 +85,9 @@ export const th: DeepPartial<Dictionary> = {
     goTo: 'ไปหน้าที่',
   },
   solutions: {
-    brandPartners: 'แบรนด์พันธมิตร',
+    brandPartners: 'แบรนด์พาร์ทเนอร์',
     viewAllBrands: 'ดูแบรนด์ทั้งหมด',
-    brandPartnersNote: 'แบรนด์อุปกรณ์และซอฟต์แวร์ที่ปรากฏใน Company Profile ของ ESI',
+    brandPartnersNote: 'แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย',
     gallery: 'ระบบและอุปกรณ์',
     galleryNote: 'แผนผังระบบและภาพผลิตภัณฑ์จาก Company Profile ของ ESI',
     viewImage: 'ดูภาพเต็ม (เปิดในแท็บใหม่)',
@@ -107,13 +107,6 @@ export const th: DeepPartial<Dictionary> = {
     vision: 'วิสัยทัศน์',
     coreValues: 'ค่านิยมหลัก',
     industriesServed: 'อุตสาหกรรมที่ให้บริการ',
-  },
-  images: {
-    photoCredits: 'เครดิตภาพและสิทธิ์การใช้งาน',
-    industryPhotoNote:
-      'ภาพถ่ายที่ได้รับอนุญาตให้ใช้เพื่อสื่อประเภทอุตสาหกรรม ไม่ใช่ภาพโครงการของ ESI และไม่ได้สื่อว่าบริษัทหรือช่างภาพในเครดิตรับรอง ESI',
-    photoChanges:
-      'ย่อขนาดและแปลงเป็น WebP พร้อมจัดกรอบภาพให้เหมาะกับหน้าจอ โดยแต่ละภาพยังคงใช้ license ที่ระบุไว้',
   },
   a11y: {
     skipToContent: 'ข้ามไปยังเนื้อหา',

@@ -1,7 +1,7 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-10-21 — เปลี่ยน Hero ของ Solutions/Industries/Projects เป็นภาพถ่ายจริงจากเยอรมนีและเนเธอร์แลนด์ พร้อมเครดิตและ license แบบพับเก็บท้ายหน้า (D38); ปรับแผง About ให้แสดงโลโก้ล้วนแล้ว · เจ้าของอนุมัติ commit/push งานรอบนี้ไปที่ `SolFrontend` (ไม่ deploy)
+> **อัปเดตล่าสุด:** 2026-10-21 — เปลี่ยน Hero หน้า Projects เป็นภาพโรงงานที่เจ้าของแนบมา (D41); ลบส่วนเครดิตภาพทุกหน้า (D40); ปรับ Brand Partners เป็นโลโก้ล้วนและเรียบเรียง copy (D39) · เจ้าของอนุมัติ commit/push งาน D39–D41 ไปที่ `SolFrontend` แล้ว (ไม่ deploy)
 > **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
@@ -108,6 +108,22 @@
 **D38 (2026-10-21):** เจ้าของให้ใช้ภาพพื้นหลังจริงจากตะวันตกที่อนุญาตใช้ได้ เฉพาะ Hero หน้า Solutions, Industries และ Projects ตามภาพที่ส่งมา: ใช้ภาพที่โฮสต์ใน repo และตรวจ license จาก Wikimedia Commons ซ้ำแล้ว — BMW Leipzig (เยอรมนี, CC BY-SA 2.0 DE), BASF Ludwigshafen (เยอรมนี, CC BY 3.0), Rotterdam Container Terminal (เนเธอร์แลนด์, CC BY-SA 3.0) ตามลำดับ; metadata อ้างจาก `industryPhotos.ts` ผ่าน `pageHeroes`, เพิ่มเครดิตแบบพับเก็บท้าย Solutions/Projects และใช้เครดิตรวมเดิมของ Industries · คง overlay/ตัวอักษร/ภาพ Home และภาพ detail เดิม · ไม่อ้างว่าเป็นภาพหน้างานหรือการรับรอง ESI · รายละเอียดใน `public/images/industries/LICENSES.md`
 
 > ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot และเปิดเครดิตทั้ง 3 หน้าใน TH/EN ที่ 375/768/1024/1440px ครบ ภาพโหลดได้ ไม่มี overflow และลิงก์ license ครบ · Home Hero ใช้ภาพเดิม · ยังไม่ได้ commit/push/deploy
+
+**D39 (2026-10-21):** เจ้าของให้ Brand Partners แสดงเฉพาะรูปโลโก้ ไม่เป็นตารางและไม่มีชื่อแบรนด์ใต้ภาพ จึงเปลี่ยน shared component เป็นแถวโลโก้แบบ flex-wrap บนพื้นขาว ไม่มีกรอบ/เส้นแบ่งช่อง; จัด 2/3/6 โลโก้ต่อแถวตามขนาดจอ เว้นระยะโปร่ง คงสีต้นฉบับและจำนวน/ลำดับตาม data; ชื่อแบรนด์เก็บเฉพาะ alt text เพื่อ accessibility · มีผลกับ Home, Solutions และ solution details ที่มีแบรนด์
+
+> ปรับ copy ตามวงของเจ้าของเพิ่มเติม: “แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย” / “Equipment and software brands for communication and security systems.” ตรวจข้อความจาก Company Profile สไลด์ 3, 5–10 แล้ว และใช้ข้อความกลางผ่าน i18n ทุกหน้าที่แสดง Brand Partners
+
+> เจ้าของเปลี่ยนหัวข้อภาษาไทยเป็น “แบรนด์พาร์ทเนอร์” (2026-10-21) ผ่าน i18n กลาง; ภาษาอังกฤษคงเป็น “Brand Partners”
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ Home 12 โลโก้, Solutions 51 โลโก้ และ PA/GA 6 โลโก้ที่ 375/768/1024/1440px ครบ ไม่มีชื่อใต้ภาพ/เส้นตาราง/overflow และ alt text ครบ · ไม่ deploy
+
+**D40 (2026-10-21):** เจ้าของให้ลบส่วน “เครดิตภาพและสิทธิ์การใช้งาน” ออกจากทุกหน้า และยืนยันให้ใช้ภาพเดิมทั้งหมด จึงลบ shared credit components, จุดเรียกใช้ใน Home/About/Industries/Solutions/Projects และข้อความ i18n ที่ไม่ได้ใช้; คงภาพ ไฟล์ metadata และรายการแหล่งที่มา/สิทธิ์ใน `public/images/industries/LICENSES.md` โดยไม่เพิ่มข้อความเครดิตตำแหน่งใหม่บนหน้าเว็บ · แทนที่ข้อกำหนด disclosure ใน D31/D32/D38
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ browser ทั้ง TH/EN ครบ 5 หน้าที่เคยแสดง disclosure ไม่พบข้อความเครดิต · ไม่มีการเปลี่ยนไฟล์ภาพในงาน D40 · ไม่ deploy
+
+**D41 (2026-10-21):** เจ้าของให้เปลี่ยนพื้นหลัง Hero หน้า `/projects` เป็นภาพโรงงานยามเย็นที่แนบมา เก็บ PNG ต้นฉบับ 687×296 ที่ `/images/hero/projects-refinery.png` โดยไม่แก้ภาพ; เปลี่ยนเฉพาะ `pageHeroes.projects.image` และถอด metadata เครดิต Rotterdam ที่ไม่ตรงกับภาพใหม่ คง overlay/ข้อความ/layout ของ Hero เดิม
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ Hero TH/EN ที่ 375/768/1024/1440px ภาพใหม่โหลดครบ ไม่มี overflow และข้อความอ่านชัด · ไม่ deploy
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว

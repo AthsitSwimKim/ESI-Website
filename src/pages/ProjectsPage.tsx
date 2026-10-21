@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { ProjectCard } from '@/components/cards/ProjectCard'
-import { HeroPhotoCredits } from '@/components/sections/shared/HeroPhotoCredits'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -256,7 +255,6 @@ export function ProjectsPage() {
           )}
         </Container>
       </section>
-      <HeroPhotoCredits credit={hero.imageCredit} />
     </>
   )
 }

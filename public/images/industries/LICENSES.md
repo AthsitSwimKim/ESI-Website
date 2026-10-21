@@ -17,9 +17,9 @@ to the card/showcase ratio. Each supplied WebP and displayed crop retains the co
 license above, including ShareAlike for the CC BY-SA images. Those licenses apply to these
 photographs, not as a claim about the license of other website assets or source code.
 
-Public credits appear in the native “Photo credits & licenses” disclosure on Home, About
-and Industries, with creator, source and license links, contextual-use information and
-the changes listed above. Credits are consolidated rather than repeated under each image.
+The owner requested removal of the visible photo-credit disclosures from every page on
+2026-10-21 (PLAN D40), while explicitly retaining the existing photographs. Source,
+creator, license and modification records remain in this file and the image metadata.
 
 ## Inner-page hero backgrounds (2026-10-21)
 
@@ -29,11 +29,14 @@ The same locally hosted photographs are also used as these hero backgrounds:
 | --- | --- | --- | --- |
 | Solutions | `manufacturing-photo.webp` | BMW plant Leipzig, Germany | CC BY-SA 2.0 Germany |
 | Industries | `petrochemical-basf-photo.webp` | BASF Ludwigshafen, Germany | CC BY 3.0 |
-| Projects | `industrial-infrastructure-photo.webp` | Rotterdam Container Terminal, Netherlands | CC BY-SA 3.0 |
 
 All attribution and source links are in the table above. The hero uses a responsive CSS crop
 with a navy overlay and separate decorative network lines; the original local photograph
-is retained. The same image licenses apply to these displayed crops. Solutions and Projects
-each provide a credits disclosure at the end of the page; Industries uses its existing
-consolidated disclosure, which includes the BASF photograph. These backgrounds illustrate
+is retained. The same image licenses apply to these displayed crops. These backgrounds illustrate
 industrial contexts and are not presented as ESI installations or endorsements.
+
+Projects no longer uses the Rotterdam photograph as its hero as of 2026-10-21 (PLAN D41).
+The owner supplied its replacement directly: `/images/hero/projects-refinery.png`, original
+687×296 PNG, copied unchanged from `codex-clipboard-397c73b7-a78e-48f7-9a1c-98324a223755.png`.
+The Commons licenses above are not attributed to that supplied image. The Rotterdam asset
+continues to be used for the industrial-infrastructure industry section/cards.

@@ -303,10 +303,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
   white (two lines allowed: "INDUSTRIAL / INFRASTRUCTURE").
 - Hover: image `scale-[1.06]` (500ms), an `esi-blue/35` overlay fades over the image, an
   `ArrowUpRight` slides in at the label bar's right edge.
-- Owner update (2026-10-09): use real licensed European photographs from `industryPhotos.ts`.
-  Keep a compact native photo-credit disclosure below the card row and at the end of Industries;
-  do not show creator/source/license captions directly under each image. Do not remove the
-  consolidated credits when reusing the photographs.
+- Owner update (2026-10-21, D40): keep the existing European photographs from
+  `industryPhotos.ts`, but remove photo-credit disclosures and captions from every page.
+  Retain source, creator and license records in data and `public/images/industries/LICENSES.md`.
 
 ### 4.5 Featured Projects (`sections/home/FeaturedProjectsSection.tsx`)
 
@@ -358,8 +357,10 @@ after “ระบบประกาศเสียงและ”, placing “�
 compact presentation in the service's `compactName`; reuse it in the Desktop dropdown and
 Mobile Solutions accordion per the owner's follow-up screenshot. Full service names remain in `name`.
 Detail overview images and galleries also show the complete source image, with full-image
-links. Brand Partners use a white-cell ruled grid, original-colour logos and visible names:
-2 / 3 / 6 columns. Each logo/gallery cell reveals independently so long lists still appear
+links. Brand Partners show only original-colour logos on a continuous white background,
+without table rules, cell borders or visible brand-name captions (owner update 2026-10-21,
+D39). Use a centred wrapping logo row, 2 / 3 / 6 across, with generous horizontal/vertical
+spacing. Each image retains its brand name as accessible alt text. Each logo/gallery item reveals independently so long lists still appear
 on small phone viewports. Home shows 12 brands; overview all 51; details only the slide's
 brands. This owner-supplied content/layout update supersedes the former six-card counts
 and photographic slanted-mask requirement for solution product images/diagrams.
@@ -371,9 +372,14 @@ Leipzig production-line photograph, Industries the BASF Ludwigshafen photograph,
 the Rotterdam Container Terminal photograph. These locally hosted European photographs and
 their verified CC BY / CC BY-SA attribution derive from `industryPhotos.ts`; `pageHeroes`
 records each image and its credit. Keep the navy overlay and existing responsive hero layout.
-Provide consolidated, collapsible attribution at the bottom of Solutions/Projects; Industries'
-existing photo disclosure covers the BASF hero as well. These are contextual industrial views,
+Owner update D40 removes all visible credit disclosures while retaining these photographs
+and their source/license records. These are contextual industrial views,
 not ESI project evidence. Home and detail-page images remain as previously specified.
+
+**Projects hero update (owner request, 2026-10-21, D41):** replace only the Projects overview
+background with the supplied refinery-at-dusk photograph, hosted at
+`/images/hero/projects-refinery.png` (original 687×296 PNG). Retain the shared navy overlay,
+typography and responsive crop. No visible photo-credit disclosure is added (D40).
 
 **Solution detail spacing override (owner request, 2026-10-21):** all seven `/solutions/:slug`
 pages use a base of 24px section padding on mobile and 32px from `md` for features,

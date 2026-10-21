@@ -1,5 +1,4 @@
 import { IndustryShowcase } from '@/components/sections/shared/IndustryShowcase'
-import { IndustryPhotoCredits } from '@/components/sections/shared/IndustryPhotoCredits'
 import { Container } from '@/components/ui/Container'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { Icon } from '@/components/ui/Icon'
@@ -60,7 +59,6 @@ export function IndustriesPage() {
               immediate={i === 0}
             />
           ))}
-          <IndustryPhotoCredits />
         </Container>
       </section>
     </>

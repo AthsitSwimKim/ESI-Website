@@ -30,7 +30,7 @@ export function BrandPartners({
     <section
       aria-labelledby={`${id}-title`}
       id={id}
-      className={cn('bg-esi-light', compact ? 'pt-10 pb-6 md:pt-12 md:pb-8' : 'py-14 md:py-20')}
+      className={cn('bg-white', compact ? 'pt-10 pb-6 md:pt-12 md:pb-8' : 'py-14 md:py-20')}
     >
       <Container>
         <SectionTitle
@@ -49,26 +49,21 @@ export function BrandPartners({
             ) : undefined
           }
         />
-        <ul className="flex flex-wrap justify-center overflow-hidden rounded-[4px] border border-esi-border bg-white">
+        <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-8 sm:gap-x-12 sm:gap-y-10">
           {brands.map((brand) => (
             <Reveal
               as="li"
               key={brand.id}
-              className="flex w-1/2 flex-col items-center justify-center gap-4 border-r border-b border-esi-border bg-white px-5 py-6 sm:w-1/3 lg:w-1/6"
+              className="flex h-20 w-[calc((100%-2rem)/2)] items-center justify-center sm:w-[calc((100%-6rem)/3)] lg:w-[calc((100%-15rem)/6)]"
             >
-              <div className="flex h-16 w-full items-center justify-center">
-                <img
-                  src={brand.image}
-                  alt=""
-                  width={brand.width}
-                  height={brand.height}
-                  loading="lazy"
-                  className="max-h-16 max-w-full object-contain"
-                />
-              </div>
-              <span className="text-center text-xs leading-relaxed font-medium text-esi-muted">
-                {brand.name}
-              </span>
+              <img
+                src={brand.image}
+                alt={brand.name}
+                width={brand.width}
+                height={brand.height}
+                loading="lazy"
+                className="max-h-16 max-w-full object-contain"
+              />
             </Reveal>
           ))}
         </ul>
