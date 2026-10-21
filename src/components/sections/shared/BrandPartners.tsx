@@ -5,16 +5,20 @@ import { Reveal } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { brandPartners } from '@/data/profileAssets'
 import { useT } from '@/i18n'
+import { cn } from '@/lib/utils'
 
 /** Logos supplied in the Company Profile. No dealer/certification status is implied. */
 export function BrandPartners({
   ids,
   id = 'brand-partners',
   overviewLink = false,
+  compact = false,
 }: {
   ids?: string[]
   id?: string
   overviewLink?: boolean
+  /** Reduced section spacing for solution detail pages. */
+  compact?: boolean
 }) {
   const { t } = useT()
   const brands = ids
@@ -23,12 +27,17 @@ export function BrandPartners({
   if (!brands.length) return null
 
   return (
-    <section aria-labelledby={`${id}-title`} id={id} className="bg-esi-light py-14 md:py-20">
+    <section
+      aria-labelledby={`${id}-title`}
+      id={id}
+      className={cn('bg-esi-light', compact ? 'pt-10 pb-6 md:pt-12 md:pb-8' : 'py-14 md:py-20')}
+    >
       <Container>
         <SectionTitle
           id={`${id}-title`}
           title={t('solutions.brandPartners')}
           subtitle={t('solutions.brandPartnersNote')}
+          spacing={compact ? 'compact' : 'default'}
           action={
             overviewLink ? (
               <Link

@@ -12,12 +12,13 @@ export function SolutionGallery({ service }: { service: Service }) {
   const images = service.gallery.filter((image) => image.src !== service.image)
   if (!images.length) return null
   return (
-    <section aria-labelledby="solution-gallery-title" className="bg-white py-14 md:py-20">
+    <section aria-labelledby="solution-gallery-title" className="bg-white py-6 md:py-8">
       <Container>
         <SectionTitle
           id="solution-gallery-title"
           title={t('solutions.gallery')}
           subtitle={t('solutions.galleryNote')}
+          spacing="compact"
         />
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image) => (

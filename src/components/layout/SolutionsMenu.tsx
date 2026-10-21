@@ -171,7 +171,7 @@ export function SolutionsMenu({ label, to }: { label: string; to: string }) {
                       strokeWidth={1.75}
                       className="shrink-0 text-esi-blue"
                     />
-                    <span>{l(s.name)}</span>
+                    <span className="whitespace-pre-line">{l(s.compactName ?? s.name)}</span>
                   </Link>
                 </li>
               ))}

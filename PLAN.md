@@ -1,7 +1,8 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-10-09 — ปรับ Solutions ตาม Company Profile เพิ่ม Brand Partners/ภาพต้นฉบับจากสไลด์ เปลี่ยน Hero เป็นภาพแท่นขุดเจาะที่เจ้าของให้ และใช้ภาพถ่ายจริงพร้อม license ใน Industries · เจ้าของอนุมัติ commit/push ไปที่ `SolFrontend` (ไม่ deploy)
+> **อัปเดตล่าสุด:** 2026-10-21 — เปลี่ยน Hero ของ Solutions/Industries/Projects เป็นภาพถ่ายจริงจากเยอรมนีและเนเธอร์แลนด์ พร้อมเครดิตและ license แบบพับเก็บท้ายหน้า (D38); ปรับแผง About ให้แสดงโลโก้ล้วนแล้ว · เจ้าของอนุมัติ commit/push งานรอบนี้ไปที่ `SolFrontend` (ไม่ deploy)
+> **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
 
@@ -81,6 +82,32 @@
 **D32 (2026-10-09):** เจ้าของให้ลบเครดิตและหมายเหตุการปรับภาพที่แสดงใต้รูปแต่ละใบในหน้า Industries เพราะรบกวน layout; คง disclosure “Photo credits & licenses” แบบพับได้ท้ายหน้าและรายการสิทธิ์ใน `public/images/industries/LICENSES.md` ไว้
 
 > ✅ ตรวจหน้า Industries ที่ 1440px และ 375px แล้ว layout เรียบร้อย · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง
+
+**D33 (2026-10-21):** เจ้าของให้ลดช่องว่างตลอดทั้งหน้ารายละเอียด Solutions ทั้ง 7 หน้า ตามภาพที่ชี้ช่องว่างระหว่าง Overview → สิ่งที่เราส่งมอบ → ระบบและอุปกรณ์ จึงใช้ section padding 24px บนมือถือ / 32px ตั้งแต่ `md` แทนค่าเดิม 56/80px พร้อมหัวข้อแบบ compact และ Overview ห่างย่อหน้า 16px; เป็นข้อยกเว้นจากระยะ section มาตรฐานของเว็บ ตามรายละเอียดใน design-spec §5
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · วัดทุก section ของทั้ง 7 หน้าใน TH/EN ที่ 1440/375px ไม่มี overflow หรือภาพเสีย · ตรวจ screenshot ทั้งหน้าของ PA/GA, Industrial Network และ Video Wall · ยังไม่ได้ commit/push/deploy รอบนี้
+
+**D34 (2026-10-21):** เจ้าของส่งภาพเพิ่มเติมให้เพิ่มระยะเฉพาะช่วง Hero → Overview, ก่อนหัวข้อ Brand Partners, หลังรายการ Industries Served และรอบปุ่มโซลูชันก่อนหน้า/ถัดไป จึงปรับ top ของ Overview เป็น 40/56px, top ของแบรนด์ 40/48px, bottom ของอุตสาหกรรม 40/48px และ navigation padding 32/40px (mobile/desktop) ทั้ง 7 หน้า; ระยะส่วนเนื้อหาภายในยังยึด D33
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ spacing ทั้ง 7 หน้า TH/EN ที่ 1440/375px และภาพเต็มของ PA/GA, Industrial Network, Video Wall · ไม่มี overflow หรือภาพเสีย · ยังไม่ได้ commit/push/deploy
+
+**D35 (2026-10-21):** เจ้าของให้ใช้ `ESI logo.png` (1254×1254) แทนภาพใน Company Introduction ของ `/about` เท่านั้น เก็บต้นฉบับที่ `/images/about/esi-logo.png` แสดงเต็มภาพด้วย `object-contain` และไม่ใช้ slanted mask กับโลโก้; Home ยังคงใช้ภาพวิศวกรเดิมจาก `aboutImage` ใน `home.ts`
+
+> เจ้าของปรับเพิ่มเติม: ใส่กรอบ `esi-border` 1px มุม 4px พื้นขาวและเงา `shadow-card` รอบโลโก้ใน Company Introduction
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ About TH/EN ที่ 1440/375px พร้อมยืนยันว่า Home Hero และ About photo ยังใช้ไฟล์เดิม · ยังไม่ได้ commit/push/deploy
+
+**D36 (2026-10-21):** เจ้าของให้ปรับแผงโลโก้ About ให้สวยงามขึ้น: ใช้กรอบ `esi-light` แบบ inset 12/16px, เส้น `esi-border`, มุม 4px, เงามาตรฐาน และแถบสีน้ำเงินมุมบน; พื้นที่โลโก้สัดส่วน 5:2 ใช้ `object-cover` ตัดเฉพาะพื้นที่ว่างบน/ล่างของต้นฉบับโดยเห็นตัวโลโก้ครบ เพิ่มชื่อบริษัทและ tagline TH/EN จาก `company.ts` ในแถบล่าง และใช้หัวข้อ Introduction แบบ compact · คงไฟล์รูปต้นฉบับและภาพหน้าแรก
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px ทั้งโลโก้และข้อความ ไม่ล้นจอ · Home Hero และ About photo ใช้ไฟล์เดิม · ยังไม่ได้ commit/push/deploy
+
+**D37 (2026-10-21):** เจ้าของต้องการให้แผงโชว์เฉพาะโลโก้และให้เด่นขึ้น: ลบแถบชื่อบริษัท/tagline และกรอบ inset ของ D36 เหลือกรอบชั้นเดียว พื้นขาว เงามาตรฐานและขอบบน `esi-blue` 3px; คงหน้าต่าง 5:2 ให้โลโก้ใหญ่เต็มความกว้างโดยไม่ตัดตัวอักษร ไม่มีข้อความในแผงโลโก้
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ TH/EN ที่ 375/768/1024/1440px โลโก้ครบ ไม่ล้นจอ และภาพหน้าแรกยังใช้ไฟล์เดิม
+
+**D38 (2026-10-21):** เจ้าของให้ใช้ภาพพื้นหลังจริงจากตะวันตกที่อนุญาตใช้ได้ เฉพาะ Hero หน้า Solutions, Industries และ Projects ตามภาพที่ส่งมา: ใช้ภาพที่โฮสต์ใน repo และตรวจ license จาก Wikimedia Commons ซ้ำแล้ว — BMW Leipzig (เยอรมนี, CC BY-SA 2.0 DE), BASF Ludwigshafen (เยอรมนี, CC BY 3.0), Rotterdam Container Terminal (เนเธอร์แลนด์, CC BY-SA 3.0) ตามลำดับ; metadata อ้างจาก `industryPhotos.ts` ผ่าน `pageHeroes`, เพิ่มเครดิตแบบพับเก็บท้าย Solutions/Projects และใช้เครดิตรวมเดิมของ Industries · คง overlay/ตัวอักษร/ภาพ Home และภาพ detail เดิม · ไม่อ้างว่าเป็นภาพหน้างานหรือการรับรอง ESI · รายละเอียดใน `public/images/industries/LICENSES.md`
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot และเปิดเครดิตทั้ง 3 หน้าใน TH/EN ที่ 375/768/1024/1440px ครบ ภาพโหลดได้ ไม่มี overflow และลิงก์ license ครบ · Home Hero ใช้ภาพเดิม · ยังไม่ได้ commit/push/deploy
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว
@@ -164,6 +191,11 @@
 
 ### Phase 5 — Solutions (≈ 1–2 sessions)
 
+- [x] จัดชื่อการ์ด PA/GA หน้า Home ตามเส้นใต้ของเจ้าของ (2026-10-21): “ระบบประกาศเสียงและ” / “สัญญาณเตือนภัย” แยกเป็นสองบรรทัด โดยเก็บ `compactName` ใน service data และให้ compact card รองรับ newline
+- [x] ใช้การแบ่งบรรทัด PA/GA เดียวกันในเมนู Solutions ทั้ง Desktop dropdown และ Mobile accordion ตามภาพเพิ่มเติมของเจ้าของ (2026-10-21)
+- [x] เพิ่มระยะตามภาพล่าสุด (2026-10-21, D34): Overview top 40/56px, Brand Partners top 40/48px, Industries Served bottom 40/48px, previous/next padding 32/40px; ใช้ template ร่วมครบทั้ง 7 หน้า
+- [x] ปรับทั้งหน้าตามภาพเพิ่มเติม (2026-10-21, D33): ลด section padding จาก 56/80px เป็น 24/32px (mobile/desktop) ครบ Overview, features, gallery, brands, industries และ related projects; ระยะระหว่างเนื้อหาสอง section เหลือ 48/64px; หัวข้อถึงเนื้อหา 20/24px, Overview 16px; ลด gap ข้อความ/ภาพบนมือถือและแถบ previous/next · Shared sections ใช้ `compact` เฉพาะหน้ารายละเอียด Solutions
+- [x] ปรับตามเจ้าของ (2026-10-21): INDUSTRONIC ใช้ `industronic.png` ต้นฉบับใหม่ทุกจุดผ่าน data กลาง; การ์ด rich เว้นหัวข้อ/คำอธิบาย 12px และจองพื้นที่หัวข้อ 2 บรรทัดตั้งแต่ tablet เพื่อให้คำอธิบายในแถวเริ่มตรงกัน; Overview ใช้ `SectionTitle spacing="none"` ให้ย่อหน้าห่าง 24px โดยไม่มี margin ซ้อน และเพิ่ม line-height เป็น 1.8 · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจทั้ง 7 detail pages + overview ใน TH/EN ที่ 1440/375px
 - [x] อัปเดตตาม Company Profile (2026-10-09): 7 Solution พร้อม copy TH/EN, ภาพจากสไลด์/gallery ดูภาพเต็ม, Brand Partners บน Home/overview/detail และปรับ nav/footer/sitemap ตาม data; บริการเดิม Cybersecurity/Maintenance ถูกถอดตามคำสั่งเจ้าของ
 
 - [x] `SolutionsPage` (overview): PageHero + intro + 7 rich cards (ภาพจากสไลด์, icon, ชื่อ, คำอธิบาย, Learn more) + Brand Partners + Process (reuse) + CTA

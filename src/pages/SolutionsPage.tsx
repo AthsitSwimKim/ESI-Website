@@ -1,6 +1,7 @@
 import { SolutionCard } from '@/components/cards/SolutionCard'
 import { ProcessSection } from '@/components/sections/home/ProcessSection'
 import { BrandPartners } from '@/components/sections/shared/BrandPartners'
+import { HeroPhotoCredits } from '@/components/sections/shared/HeroPhotoCredits'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { PageHero } from '@/components/ui/PageHero'
@@ -59,6 +60,7 @@ export function SolutionsPage() {
 
       <BrandPartners />
       <ProcessSection />
+      <HeroPhotoCredits credit={hero.imageCredit} />
     </>
   )
 }

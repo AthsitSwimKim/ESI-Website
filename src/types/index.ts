@@ -64,6 +64,8 @@ export interface Service {
   /** Route segment: /solutions/<slug> */
   slug: string
   name: Localized
+  /** Optional line breaks for compact cards and menus; full names stay unchanged elsewhere. */
+  compactName?: Localized
   tagline: Localized
   description: Localized
   icon: IconName
@@ -154,4 +156,6 @@ export interface PageHeroContent {
   title: Localized
   lead?: Localized
   image: string
+  /** Licensed contextual photograph; display attribution on the page where it is used. */
+  imageCredit?: Industry['imageCredit']
 }

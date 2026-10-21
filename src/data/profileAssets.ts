@@ -1,14 +1,15 @@
 // Assets extracted from ESi Profile Company_R7 copy.pptx, slides 5–11.
 // Generated from the supplied media. Original branding and proportions are retained.
+// INDUSTRONIC was replaced with the owner's supplied PNG on 2026-10-21.
 export const brandPartners = [
   {
     id: 'industronic',
     name: 'INDUSTRONIC',
-    image: '/images/partners/industronic.webp',
-    width: 153,
-    height: 100,
+    image: '/images/partners/industronic.png',
+    width: 1103,
+    height: 754,
     sourceSlide: 5,
-    sourceImage: 'image5.png',
+    sourceImage: 'industronic.png (owner supplied, 2026-10-21)',
   },
   {
     id: 'gai-tronics',

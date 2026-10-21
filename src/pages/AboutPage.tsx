@@ -44,7 +44,7 @@ export function AboutPage() {
               <SectionTitle
                 id="about-intro-title"
                 title={t('about.introduction')}
-                className="mb-6"
+                spacing="compact"
               />
             </RevealItem>
             <RevealItem>
@@ -53,15 +53,21 @@ export function AboutPage() {
               </p>
             </RevealItem>
           </Reveal>
-          <Reveal variants={scaleIn} immediate>
-            <img
-              src={aboutIntroImage}
-              alt=""
-              loading="lazy"
-              width={1200}
-              height={900}
-              className="aspect-[4/3] w-full object-cover lg:clip-slant-img-left"
-            />
+          <Reveal
+            variants={scaleIn}
+            immediate
+            className="overflow-hidden rounded-[4px] border border-t-[3px] border-esi-border border-t-esi-blue bg-white shadow-card"
+          >
+            <div className="aspect-[5/2] overflow-hidden">
+              <img
+                src={aboutIntroImage}
+                alt=""
+                loading="lazy"
+                width={1254}
+                height={1254}
+                className="h-full w-full object-cover"
+              />
+            </div>
           </Reveal>
         </Container>
       </section>

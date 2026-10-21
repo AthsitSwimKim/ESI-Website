@@ -353,6 +353,10 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
 **Company Profile update (owner request, 2026-10-09):** Solutions now use the seven groups
 from slides 5–11. Home compact cards wrap into balanced 4+3 rows on desktop; overview rich
 cards include full original slide images on white using `object-contain` (3+3+1, centred).
+Owner typography update (2026-10-21): the Thai compact Home PA/GA card explicitly breaks
+after “ระบบประกาศเสียงและ”, placing “สัญญาณเตือนภัย” together on the next line. Store this
+compact presentation in the service's `compactName`; reuse it in the Desktop dropdown and
+Mobile Solutions accordion per the owner's follow-up screenshot. Full service names remain in `name`.
 Detail overview images and galleries also show the complete source image, with full-image
 links. Brand Partners use a white-cell ruled grid, original-colour logos and visible names:
 2 / 3 / 6 columns. Each logo/gallery cell reveals independently so long lists still appear
@@ -362,8 +366,34 @@ and photographic slanted-mask requirement for solution product images/diagrams.
 
 Every inner page = `<Seo>` + `<PageHero>` + sections + (CTA band + footer from the layout).
 
+**Real overview-hero photographs (owner request, 2026-10-21, D38):** Solutions uses the BMW
+Leipzig production-line photograph, Industries the BASF Ludwigshafen photograph, and Projects
+the Rotterdam Container Terminal photograph. These locally hosted European photographs and
+their verified CC BY / CC BY-SA attribution derive from `industryPhotos.ts`; `pageHeroes`
+records each image and its credit. Keep the navy overlay and existing responsive hero layout.
+Provide consolidated, collapsible attribution at the bottom of Solutions/Projects; Industries'
+existing photo disclosure covers the BASF hero as well. These are contextual industrial views,
+not ESI project evidence. Home and detail-page images remain as previously specified.
+
+**Solution detail spacing override (owner request, 2026-10-21):** all seven `/solutions/:slug`
+pages use a base of 24px section padding on mobile and 32px from `md` for features,
+gallery and Related Projects, replacing the former 56px / 80px. At the owner's marked
+page boundaries, add breathing room: Overview top 40px / 56px, Brand Partners top
+40px / 48px, and Industries Served bottom 40px / 48px (mobile / `md` respectively).
+Their other edges retain the base padding. Use
+`SectionTitle spacing="compact"` for 20px / 24px below headings, with 16px between Overview's
+heading and body and a 24px mobile gap between its text and image. Previous/next navigation
+uses 32px / 40px vertical padding. These boundary adjustments follow the owner's later
+screenshots on the same date (D34). Shared Brand Partners and Related Projects receive `compact`
+only on solution details; their default spacing on other pages stays as specified above.
+
 - **About** (`/about`): PageHero ("About ESI", lead) → Company Introduction (2-col: text +
-  photo with slanted mask) → Company Overview (stats strip optional — only real numbers) →
+  owner-supplied ESI logo only, 2026-10-21 D37: a single white frame with 1px `esi-border`,
+  a 3px `esi-blue` top edge, 4px corners and `shadow-card`. The 5:2 logo window uses
+  `object-cover` to crop only the source's blank vertical margins, keeping the entire mark
+  visible and prominent. No caption, company name or tagline inside the panel; no inset
+  frame. Introduction title uses compact spacing.
+  No slanted image mask; Home's About photo stays unchanged) → Company Overview (stats strip optional — only real numbers) →
   Expertise (6 solution cards, rich variant) → Mission / Vision (2 cards on `esi-light`, icon +
   title + text) → Core Values (4-column icon grid) → Why ESI (dark section, reused) →
   Industries Served (industry cards, reused) → CTA.

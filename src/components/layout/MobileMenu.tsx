@@ -167,7 +167,9 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
                                     strokeWidth={1.75}
                                     className="shrink-0 text-esi-blue"
                                   />
-                                  {l(s.name)}
+                                  <span className="whitespace-pre-line">
+                                    {l(s.compactName ?? s.name)}
+                                  </span>
                                 </NavLink>
                               </li>
                             ))}

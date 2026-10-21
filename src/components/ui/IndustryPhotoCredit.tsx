@@ -1,7 +1,7 @@
 import type { Industry } from '@/types'
 
 /** Keep the creator, source and license linked whenever a licensed industry photo is used. */
-export function IndustryPhotoCredit({ industry }: { industry: Industry }) {
+export function IndustryPhotoCredit({ industry }: { industry: Pick<Industry, 'imageCredit'> }) {
   const credit = industry.imageCredit
   return (
     <span className="text-xs leading-relaxed text-esi-muted">

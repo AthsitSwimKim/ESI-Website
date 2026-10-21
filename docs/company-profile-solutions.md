@@ -31,6 +31,8 @@ contact details differ from the previously confirmed information; Contact is out
 - `src/data/profileAssets.ts` records original media filenames, logo source slides and dimensions.
 - `src/data/services.ts` records the solution source slide and caption for each source image.
 - `public/images/partners/` contains lossless WebP logos, without recolouring or redrawing.
+- Owner update (2026-10-21): INDUSTRONIC uses the supplied `industronic.png` (1103×754)
+  unchanged, replacing the deck logo on Home, Solutions and the PA/GA detail page.
 - `public/images/solutions/` contains WebP versions of the original system images.
 - WMF/EMF source images (`image87.wmf`, `image25.emf`, `image36.emf`) were rasterised using
   Windows System.Drawing to preserve their original artwork in a browser-supported format.

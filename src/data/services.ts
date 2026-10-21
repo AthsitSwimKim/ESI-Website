@@ -10,6 +10,10 @@ export const services: Service[] = [
   {
     slug: 'paga',
     name: { en: 'Public Address & General Alarm', th: 'ระบบประกาศเสียงและสัญญาณเตือนภัย' },
+    compactName: {
+      en: 'Public Address & General Alarm',
+      th: 'ระบบประกาศเสียงและ\nสัญญาณเตือนภัย',
+    },
     tagline: {
       en: 'Plant announcements, emergency alarms and two-way intercom.',
       th: 'ประกาศเสียง แจ้งเตือนเหตุฉุกเฉิน และสื่อสารสองทางภายในโรงงาน',
