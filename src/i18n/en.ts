@@ -3,6 +3,9 @@
  * component is a compile error. Long-form content lives in src/data with `Localized` fields.
  */
 export const en = {
+  home: {
+    organizations: 'Organizations We Work With',
+  },
   nav: {
     home: 'Home',
     about: 'About',

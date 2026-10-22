@@ -345,6 +345,23 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
 
 ### 4.8 CTA band — see §3.
 
+### 4.9 Organizations We Work With (owner update 2026-10-22, D45)
+
+Home only: insert a separate section immediately after Brand Partners and before Why ESI.
+Use the requested Thai heading “องค์กรที่ร่วมงานกับเรา” / “Organizations We Work With”,
+the standard blue display title and underline and a continuous white background. Owner
+update D46 removes the full-width top border and reduces this section's top padding to
+24px / 32px (mobile / `md`), retaining 56px / 80px bottom padding. The independent heading
+and spacing keep the two sections distinct. Show 44 logo entries representing 43 organizations from the
+Company Profile project-reference sequence, preserving their original colours and proportions.
+Use centred wrapping rows, 2 / 3 / 6 across, with individual viewport reveals and lazy images.
+No table rules, card borders, visible company-name captions, subtitle or external links.
+Logo accessible names come from the organization data; source records are kept in
+`docs/company-profile-organizations.md`. Do not merge these logos into Brand Partners or
+add the section to Solutions/detail pages.
+Owner follow-up: retain both GC and PTT Global Chemical wordmarks rather than deduplicating
+them into one mark. Use the embedded `image126.png` for the requested PTT version.
+
 ---
 
 ## 5. Inner pages

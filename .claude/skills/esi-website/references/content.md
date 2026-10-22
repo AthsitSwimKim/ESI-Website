@@ -10,6 +10,14 @@ invented on the spot. Legend:
 English is the primary language (the mockup is English). Thai (`th`) fields are optional and
 fall back to English until ESI supplies Thai copy — see `architecture.md` § i18n.
 
+**Home organizations (owner request, 2026-10-22, D45):** add the heading
+“องค์กรที่ร่วมงานกับเรา” / “Organizations We Work With” as a separate section after Brand
+Partners and before Why ESI. Logos come from the supplied Company Profile project-reference
+slides 12–18, with 44 logo entries for 43 organizations: the owner specifically requested
+both the GC and PTT Global Chemical wordmarks. Use
+`src/data/organizations.ts` and `docs/company-profile-organizations.md` for the complete
+list and source mapping. No extra subtitle or relationship claims are supplied.
+
 ---
 
 ## 1. Company (`src/data/company.ts`) ✅

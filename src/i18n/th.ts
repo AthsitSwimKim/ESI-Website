@@ -7,6 +7,9 @@ import type { Dictionary } from './en'
  * Any key missing here falls back to English automatically.
  */
 export const th: DeepPartial<Dictionary> = {
+  home: {
+    organizations: 'องค์กรที่ร่วมงานกับเรา',
+  },
   nav: {
     home: 'หน้าแรก',
     about: 'เกี่ยวกับเรา',

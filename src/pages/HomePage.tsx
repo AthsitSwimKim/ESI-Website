@@ -2,6 +2,7 @@ import { AboutSection } from '@/components/sections/home/AboutSection'
 import { FeaturedProjectsSection } from '@/components/sections/home/FeaturedProjectsSection'
 import { HeroSection } from '@/components/sections/home/HeroSection'
 import { IndustriesSection } from '@/components/sections/home/IndustriesSection'
+import { OrganizationsSection } from '@/components/sections/home/OrganizationsSection'
 import { ProcessSection } from '@/components/sections/home/ProcessSection'
 import { SolutionsSection } from '@/components/sections/home/SolutionsSection'
 import { WhyEsiSection } from '@/components/sections/home/WhyEsiSection'
@@ -12,7 +13,7 @@ import { seo } from '@/data/seo'
 import { featuredBrandIds } from '@/data/partners'
 import { useT } from '@/i18n'
 
-/** Home (spec §13): Hero → Solutions → About → Industries → Featured Projects → Why ESI → Process → CTA (layout) → Footer. */
+/** Home: Hero → Solutions → About → Evidence → Industries → Projects → Brands → Organizations → Why ESI → Process → CTA → Footer. */
 export function HomePage() {
   const { l } = useT()
   return (
@@ -25,6 +26,7 @@ export function HomePage() {
       <IndustriesSection />
       <FeaturedProjectsSection />
       <BrandPartners ids={featuredBrandIds} overviewLink />
+      <OrganizationsSection />
       <WhyEsiSection />
       <ProcessSection />
     </>

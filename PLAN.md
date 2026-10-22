@@ -1,7 +1,7 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-10-21 — ปรับ checklist เฉพาะ LAN/WAN, CCTV และ Radio ให้บล็อกกว้างตามข้อความและอยู่บรรทัดเดียวบน desktop (D44); เรียบเรียงคำอธิบาย Systems & Equipment (D43); ลดสเกลโลโก้ About (D42) · งาน D39–D41 commit/push ไปที่ `SolFrontend` แล้ว; งาน D42–D44 ยังไม่ commit/push และไม่ deploy
+> **อัปเดตล่าสุด:** 2026-10-22 — ปรับรอยต่อแบรนด์พาร์ทเนอร์/องค์กรให้โปร่งและกระชับโดยไม่มีเส้นเต็มจอ (D46); เพิ่มส่วนองค์กรบน Home พร้อมทั้ง GC และ PTT Global Chemical (D45) · เจ้าของอนุมัติ commit/push งาน D45–D46 ไปที่ `SolFrontend` แล้ว (ไม่ deploy)
 > **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
@@ -136,6 +136,18 @@
 **D44 (2026-10-21):** เจ้าของให้ปรับเฉพาะ checklist ในภาพของ LAN/WAN, CCTV และ Radio โดยไม่ต้องแบ่งบล็อกเท่ากัน จึงเลือก `featureLayout: 'flow'` ผ่าน service data เฉพาะ 3 รายการ ให้บล็อกกว้างตามข้อความและไม่ตัดบรรทัดตั้งแต่ `lg`; เมื่อจอแคบให้ข้อความยาวขึ้นบรรทัดได้เพื่อไม่ล้นจอ คงข้อความ/สี/ขนาดตัวอักษร/spacing เดิมและ grid ของอีก 4 หน้า Solutions
 
 > ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจสามหน้า TH/EN ที่ 375/768/1024/1440px: desktop ทุก label บรรทัดเดียว ไม่มี overflow; อีก 4 หน้าใช้ grid เดิม · ตรวจ screenshot desktop และ mobile แล้ว · ยังไม่ commit/push/deploy งาน D44
+
+**D45 (2026-10-22):** เจ้าของให้เพิ่ม “องค์กรที่ร่วมงานกับเรา” เฉพาะ Home เป็น section แยกต่อจาก Brand Partners และก่อน Why ESI ตามภาพวง ใช้โลโก้จาก Company Profile ชุด BACKGROUND PROJECT / EXPERIENCE REFERANCE สไลด์ 12–18: 49 ภาพไม่ซ้ำไฟล์ รวมโลโก้ทางเลือกของบริษัทเดียวกันแล้วเหลือ 43 องค์กร เก็บสีและสัดส่วนเดิม แสดงเฉพาะโลโก้ ไม่มีชื่อซ้ำ/กรอบช่อง และไม่รวมกับ equipment-brand partners; ข้อมูลใน `src/data/organizations.ts`, ภาพใน `/images/organizations/`, หลักฐานที่ `docs/company-profile-organizations.md` · หัวข้อ TH ตามคำขอ / EN “Organizations We Work With” · รายการมีทั้ง project references และประวัติประสบการณ์ตามเอกสาร ไม่เพิ่มคำกล่าวอ้างเรื่อง certification/endorsement
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ TH/EN ที่ 375/768/1024/1440px: โลโก้ 43 องค์กรโหลดครบ ขนาดภาพตรง metadata ชื่อ alt ไม่ซ้ำ ไม่มี overflow; แบรนด์พาร์ทเนอร์เดิมยังมี 12 รายการ และ section ใหม่อยู่หลังแบรนด์ก่อน Why ESI · ตรวจว่า About/Solutions/PA-GA ไม่แสดง section ใหม่นี้ · ยังไม่ commit/push/deploy งาน D45
+
+> เจ้าของทักว่าโลโก้ PTT Global Chemical ที่แนบมาหายไป จึงแยก `image126.png` จากสไลด์ 17 กลับมาแสดงถัดจาก GC โดยไม่ลบ GC เดิม รวมแสดง 44 โลโก้สำหรับ 43 องค์กร ไม่รวมโลโก้สองแบบนี้เป็นรายการเดียวอีก
+
+> ✅ ตรวจรอบเพิ่มโลโก้: typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ TH/EN ที่ 375/768/1024/1440px พบทั้ง GC และ PTT Global Chemical โหลดจาก PNG ต้นฉบับ 428×118 ครบ และไม่มี overflow · ยังไม่ commit/push/deploy
+
+**D46 (2026-10-22):** เจ้าของวงรอยต่อระหว่าง Brand Partners กับ Organizations ให้ปรับความสวยงาม จึงลบเส้น border ที่พาดเต็มจอและลด top padding ของ Organizations จาก 56/80px เป็น 24/32px (mobile/desktop) โดยคงสอง section แยกกันผ่านหัวข้อและพื้นที่ว่าง; ไม่เปลี่ยนโลโก้ ลำดับ ข้อความ หรือ Brand Partners ของหน้าอื่น
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px ไม่มีเส้นเต็มจอ ระยะด้านบนตรง 24/32px ไม่มี overflow และยังคงรายการโลโก้ 12/44 ตามเดิม · ยังไม่ commit/push/deploy งาน D46
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว
