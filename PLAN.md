@@ -1,7 +1,8 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-09-30
+> **อัปเดตล่าสุด:** 2026-10-22 — ปรับรอยต่อแบรนด์พาร์ทเนอร์/องค์กรให้โปร่งและกระชับโดยไม่มีเส้นเต็มจอ (D46); เพิ่มส่วนองค์กรบน Home พร้อมทั้ง GC และ PTT Global Chemical (D45) · เจ้าของอนุมัติ commit/push งาน D45–D46 ไปที่ `SolFrontend` แล้ว (ไม่ deploy)
+> **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
 
@@ -18,7 +19,7 @@
 | ข้อมูล  | Static data ใน `src/data/*.ts` — เพิ่ม Project/Service โดยแก้ไฟล์ data (spec §50–51)                                |
 | ภาษา    | EN เป็นหลัก + สวิตช์ TH/EN — copy อังกฤษและไทยครบทั้ง site แล้ว รอ ESI ตรวจอนุมัติถ้อยคำขั้นสุดท้าย                 |
 | หน้าตา  | **ยึดตาม mockup หน้า Home** ทุก section แล้วขยาย design language เดียวกันไปหน้าอื่น (รายละเอียดใน `design-spec.md`) |
-| หน้า    | Home, About, Solutions (+6 detail), Industries, Projects (+detail), Contact, 404 — route ตาม spec §9                |
+| หน้า    | Home, About, Solutions (+7 detail ตาม Company Profile), Industries, Projects (+detail), Contact, 404               |
 | Deploy  | `npm run build` → `dist/` ขึ้น Vercel / Netlify / Cloudflare Pages / Apache / Nginx ได้ทันที                        |
 
 ## 2. หลักการทำงานทุก Phase
@@ -65,6 +66,88 @@
 | D28 | Trust evidence ต้องมีน้ำหนักแต่ห้ามสร้างตัวเลข/ใบรับรองที่ ESI ยังไม่ยืนยัน                                                                                                                                           | แสดงเฉพาะหลักฐานที่คำนวณย้อนกลับได้จากข้อมูลจริงใน repo: 22 project references, 6 solution areas, 5 industry groups และช่วงผลงานที่เผยแพร่ 2017–2024; ไม่ใส่ ISO, จำนวนลูกค้า, uptime หรือจำนวนปีประสบการณ์ที่ไม่มีเอกสารรองรับ                                                                                                                                                                 | ✅ ตัดสินใจแล้ว (2026-09-30)             |
 
 ### ข้อมูลที่ต้องขอจาก ESI (content needed)
+
+**D29 (2026-10-09):** เจ้าของให้ยึด `ESi Profile Company_R7 copy.pptx` สไลด์ 5–11 เป็นข้อมูล Solutions: PA/GA, LAN/WAN, PABX/Telephone, CCTV, Access Control, Radio และ Video Wall รวม 7 กลุ่ม; ถอด Cybersecurity/Maintenance จากหน้า Solution แต่เก็บประวัติผลงานเดิมไว้ ใช้รูปต้นฉบับ 35 ภาพและโลโก้ 51 แบรนด์จากสไลด์ ไม่เพิ่ม dealer/certification claims หน้า Video Wall ไม่มี Brand Partners เพราะสไลด์ไม่ระบุ · รายละเอียดที่ `docs/company-profile-solutions.md`
+
+**D30 (2026-10-09):** เจ้าของให้เปลี่ยนภาพ Hero หน้าแรกเป็นแท่นขุดเจาะจากไฟล์ `maros_1680x645.jpg` ที่ส่งมา ใช้ภาพต้นฉบับ 1680×645 เก็บที่ `/images/hero/maros-offshore.jpg` คง navy gradient/ข้อความ/CTA เดิม และไม่เปลี่ยนภาพพื้นหลังหน้าอื่น ภาพนี้ใช้สื่อบริบทอุตสาหกรรม ไม่อ้างว่าเป็นโครงการของ ESI
+
+> ✅ ตรวจ Hero ใหม่ TH/EN ที่ 375/768/1024/1440 แล้ว ภาพโหลดครบและข้อความอ่านชัด · typecheck/lint/20 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง (axe WCAG 2 A/AA 0 violations) · ยังไม่ได้ commit/deploy การเปลี่ยนแปลงนี้
+
+> ปรับตำแหน่งตามเจ้าของเพิ่มเติม: Desktop ตั้งแต่ 1024px เลื่อนชั้นภาพไปขวา 12% พร้อม mask ไล่ขอบซ้ายให้กลืนกับพื้น navy; Tablet/Mobile คงตำแหน่งเดิม ตรวจภาพจริง TH/EN เพิ่มที่ 1900px ด้วย
+
+**D31 (2026-10-09):** เจ้าของให้เปลี่ยนภาพอุตสาหกรรม 5 ช่องเป็นภาพถ่ายจริงจากตะวันตกที่ได้รับอนุญาต ใช้ภาพทะเลเหนือ, BASF Ludwigshafen, Rostock power station, BMW Leipzig และ Rotterdam Container Terminal ภายใต้ CC BY/CC BY-SA พร้อมเครดิต/แหล่งที่มา/license ใน Home, About และ Industries; asset WebP เก็บในเว็บ ไม่ hotlink และไม่สื่อว่าเป็นภาพหน้างาน ESI · รายการสิทธิ์ที่ `public/images/industries/LICENSES.md`
+
+> ✅ ตรวจภาพ/เครดิต TH/EN ใน Home และ Industries ที่ 375/768/1024/1440 ผ่าน รวม mobile horizontal scroll และ disclosure เครดิต · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง · ยังไม่ได้ commit/deploy รอบนี้
+
+**D32 (2026-10-09):** เจ้าของให้ลบเครดิตและหมายเหตุการปรับภาพที่แสดงใต้รูปแต่ละใบในหน้า Industries เพราะรบกวน layout; คง disclosure “Photo credits & licenses” แบบพับได้ท้ายหน้าและรายการสิทธิ์ใน `public/images/industries/LICENSES.md` ไว้
+
+> ✅ ตรวจหน้า Industries ที่ 1440px และ 375px แล้ว layout เรียบร้อย · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง
+
+**D33 (2026-10-21):** เจ้าของให้ลดช่องว่างตลอดทั้งหน้ารายละเอียด Solutions ทั้ง 7 หน้า ตามภาพที่ชี้ช่องว่างระหว่าง Overview → สิ่งที่เราส่งมอบ → ระบบและอุปกรณ์ จึงใช้ section padding 24px บนมือถือ / 32px ตั้งแต่ `md` แทนค่าเดิม 56/80px พร้อมหัวข้อแบบ compact และ Overview ห่างย่อหน้า 16px; เป็นข้อยกเว้นจากระยะ section มาตรฐานของเว็บ ตามรายละเอียดใน design-spec §5
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · วัดทุก section ของทั้ง 7 หน้าใน TH/EN ที่ 1440/375px ไม่มี overflow หรือภาพเสีย · ตรวจ screenshot ทั้งหน้าของ PA/GA, Industrial Network และ Video Wall · ยังไม่ได้ commit/push/deploy รอบนี้
+
+**D34 (2026-10-21):** เจ้าของส่งภาพเพิ่มเติมให้เพิ่มระยะเฉพาะช่วง Hero → Overview, ก่อนหัวข้อ Brand Partners, หลังรายการ Industries Served และรอบปุ่มโซลูชันก่อนหน้า/ถัดไป จึงปรับ top ของ Overview เป็น 40/56px, top ของแบรนด์ 40/48px, bottom ของอุตสาหกรรม 40/48px และ navigation padding 32/40px (mobile/desktop) ทั้ง 7 หน้า; ระยะส่วนเนื้อหาภายในยังยึด D33
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ spacing ทั้ง 7 หน้า TH/EN ที่ 1440/375px และภาพเต็มของ PA/GA, Industrial Network, Video Wall · ไม่มี overflow หรือภาพเสีย · ยังไม่ได้ commit/push/deploy
+
+**D35 (2026-10-21):** เจ้าของให้ใช้ `ESI logo.png` (1254×1254) แทนภาพใน Company Introduction ของ `/about` เท่านั้น เก็บต้นฉบับที่ `/images/about/esi-logo.png` แสดงเต็มภาพด้วย `object-contain` และไม่ใช้ slanted mask กับโลโก้; Home ยังคงใช้ภาพวิศวกรเดิมจาก `aboutImage` ใน `home.ts`
+
+> เจ้าของปรับเพิ่มเติม: ใส่กรอบ `esi-border` 1px มุม 4px พื้นขาวและเงา `shadow-card` รอบโลโก้ใน Company Introduction
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ About TH/EN ที่ 1440/375px พร้อมยืนยันว่า Home Hero และ About photo ยังใช้ไฟล์เดิม · ยังไม่ได้ commit/push/deploy
+
+**D36 (2026-10-21):** เจ้าของให้ปรับแผงโลโก้ About ให้สวยงามขึ้น: ใช้กรอบ `esi-light` แบบ inset 12/16px, เส้น `esi-border`, มุม 4px, เงามาตรฐาน และแถบสีน้ำเงินมุมบน; พื้นที่โลโก้สัดส่วน 5:2 ใช้ `object-cover` ตัดเฉพาะพื้นที่ว่างบน/ล่างของต้นฉบับโดยเห็นตัวโลโก้ครบ เพิ่มชื่อบริษัทและ tagline TH/EN จาก `company.ts` ในแถบล่าง และใช้หัวข้อ Introduction แบบ compact · คงไฟล์รูปต้นฉบับและภาพหน้าแรก
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px ทั้งโลโก้และข้อความ ไม่ล้นจอ · Home Hero และ About photo ใช้ไฟล์เดิม · ยังไม่ได้ commit/push/deploy
+
+**D37 (2026-10-21):** เจ้าของต้องการให้แผงโชว์เฉพาะโลโก้และให้เด่นขึ้น: ลบแถบชื่อบริษัท/tagline และกรอบ inset ของ D36 เหลือกรอบชั้นเดียว พื้นขาว เงามาตรฐานและขอบบน `esi-blue` 3px; คงหน้าต่าง 5:2 ให้โลโก้ใหญ่เต็มความกว้างโดยไม่ตัดตัวอักษร ไม่มีข้อความในแผงโลโก้
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ TH/EN ที่ 375/768/1024/1440px โลโก้ครบ ไม่ล้นจอ และภาพหน้าแรกยังใช้ไฟล์เดิม
+
+**D38 (2026-10-21):** เจ้าของให้ใช้ภาพพื้นหลังจริงจากตะวันตกที่อนุญาตใช้ได้ เฉพาะ Hero หน้า Solutions, Industries และ Projects ตามภาพที่ส่งมา: ใช้ภาพที่โฮสต์ใน repo และตรวจ license จาก Wikimedia Commons ซ้ำแล้ว — BMW Leipzig (เยอรมนี, CC BY-SA 2.0 DE), BASF Ludwigshafen (เยอรมนี, CC BY 3.0), Rotterdam Container Terminal (เนเธอร์แลนด์, CC BY-SA 3.0) ตามลำดับ; metadata อ้างจาก `industryPhotos.ts` ผ่าน `pageHeroes`, เพิ่มเครดิตแบบพับเก็บท้าย Solutions/Projects และใช้เครดิตรวมเดิมของ Industries · คง overlay/ตัวอักษร/ภาพ Home และภาพ detail เดิม · ไม่อ้างว่าเป็นภาพหน้างานหรือการรับรอง ESI · รายละเอียดใน `public/images/industries/LICENSES.md`
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot และเปิดเครดิตทั้ง 3 หน้าใน TH/EN ที่ 375/768/1024/1440px ครบ ภาพโหลดได้ ไม่มี overflow และลิงก์ license ครบ · Home Hero ใช้ภาพเดิม · ยังไม่ได้ commit/push/deploy
+
+**D39 (2026-10-21):** เจ้าของให้ Brand Partners แสดงเฉพาะรูปโลโก้ ไม่เป็นตารางและไม่มีชื่อแบรนด์ใต้ภาพ จึงเปลี่ยน shared component เป็นแถวโลโก้แบบ flex-wrap บนพื้นขาว ไม่มีกรอบ/เส้นแบ่งช่อง; จัด 2/3/6 โลโก้ต่อแถวตามขนาดจอ เว้นระยะโปร่ง คงสีต้นฉบับและจำนวน/ลำดับตาม data; ชื่อแบรนด์เก็บเฉพาะ alt text เพื่อ accessibility · มีผลกับ Home, Solutions และ solution details ที่มีแบรนด์
+
+> ปรับ copy ตามวงของเจ้าของเพิ่มเติม: “แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย” / “Equipment and software brands for communication and security systems.” ตรวจข้อความจาก Company Profile สไลด์ 3, 5–10 แล้ว และใช้ข้อความกลางผ่าน i18n ทุกหน้าที่แสดง Brand Partners
+
+> เจ้าของเปลี่ยนหัวข้อภาษาไทยเป็น “แบรนด์พาร์ทเนอร์” (2026-10-21) ผ่าน i18n กลาง; ภาษาอังกฤษคงเป็น “Brand Partners”
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจภาพ Home 12 โลโก้, Solutions 51 โลโก้ และ PA/GA 6 โลโก้ที่ 375/768/1024/1440px ครบ ไม่มีชื่อใต้ภาพ/เส้นตาราง/overflow และ alt text ครบ · ไม่ deploy
+
+**D40 (2026-10-21):** เจ้าของให้ลบส่วน “เครดิตภาพและสิทธิ์การใช้งาน” ออกจากทุกหน้า และยืนยันให้ใช้ภาพเดิมทั้งหมด จึงลบ shared credit components, จุดเรียกใช้ใน Home/About/Industries/Solutions/Projects และข้อความ i18n ที่ไม่ได้ใช้; คงภาพ ไฟล์ metadata และรายการแหล่งที่มา/สิทธิ์ใน `public/images/industries/LICENSES.md` โดยไม่เพิ่มข้อความเครดิตตำแหน่งใหม่บนหน้าเว็บ · แทนที่ข้อกำหนด disclosure ใน D31/D32/D38
+
+> ✅ typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ browser ทั้ง TH/EN ครบ 5 หน้าที่เคยแสดง disclosure ไม่พบข้อความเครดิต · ไม่มีการเปลี่ยนไฟล์ภาพในงาน D40 · ไม่ deploy
+
+**D41 (2026-10-21):** เจ้าของให้เปลี่ยนพื้นหลัง Hero หน้า `/projects` เป็นภาพโรงงานยามเย็นที่แนบมา เก็บ PNG ต้นฉบับ 687×296 ที่ `/images/hero/projects-refinery.png` โดยไม่แก้ภาพ; เปลี่ยนเฉพาะ `pageHeroes.projects.image` และถอด metadata เครดิต Rotterdam ที่ไม่ตรงกับภาพใหม่ คง overlay/ข้อความ/layout ของ Hero เดิม
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ Hero TH/EN ที่ 375/768/1024/1440px ภาพใหม่โหลดครบ ไม่มี overflow และข้อความอ่านชัด · ไม่ deploy
+
+**D42 (2026-10-21):** ลูกค้าเห็นว่าโลโก้ใน Company Introduction ใหญ่เกินไป จึงลดความกว้างภาพเหลือ 72% ของพื้นที่เดิมและจัดกึ่งกลางในกรอบ 5:2 เพื่อเพิ่มพื้นที่ว่างรอบโลโก้ คงไฟล์ต้นฉบับและสัดส่วนตัวอักษรเดิม โดยแก้เฉพาะส่วนนี้ของหน้า About
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px โลโก้แสดงครบและอยู่กึ่งกลาง ไม่มี overflow · ยังไม่ commit/push/deploy งาน D42
+
+**D43 (2026-10-21):** เจ้าของทักว่าคำอธิบายใต้หัวข้อ “ระบบและอุปกรณ์” อ่านแปลก จึงเรียบเรียงข้อความกลางผ่าน i18n เป็น “ตัวอย่างอุปกรณ์และแผนผังการทำงานของระบบ” / “Equipment examples and system diagrams.” แทนประโยคที่เน้นว่ารูปมาจาก Company Profile โดยมีผลกับทุกหน้า Solutions ที่แสดง gallery
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจข้อความใน browser ครบทั้ง 7 หน้า Solutions ทั้ง TH/EN บนมือถือ ไม่พบประโยคเดิมหรือ overflow · ยังไม่ commit/push/deploy งาน D43
+
+**D44 (2026-10-21):** เจ้าของให้ปรับเฉพาะ checklist ในภาพของ LAN/WAN, CCTV และ Radio โดยไม่ต้องแบ่งบล็อกเท่ากัน จึงเลือก `featureLayout: 'flow'` ผ่าน service data เฉพาะ 3 รายการ ให้บล็อกกว้างตามข้อความและไม่ตัดบรรทัดตั้งแต่ `lg`; เมื่อจอแคบให้ข้อความยาวขึ้นบรรทัดได้เพื่อไม่ล้นจอ คงข้อความ/สี/ขนาดตัวอักษร/spacing เดิมและ grid ของอีก 4 หน้า Solutions
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจสามหน้า TH/EN ที่ 375/768/1024/1440px: desktop ทุก label บรรทัดเดียว ไม่มี overflow; อีก 4 หน้าใช้ grid เดิม · ตรวจ screenshot desktop และ mobile แล้ว · ยังไม่ commit/push/deploy งาน D44
+
+**D45 (2026-10-22):** เจ้าของให้เพิ่ม “องค์กรที่ร่วมงานกับเรา” เฉพาะ Home เป็น section แยกต่อจาก Brand Partners และก่อน Why ESI ตามภาพวง ใช้โลโก้จาก Company Profile ชุด BACKGROUND PROJECT / EXPERIENCE REFERANCE สไลด์ 12–18: 49 ภาพไม่ซ้ำไฟล์ รวมโลโก้ทางเลือกของบริษัทเดียวกันแล้วเหลือ 43 องค์กร เก็บสีและสัดส่วนเดิม แสดงเฉพาะโลโก้ ไม่มีชื่อซ้ำ/กรอบช่อง และไม่รวมกับ equipment-brand partners; ข้อมูลใน `src/data/organizations.ts`, ภาพใน `/images/organizations/`, หลักฐานที่ `docs/company-profile-organizations.md` · หัวข้อ TH ตามคำขอ / EN “Organizations We Work With” · รายการมีทั้ง project references และประวัติประสบการณ์ตามเอกสาร ไม่เพิ่มคำกล่าวอ้างเรื่อง certification/endorsement
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ TH/EN ที่ 375/768/1024/1440px: โลโก้ 43 องค์กรโหลดครบ ขนาดภาพตรง metadata ชื่อ alt ไม่ซ้ำ ไม่มี overflow; แบรนด์พาร์ทเนอร์เดิมยังมี 12 รายการ และ section ใหม่อยู่หลังแบรนด์ก่อน Why ESI · ตรวจว่า About/Solutions/PA-GA ไม่แสดง section ใหม่นี้ · ยังไม่ commit/push/deploy งาน D45
+
+> เจ้าของทักว่าโลโก้ PTT Global Chemical ที่แนบมาหายไป จึงแยก `image126.png` จากสไลด์ 17 กลับมาแสดงถัดจาก GC โดยไม่ลบ GC เดิม รวมแสดง 44 โลโก้สำหรับ 43 องค์กร ไม่รวมโลโก้สองแบบนี้เป็นรายการเดียวอีก
+
+> ✅ ตรวจรอบเพิ่มโลโก้: typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ TH/EN ที่ 375/768/1024/1440px พบทั้ง GC และ PTT Global Chemical โหลดจาก PNG ต้นฉบับ 428×118 ครบ และไม่มี overflow · ยังไม่ commit/push/deploy
+
+**D46 (2026-10-22):** เจ้าของวงรอยต่อระหว่าง Brand Partners กับ Organizations ให้ปรับความสวยงาม จึงลบเส้น border ที่พาดเต็มจอและลด top padding ของ Organizations จาก 56/80px เป็น 24/32px (mobile/desktop) โดยคงสอง section แยกกันผ่านหัวข้อและพื้นที่ว่าง; ไม่เปลี่ยนโลโก้ ลำดับ ข้อความ หรือ Brand Partners ของหน้าอื่น
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px ไม่มีเส้นเต็มจอ ระยะด้านบนตรง 24/32px ไม่มี overflow และยังคงรายการโลโก้ 12/44 ตามเดิม · ยังไม่ commit/push/deploy งาน D46
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว
@@ -148,12 +231,21 @@
 
 ### Phase 5 — Solutions (≈ 1–2 sessions)
 
-- [x] `SolutionsPage` (overview): PageHero + intro + 6 rich cards (icon, ชื่อ, คำอธิบาย, Learn more) + Process (reuse) + CTA
+- [x] จัดชื่อการ์ด PA/GA หน้า Home ตามเส้นใต้ของเจ้าของ (2026-10-21): “ระบบประกาศเสียงและ” / “สัญญาณเตือนภัย” แยกเป็นสองบรรทัด โดยเก็บ `compactName` ใน service data และให้ compact card รองรับ newline
+- [x] ใช้การแบ่งบรรทัด PA/GA เดียวกันในเมนู Solutions ทั้ง Desktop dropdown และ Mobile accordion ตามภาพเพิ่มเติมของเจ้าของ (2026-10-21)
+- [x] เพิ่มระยะตามภาพล่าสุด (2026-10-21, D34): Overview top 40/56px, Brand Partners top 40/48px, Industries Served bottom 40/48px, previous/next padding 32/40px; ใช้ template ร่วมครบทั้ง 7 หน้า
+- [x] ปรับทั้งหน้าตามภาพเพิ่มเติม (2026-10-21, D33): ลด section padding จาก 56/80px เป็น 24/32px (mobile/desktop) ครบ Overview, features, gallery, brands, industries และ related projects; ระยะระหว่างเนื้อหาสอง section เหลือ 48/64px; หัวข้อถึงเนื้อหา 20/24px, Overview 16px; ลด gap ข้อความ/ภาพบนมือถือและแถบ previous/next · Shared sections ใช้ `compact` เฉพาะหน้ารายละเอียด Solutions
+- [x] ปรับตามเจ้าของ (2026-10-21): INDUSTRONIC ใช้ `industronic.png` ต้นฉบับใหม่ทุกจุดผ่าน data กลาง; การ์ด rich เว้นหัวข้อ/คำอธิบาย 12px และจองพื้นที่หัวข้อ 2 บรรทัดตั้งแต่ tablet เพื่อให้คำอธิบายในแถวเริ่มตรงกัน; Overview ใช้ `SectionTitle spacing="none"` ให้ย่อหน้าห่าง 24px โดยไม่มี margin ซ้อน และเพิ่ม line-height เป็น 1.8 · typecheck/lint/21 tests/build ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจทั้ง 7 detail pages + overview ใน TH/EN ที่ 1440/375px
+- [x] อัปเดตตาม Company Profile (2026-10-09): 7 Solution พร้อม copy TH/EN, ภาพจากสไลด์/gallery ดูภาพเต็ม, Brand Partners บน Home/overview/detail และปรับ nav/footer/sitemap ตาม data; บริการเดิม Cybersecurity/Maintenance ถูกถอดตามคำสั่งเจ้าของ
+
+- [x] `SolutionsPage` (overview): PageHero + intro + 7 rich cards (ภาพจากสไลด์, icon, ชื่อ, คำอธิบาย, Learn more) + Brand Partners + Process (reuse) + CTA
 - [x] `SolutionCard` variant `rich` (ทำไว้ตั้งแต่ Phase 3) · `SolutionFeatures` (checklist grid) · `RelatedProjects` (shared, ซ่อนเองเมื่อไม่มีผลงาน — ใช้ต่อใน Phase 6)
-- [x] `SolutionDetailPage` template: PageHero + breadcrumb → Overview (2 คอลัมน์ + ภาพ mask เฉียง) → What we deliver (features จาก spec §16–21) → Industries served (ลิงก์ไป `/industries#slug`) → `RelatedProjects` (ตาม category, สูงสุด 3) → prev/next solution (วนรอบ) → CTA; slug ไม่ถูกต้อง → 404
+- [x] `SolutionDetailPage` template: PageHero + breadcrumb → Overview (2 คอลัมน์ + รูปต้นฉบับเต็มสัดส่วน) → What we deliver (features จาก Company Profile) → Systems & Equipment gallery → Brand Partners ตามสไลด์ → Industries served → `RelatedProjects` (เฉพาะ category ที่ตรง, สูงสุด 3) → prev/next solution → CTA; slug ไม่ถูกต้อง → 404
 - [x] Nav dropdown / mobile submenu / footer / overview ดึงรายการจาก `services.ts` โดยอัตโนมัติ (ทดสอบด้วยการเพิ่ม service ชั่วคราวแล้วลบออก)
 
-**เกณฑ์ผ่าน:** ทั้ง 6 route `/solutions/*` เปิดได้และเนื้อหาถูกต้อง · related projects แสดงเฉพาะที่มี category ตรง (ซ่อนถ้าไม่มี) · การเพิ่ม service ใหม่ใน data ทำให้ nav/footer/overview อัปเดตเอง
+**เกณฑ์ผ่าน:** ทั้ง 7 route `/solutions/*` เปิดได้และเนื้อหาถูกต้อง · related projects แสดงเฉพาะที่มี category ตรง (ซ่อนถ้าไม่มี) · การเพิ่ม service ใหม่ใน data ทำให้ nav/footer/overview อัปเดตเอง
+
+> ✅ **อัปเดตผ่านแล้ว 2026-10-09** — typecheck/lint/20 tests/build ผ่าน · audit สะอาด 18 routes × 4 ความกว้าง (375/768/1024/1440), axe WCAG 2 A/AA 0 violations · ตรวจภาพจริง Desktop และ Mobile 375×667, สลับ TH/EN, ภาพต้นฉบับ/โลโก้โหลดครบ, dropdown keyboard/Escape และ route ที่ถอดออกเป็น 404 · เวอร์ชันนี้ยังไม่ได้ commit หรืออัปเดต Vercel Demo
 
 > ✅ **ผ่านแล้ว 2026-09-29** — ทดสอบใน headless Chrome ครบ 6 route: title/breadcrumb/h1 ถูกต้อง, จำนวน features ตรง spec (9/8/7/7/7/8), industries chips, related projects 3 รายการต่อหน้า, prev/next วนรอบ, CTA band ครบ · slug มั่ว → 404 (ไม่มี CTA) · เพิ่ม service ที่ 7 ชั่วคราว → dropdown/drawer/footer/overview ขึ้นเป็น 7 และ route ใหม่เปิดได้ แล้วลบออก · ไม่มี console error · typecheck/lint/build ผ่าน · แก้ระหว่างทาง: intro หน้า overview ซ้ำกับ lead ใน hero (เขียนใหม่ให้ต่างกัน), หัวข้อ Overview เคยซ้ำชื่อ solution, placeholder SVG ย้าย label ไปมุมบนซ้ายให้เล็กลงเพราะทับ h1 ใน PageHero
 

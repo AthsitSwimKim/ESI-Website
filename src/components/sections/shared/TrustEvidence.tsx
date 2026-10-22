@@ -24,9 +24,6 @@ export function TrustEvidence({ className }: { className?: string }) {
             </RevealItem>
           ))}
         </Reveal>
-        <p className="mt-7 max-w-[90ch] text-[12px] leading-relaxed text-white/55">
-          {l(trustNote)}
-        </p>
       </Container>
     </section>
   )

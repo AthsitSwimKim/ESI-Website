@@ -22,7 +22,7 @@ export function IndustriesSection({
       aria-labelledby={`${id}-title`}
       className="relative isolate overflow-hidden bg-white py-14 md:py-20"
     >
-      <DiagonalLines className="absolute bottom-6 -left-4" />
+      <DiagonalLines className="absolute -bottom-8 -left-4" />
       <Container className="relative">
         <SectionTitle id={`${id}-title`} title={title} />
       </Container>

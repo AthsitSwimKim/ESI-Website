@@ -15,6 +15,8 @@ interface SectionTitleProps {
   action?: ReactNode
   as?: 'h1' | 'h2' | 'h3'
   id?: string
+  /** Let a parent layout control the gap to the following content. */
+  spacing?: 'default' | 'compact' | 'none'
   className?: string
 }
 
@@ -31,6 +33,7 @@ export function SectionTitle({
   action,
   as: Tag = 'h2',
   id,
+  spacing = 'default',
   className,
 }: SectionTitleProps) {
   const dark = tone === 'dark'
@@ -38,7 +41,8 @@ export function SectionTitle({
   return (
     <div
       className={cn(
-        'mb-10',
+        spacing === 'default' && 'mb-10',
+        spacing === 'compact' && 'mb-5 md:mb-6',
         action && 'md:flex md:items-end md:justify-between md:gap-8',
         center && 'text-center',
         className,

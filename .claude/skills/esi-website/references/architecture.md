@@ -209,10 +209,13 @@ export interface Service {
   tagline: Localized;
   description: Localized;
   icon: IconName;
-  features: string[];
+  features: Localized[];
   image: string;
-  category: ProjectCategory;          // links solution ↔ projects
+  category?: ProjectCategory;         // only if a historical project category matches
   industries: IndustrySlug[];
+  brandIds: string[];                 // ids from profileAssets.ts
+  sourceSlide: number;                // slide 5–11 in the supplied Company Profile
+  gallery: { src: string; width: number; height: number; caption: Localized }[];
 }
 
 export interface Industry { slug: IndustrySlug; name: Localized; description: Localized; scope: string[]; icon: IconName; image: string; }

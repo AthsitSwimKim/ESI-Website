@@ -3,6 +3,9 @@
  * component is a compile error. Long-form content lives in src/data with `Localized` fields.
  */
 export const en = {
+  home: {
+    organizations: 'Organizations We Work With',
+  },
   nav: {
     home: 'Home',
     about: 'About',
@@ -81,6 +84,12 @@ export const en = {
     goTo: 'Go to page',
   },
   solutions: {
+    brandPartners: 'Brand Partners',
+    viewAllBrands: 'View all brands',
+    brandPartnersNote: 'Equipment and software brands for communication and security systems.',
+    gallery: 'Systems & Equipment',
+    galleryNote: 'Equipment examples and system diagrams.',
+    viewImage: 'View full image (opens in a new tab)',
     overview: 'Overview',
     whatWeDeliver: 'What we deliver',
     industriesServed: 'Industries served',

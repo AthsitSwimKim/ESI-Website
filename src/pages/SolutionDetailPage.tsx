@@ -2,6 +2,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 
 import { RelatedProjects } from '@/components/sections/shared/RelatedProjects'
+import { BrandPartners } from '@/components/sections/shared/BrandPartners'
+import { SolutionGallery } from '@/components/sections/shared/SolutionGallery'
 import { SolutionFeatures } from '@/components/sections/shared/SolutionFeatures'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
@@ -18,7 +20,7 @@ import { useT } from '@/i18n'
 import { scaleIn } from '@/lib/motion'
 
 /**
- * /solutions/:slug — one template for all six solutions (spec §16–21, design-spec §5):
+ * /solutions/:slug — one template for the seven Company Profile solutions:
  * hero → overview → what we deliver → industries served → related projects → prev/next → CTA.
  * The route loader already 404s unknown slugs, so `service` is always defined here.
  */
@@ -29,8 +31,9 @@ export function SolutionDetailPage() {
   if (!service) return null
 
   const { prev, next } = getAdjacentServices(service.slug)
-  const related = getProjectsByCategory(service.category).slice(0, 3)
+  const related = service.category ? getProjectsByCategory(service.category).slice(0, 3) : []
   const name = l(service.name)
+  const primaryImage = service.gallery.find((image) => image.src === service.image)!
 
   return (
     <>
@@ -51,8 +54,8 @@ export function SolutionDetailPage() {
       />
 
       {/* Overview */}
-      <section aria-labelledby="solution-overview-title" className="py-14 md:py-20">
-        <Container className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <section aria-labelledby="solution-overview-title" className="pt-10 pb-6 md:pt-14 md:pb-8">
+        <Container className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
           <Reveal immediate>
             <div className="flex size-14 items-center justify-center rounded-[4px] bg-esi-light text-esi-blue">
               <Icon name={service.icon} size={32} strokeWidth={1.25} />
@@ -61,22 +64,31 @@ export function SolutionDetailPage() {
             <SectionTitle
               id="solution-overview-title"
               title={t('solutions.overview')}
-              className="mt-5 mb-0"
+              className="mt-4"
+              spacing="none"
               as="h2"
             />
-            <p className="mt-6 max-w-[60ch] text-base leading-[1.7] text-esi-text md:text-lg">
+            <p className="mt-4 max-w-[60ch] text-base leading-[1.7] text-esi-text md:text-lg">
               {l(service.description)}
             </p>
           </Reveal>
           <Reveal variants={scaleIn} immediate>
-            <img
-              src={service.image}
-              alt=""
-              loading="lazy"
-              width={1200}
-              height={800}
-              className="aspect-[3/2] w-full object-cover lg:clip-slant-img-left"
-            />
+            <a
+              href={service.image}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${l(primaryImage.caption)} — ${t('solutions.viewImage')}`}
+              className="block rounded-[4px] border border-esi-border bg-white p-4"
+            >
+              <img
+                src={service.image}
+                alt={l(primaryImage.caption)}
+                loading="lazy"
+                width={primaryImage.width}
+                height={primaryImage.height}
+                className="aspect-[3/2] w-full object-contain"
+              />
+            </a>
           </Reveal>
         </Container>
       </section>
@@ -84,19 +96,33 @@ export function SolutionDetailPage() {
       {/* What we deliver */}
       <section
         aria-labelledby="solution-features-title"
-        className="relative isolate overflow-hidden bg-white py-14 md:py-20"
+        className="relative isolate overflow-hidden bg-white py-6 md:py-8"
       >
         <DiagonalLines className="absolute -right-4 bottom-6" />
         <Container className="relative">
-          <SectionTitle id="solution-features-title" title={t('solutions.whatWeDeliver')} />
-          <SolutionFeatures features={service.features} />
+          <SectionTitle
+            id="solution-features-title"
+            title={t('solutions.whatWeDeliver')}
+            spacing="compact"
+          />
+          <SolutionFeatures features={service.features} layout={service.featureLayout} />
         </Container>
       </section>
 
+      <SolutionGallery service={service} />
+      <BrandPartners ids={service.brandIds} id="solution-brand-partners" compact />
+
       {/* Industries served */}
-      <section aria-labelledby="solution-industries-title" className="bg-esi-light py-14 md:py-20">
+      <section
+        aria-labelledby="solution-industries-title"
+        className="bg-esi-light pt-6 pb-10 md:pt-8 md:pb-12"
+      >
         <Container>
-          <SectionTitle id="solution-industries-title" title={t('solutions.industriesServed')} />
+          <SectionTitle
+            id="solution-industries-title"
+            title={t('solutions.industriesServed')}
+            spacing="compact"
+          />
           <Reveal as="ul" staggerChildren={0.06} className="flex flex-wrap gap-3">
             {service.industries.map((slug) => {
               const industry = getIndustry(slug)
@@ -127,10 +153,14 @@ export function SolutionDetailPage() {
         projects={related}
         title={t('solutions.relatedProjects')}
         id="solution-related"
+        compact
       />
 
       {/* Previous / next solution */}
-      <nav aria-label={t('nav.solutions')} className="border-t border-esi-border bg-white py-8">
+      <nav
+        aria-label={t('nav.solutions')}
+        className="border-t border-esi-border bg-white py-8 md:py-10"
+      >
         <Container>
           <Reveal as="ul" staggerChildren={0.08} className="grid gap-4 sm:grid-cols-2">
             <RevealItem as="li">

@@ -1,4 +1,5 @@
 import type { PageHeroContent } from '@/types'
+import { industryPhotos } from '@/data/industryPhotos'
 
 /** Inner-page heroes (design-spec §3 PageHero). Leads marked DRAFT – ESI to approve. */
 export const pageHeroes: Record<
@@ -16,10 +17,11 @@ export const pageHeroes: Record<
   solutions: {
     title: { en: 'Solutions', th: 'โซลูชัน' },
     lead: {
-      en: 'From network backbone to lifecycle support, ESI delivers the systems that keep industrial operations connected, secure and running.',
-      th: 'ตั้งแต่โครงข่ายหลักไปจนถึงการดูแลระยะยาว ESI ส่งมอบระบบที่ช่วยให้การดำเนินงานเชื่อมต่อ ปลอดภัย และต่อเนื่อง',
+      en: 'Industrial communication systems for plant operations, safety and security, from PA/GA and networks to telephony, surveillance, radio and video walls.',
+      th: 'ระบบสื่อสารสำหรับการปฏิบัติงานและความปลอดภัยในโรงงาน ครอบคลุม PA/GA เครือข่าย โทรศัพท์ กล้องวงจรปิด ระบบควบคุมการเข้าออก วิทยุสื่อสาร และ Video Wall',
     }, // DRAFT
-    image: '/images/hero/esi-industrial-hero.webp',
+    image: industryPhotos.manufacturing.image,
+    imageCredit: industryPhotos.manufacturing.imageCredit,
   },
   industries: {
     title: { en: 'Industries We Serve', th: 'อุตสาหกรรมที่เราให้บริการ' },
@@ -27,7 +29,8 @@ export const pageHeroes: Record<
       en: 'Proven in oil & gas, petrochemical, power, manufacturing and industrial infrastructure.',
       th: 'รองรับอุตสาหกรรมน้ำมันและก๊าซ ปิโตรเคมี พลังงาน การผลิต และโครงสร้างพื้นฐานอุตสาหกรรม',
     }, // DRAFT
-    image: '/images/industries/petrochemical.webp',
+    image: industryPhotos.petrochemical.image,
+    imageCredit: industryPhotos.petrochemical.imageCredit,
   },
   projects: {
     title: { en: 'Projects', th: 'ผลงาน' },
@@ -35,7 +38,7 @@ export const pageHeroes: Record<
       en: 'Selected references from the industrial sites we have connected, secured and supported.',
       th: 'ผลงานอ้างอิงด้านระบบเครือข่าย การสื่อสาร ความปลอดภัย และการบำรุงรักษาจากหลากหลายอุตสาหกรรม',
     }, // DRAFT
-    image: '/images/industries/industrial-infrastructure.webp',
+    image: '/images/hero/projects-refinery.png',
   },
   contact: {
     title: { en: 'Contact', th: 'ติดต่อเรา' },

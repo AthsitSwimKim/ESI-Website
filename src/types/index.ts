@@ -64,14 +64,21 @@ export interface Service {
   /** Route segment: /solutions/<slug> */
   slug: string
   name: Localized
+  /** Optional line breaks for compact cards and menus; full names stay unchanged elsewhere. */
+  compactName?: Localized
   tagline: Localized
   description: Localized
   icon: IconName
   features: Localized[]
+  /** Content-sized checklist tiles for services whose labels need more room. */
+  featureLayout?: 'grid' | 'flow'
   image: string
-  /** Links this solution to project cards with the same category. */
-  category: ProjectCategory
+  /** Only set when an existing project category directly matches this solution. */
+  category?: ProjectCategory
   industries: IndustrySlug[]
+  brandIds: string[]
+  sourceSlide: number
+  gallery: { src: string; width: number; height: number; caption: Localized }[]
 }
 
 export interface Industry {
@@ -82,6 +89,15 @@ export interface Industry {
   scope: Localized[]
   icon: IconName
   image: string
+  imageWidth: number
+  imageHeight: number
+  imageCredit: {
+    title: string
+    author: string
+    sourceUrl: string
+    license: string
+    licenseUrl: string
+  }
 }
 
 export interface ProcessStep {
@@ -142,4 +158,6 @@ export interface PageHeroContent {
   title: Localized
   lead?: Localized
   image: string
+  /** Licensed contextual photograph; display attribution on the page where it is used. */
+  imageCredit?: Industry['imageCredit']
 }

@@ -252,6 +252,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
   mount (the spec's "slow background zoom"). Above it: `--gradient-hero` then
   `--gradient-hero-bottom`; `<NetworkGraphic>` covering the right ~55% at opacity .35; a single
   thin diagonal line decoration top-left (white/30).
+- Owner adjustment (2026-10-09): the supplied offshore Home photo is offset right by 12% at
+  `lg` and above, with a soft left-edge mask. Below `lg`, retain the original full-bleed
+  positioning. The existing navy overlays and text layout stay unchanged.
 - Content: container, `max-w-[640px]`, vertically centred. `h1` on three lines —
   `ENGINEERING THE / CONNECTION THAT / INDUSTRY RELIES ON.` (use `<br className="hidden md:block">`;
   natural wrap on mobile). Sub-line 18–20px/400 `white/90`, `mt-5`:
@@ -300,6 +303,9 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
   white (two lines allowed: "INDUSTRIAL / INFRASTRUCTURE").
 - Hover: image `scale-[1.06]` (500ms), an `esi-blue/35` overlay fades over the image, an
   `ArrowUpRight` slides in at the label bar's right edge.
+- Owner update (2026-10-21, D40): keep the existing European photographs from
+  `industryPhotos.ts`, but remove photo-credit disclosures and captions from every page.
+  Retain source, creator and license records in data and `public/images/industries/LICENSES.md`.
 
 ### 4.5 Featured Projects (`sections/home/FeaturedProjectsSection.tsx`)
 
@@ -339,14 +345,85 @@ navy (Why ESI) → white → navy (CTA) → navy (footer).
 
 ### 4.8 CTA band — see §3.
 
+### 4.9 Organizations We Work With (owner update 2026-10-22, D45)
+
+Home only: insert a separate section immediately after Brand Partners and before Why ESI.
+Use the requested Thai heading “องค์กรที่ร่วมงานกับเรา” / “Organizations We Work With”,
+the standard blue display title and underline and a continuous white background. Owner
+update D46 removes the full-width top border and reduces this section's top padding to
+24px / 32px (mobile / `md`), retaining 56px / 80px bottom padding. The independent heading
+and spacing keep the two sections distinct. Show 44 logo entries representing 43 organizations from the
+Company Profile project-reference sequence, preserving their original colours and proportions.
+Use centred wrapping rows, 2 / 3 / 6 across, with individual viewport reveals and lazy images.
+No table rules, card borders, visible company-name captions, subtitle or external links.
+Logo accessible names come from the organization data; source records are kept in
+`docs/company-profile-organizations.md`. Do not merge these logos into Brand Partners or
+add the section to Solutions/detail pages.
+Owner follow-up: retain both GC and PTT Global Chemical wordmarks rather than deduplicating
+them into one mark. Use the embedded `image126.png` for the requested PTT version.
+
 ---
 
 ## 5. Inner pages
 
+**Company Profile update (owner request, 2026-10-09):** Solutions now use the seven groups
+from slides 5–11. Home compact cards wrap into balanced 4+3 rows on desktop; overview rich
+cards include full original slide images on white using `object-contain` (3+3+1, centred).
+Owner typography update (2026-10-21): the Thai compact Home PA/GA card explicitly breaks
+after “ระบบประกาศเสียงและ”, placing “สัญญาณเตือนภัย” together on the next line. Store this
+compact presentation in the service's `compactName`; reuse it in the Desktop dropdown and
+Mobile Solutions accordion per the owner's follow-up screenshot. Full service names remain in `name`.
+Detail overview images and galleries also show the complete source image, with full-image
+links. Brand Partners show only original-colour logos on a continuous white background,
+without table rules, cell borders or visible brand-name captions (owner update 2026-10-21,
+D39). Use a centred wrapping logo row, 2 / 3 / 6 across, with generous horizontal/vertical
+spacing. Each image retains its brand name as accessible alt text. Each logo/gallery item reveals independently so long lists still appear
+on small phone viewports. Home shows 12 brands; overview all 51; details only the slide's
+brands. This owner-supplied content/layout update supersedes the former six-card counts
+and photographic slanted-mask requirement for solution product images/diagrams.
+
 Every inner page = `<Seo>` + `<PageHero>` + sections + (CTA band + footer from the layout).
 
+**Real overview-hero photographs (owner request, 2026-10-21, D38):** Solutions uses the BMW
+Leipzig production-line photograph, Industries the BASF Ludwigshafen photograph, and Projects
+the Rotterdam Container Terminal photograph. These locally hosted European photographs and
+their verified CC BY / CC BY-SA attribution derive from `industryPhotos.ts`; `pageHeroes`
+records each image and its credit. Keep the navy overlay and existing responsive hero layout.
+Owner update D40 removes all visible credit disclosures while retaining these photographs
+and their source/license records. These are contextual industrial views,
+not ESI project evidence. Home and detail-page images remain as previously specified.
+
+**Projects hero update (owner request, 2026-10-21, D41):** replace only the Projects overview
+background with the supplied refinery-at-dusk photograph, hosted at
+`/images/hero/projects-refinery.png` (original 687×296 PNG). Retain the shared navy overlay,
+typography and responsive crop. No visible photo-credit disclosure is added (D40).
+
+**Solution detail spacing override (owner request, 2026-10-21):** all seven `/solutions/:slug`
+pages use a base of 24px section padding on mobile and 32px from `md` for features,
+gallery and Related Projects, replacing the former 56px / 80px. At the owner's marked
+page boundaries, add breathing room: Overview top 40px / 56px, Brand Partners top
+40px / 48px, and Industries Served bottom 40px / 48px (mobile / `md` respectively).
+Their other edges retain the base padding. Use
+`SectionTitle spacing="compact"` for 20px / 24px below headings, with 16px between Overview's
+heading and body and a 24px mobile gap between its text and image. Previous/next navigation
+uses 32px / 40px vertical padding. These boundary adjustments follow the owner's later
+screenshots on the same date (D34). Shared Brand Partners and Related Projects receive `compact`
+only on solution details; their default spacing on other pages stays as specified above.
+
+**Checklist sizing override (owner request, 2026-10-21, D44):** only LAN/WAN, CCTV and Radio
+use content-sized, wrapping flex tiles for What We Deliver, selected through service data.
+Their labels stay on one line from `lg`, with no equal-column width constraint. Below `lg`,
+long labels may wrap to stay within the viewport. All other service checklists keep the
+existing grid, and all checklist copy, typography, colour and spacing stay unchanged.
+
 - **About** (`/about`): PageHero ("About ESI", lead) → Company Introduction (2-col: text +
-  photo with slanted mask) → Company Overview (stats strip optional — only real numbers) →
+  owner-supplied ESI logo only, 2026-10-21 D37: a single white frame with 1px `esi-border`,
+  a 3px `esi-blue` top edge, 4px corners and `shadow-card`. The 5:2 logo window uses
+  `object-cover` to crop only the source's blank vertical margins. Owner update D42 reduces
+  the image to 72% of the window width, centred horizontally and vertically, to give the mark
+  more surrounding whitespace. No caption, company name or tagline inside the panel; no inset
+  frame. Introduction title uses compact spacing.
+  No slanted image mask; Home's About photo stays unchanged) → Company Overview (stats strip optional — only real numbers) →
   Expertise (6 solution cards, rich variant) → Mission / Vision (2 cards on `esi-light`, icon +
   title + text) → Core Values (4-column icon grid) → Why ESI (dark section, reused) →
   Industries Served (industry cards, reused) → CTA.

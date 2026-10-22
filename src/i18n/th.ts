@@ -7,6 +7,9 @@ import type { Dictionary } from './en'
  * Any key missing here falls back to English automatically.
  */
 export const th: DeepPartial<Dictionary> = {
+  home: {
+    organizations: 'องค์กรที่ร่วมงานกับเรา',
+  },
   nav: {
     home: 'หน้าแรก',
     about: 'เกี่ยวกับเรา',
@@ -85,6 +88,12 @@ export const th: DeepPartial<Dictionary> = {
     goTo: 'ไปหน้าที่',
   },
   solutions: {
+    brandPartners: 'แบรนด์พาร์ทเนอร์',
+    viewAllBrands: 'ดูแบรนด์ทั้งหมด',
+    brandPartnersNote: 'แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย',
+    gallery: 'ระบบและอุปกรณ์',
+    galleryNote: 'ตัวอย่างอุปกรณ์และแผนผังการทำงานของระบบ',
+    viewImage: 'ดูภาพเต็ม (เปิดในแท็บใหม่)',
     overview: 'ภาพรวม',
     whatWeDeliver: 'สิ่งที่เราส่งมอบ',
     industriesServed: 'อุตสาหกรรมที่ให้บริการ',

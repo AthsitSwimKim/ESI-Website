@@ -1,4 +1,5 @@
 import type { Industry, IndustrySlug } from '@/types'
+import { industryPhotos } from '@/data/industryPhotos'
 
 /**
  * Industries we serve (spec §24–25). Names and scope are from the spec;
@@ -20,7 +21,7 @@ export const industries: Industry[] = [
       { en: 'Maintenance', th: 'บำรุงรักษา' },
     ],
     icon: 'Droplet',
-    image: '/images/industries/oil-gas.webp',
+    ...industryPhotos['oil-gas'],
   },
   {
     slug: 'petrochemical',
@@ -37,7 +38,7 @@ export const industries: Industry[] = [
       { en: 'Cybersecurity', th: 'ความปลอดภัยไซเบอร์' },
     ],
     icon: 'Hexagon',
-    image: '/images/industries/petrochemical.webp',
+    ...industryPhotos.petrochemical,
   },
   {
     slug: 'power-energy',
@@ -54,7 +55,7 @@ export const industries: Industry[] = [
       { en: 'Maintenance', th: 'บำรุงรักษา' },
     ],
     icon: 'Zap',
-    image: '/images/industries/power-energy.webp',
+    ...industryPhotos['power-energy'],
   },
   {
     slug: 'manufacturing',
@@ -70,7 +71,7 @@ export const industries: Industry[] = [
       { en: 'Cybersecurity', th: 'ความปลอดภัยไซเบอร์' },
     ],
     icon: 'Factory',
-    image: '/images/industries/manufacturing.webp',
+    ...industryPhotos.manufacturing,
   },
   {
     slug: 'industrial-infrastructure',
@@ -86,7 +87,7 @@ export const industries: Industry[] = [
       { en: 'Monitoring', th: 'ระบบเฝ้าระวัง' },
     ],
     icon: 'Building2',
-    image: '/images/industries/industrial-infrastructure.webp',
+    ...industryPhotos['industrial-infrastructure'],
   },
 ]
 

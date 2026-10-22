@@ -46,8 +46,8 @@ export function IndustryShowcase({
           src={industry.image}
           alt=""
           loading="lazy"
-          width={800}
-          height={600}
+          width={industry.imageWidth}
+          height={industry.imageHeight}
           className={cn(
             'aspect-[4/3] w-full object-cover',
             reverse ? 'lg:clip-slant-img-left' : 'lg:clip-slant-img',

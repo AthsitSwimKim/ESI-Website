@@ -13,7 +13,10 @@ export const hero = {
   } satisfies Localized,
   primaryCta: { labelKey: 'cta.exploreSolutions', to: '/solutions' },
   secondaryCta: { labelKey: 'cta.viewProjects', to: '/projects' },
-  image: '/images/hero/esi-industrial-hero.webp',
+  // Owner-supplied maros_1680x645.jpg (2026-10-09); illustrative context, not project evidence.
+  image: '/images/hero/maros-offshore.jpg',
+  imageWidth: 1680,
+  imageHeight: 645,
 }
 
 /** Section headings on Home. Kept in English in both languages — part of the visual identity (D5). */
