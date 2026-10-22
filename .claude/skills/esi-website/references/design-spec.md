@@ -393,11 +393,18 @@ uses 32px / 40px vertical padding. These boundary adjustments follow the owner's
 screenshots on the same date (D34). Shared Brand Partners and Related Projects receive `compact`
 only on solution details; their default spacing on other pages stays as specified above.
 
+**Checklist sizing override (owner request, 2026-10-21, D44):** only LAN/WAN, CCTV and Radio
+use content-sized, wrapping flex tiles for What We Deliver, selected through service data.
+Their labels stay on one line from `lg`, with no equal-column width constraint. Below `lg`,
+long labels may wrap to stay within the viewport. All other service checklists keep the
+existing grid, and all checklist copy, typography, colour and spacing stay unchanged.
+
 - **About** (`/about`): PageHero ("About ESI", lead) → Company Introduction (2-col: text +
   owner-supplied ESI logo only, 2026-10-21 D37: a single white frame with 1px `esi-border`,
   a 3px `esi-blue` top edge, 4px corners and `shadow-card`. The 5:2 logo window uses
-  `object-cover` to crop only the source's blank vertical margins, keeping the entire mark
-  visible and prominent. No caption, company name or tagline inside the panel; no inset
+  `object-cover` to crop only the source's blank vertical margins. Owner update D42 reduces
+  the image to 72% of the window width, centred horizontally and vertically, to give the mark
+  more surrounding whitespace. No caption, company name or tagline inside the panel; no inset
   frame. Introduction title uses compact spacing.
   No slanted image mask; Home's About photo stays unchanged) → Company Overview (stats strip optional — only real numbers) →
   Expertise (6 solution cards, rich variant) → Mission / Vision (2 cards on `esi-light`, icon +

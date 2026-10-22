@@ -58,14 +58,14 @@ export function AboutPage() {
             immediate
             className="overflow-hidden rounded-[4px] border border-t-[3px] border-esi-border border-t-esi-blue bg-white shadow-card"
           >
-            <div className="aspect-[5/2] overflow-hidden">
+            <div className="flex aspect-[5/2] items-center justify-center overflow-hidden">
               <img
                 src={aboutIntroImage}
                 alt=""
                 loading="lazy"
                 width={1254}
                 height={1254}
-                className="h-full w-full object-cover"
+                className="h-full w-[72%] object-cover"
               />
             </div>
           </Reveal>

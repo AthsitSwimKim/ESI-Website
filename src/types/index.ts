@@ -70,6 +70,8 @@ export interface Service {
   description: Localized
   icon: IconName
   features: Localized[]
+  /** Content-sized checklist tiles for services whose labels need more room. */
+  featureLayout?: 'grid' | 'flow'
   image: string
   /** Only set when an existing project category directly matches this solution. */
   category?: ProjectCategory

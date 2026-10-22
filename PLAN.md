@@ -1,7 +1,7 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
-> **อัปเดตล่าสุด:** 2026-10-21 — เปลี่ยน Hero หน้า Projects เป็นภาพโรงงานที่เจ้าของแนบมา (D41); ลบส่วนเครดิตภาพทุกหน้า (D40); ปรับ Brand Partners เป็นโลโก้ล้วนและเรียบเรียง copy (D39) · เจ้าของอนุมัติ commit/push งาน D39–D41 ไปที่ `SolFrontend` แล้ว (ไม่ deploy)
+> **อัปเดตล่าสุด:** 2026-10-21 — ปรับ checklist เฉพาะ LAN/WAN, CCTV และ Radio ให้บล็อกกว้างตามข้อความและอยู่บรรทัดเดียวบน desktop (D44); เรียบเรียงคำอธิบาย Systems & Equipment (D43); ลดสเกลโลโก้ About (D42) · งาน D39–D41 commit/push ไปที่ `SolFrontend` แล้ว; งาน D42–D44 ยังไม่ commit/push และไม่ deploy
 > **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
@@ -124,6 +124,18 @@
 **D41 (2026-10-21):** เจ้าของให้เปลี่ยนพื้นหลัง Hero หน้า `/projects` เป็นภาพโรงงานยามเย็นที่แนบมา เก็บ PNG ต้นฉบับ 687×296 ที่ `/images/hero/projects-refinery.png` โดยไม่แก้ภาพ; เปลี่ยนเฉพาะ `pageHeroes.projects.image` และถอด metadata เครดิต Rotterdam ที่ไม่ตรงกับภาพใหม่ คง overlay/ข้อความ/layout ของ Hero เดิม
 
 > ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ Hero TH/EN ที่ 375/768/1024/1440px ภาพใหม่โหลดครบ ไม่มี overflow และข้อความอ่านชัด · ไม่ deploy
+
+**D42 (2026-10-21):** ลูกค้าเห็นว่าโลโก้ใน Company Introduction ใหญ่เกินไป จึงลดความกว้างภาพเหลือ 72% ของพื้นที่เดิมและจัดกึ่งกลางในกรอบ 5:2 เพื่อเพิ่มพื้นที่ว่างรอบโลโก้ คงไฟล์ต้นฉบับและสัดส่วนตัวอักษรเดิม โดยแก้เฉพาะส่วนนี้ของหน้า About
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px โลโก้แสดงครบและอยู่กึ่งกลาง ไม่มี overflow · ยังไม่ commit/push/deploy งาน D42
+
+**D43 (2026-10-21):** เจ้าของทักว่าคำอธิบายใต้หัวข้อ “ระบบและอุปกรณ์” อ่านแปลก จึงเรียบเรียงข้อความกลางผ่าน i18n เป็น “ตัวอย่างอุปกรณ์และแผนผังการทำงานของระบบ” / “Equipment examples and system diagrams.” แทนประโยคที่เน้นว่ารูปมาจาก Company Profile โดยมีผลกับทุกหน้า Solutions ที่แสดง gallery
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจข้อความใน browser ครบทั้ง 7 หน้า Solutions ทั้ง TH/EN บนมือถือ ไม่พบประโยคเดิมหรือ overflow · ยังไม่ commit/push/deploy งาน D43
+
+**D44 (2026-10-21):** เจ้าของให้ปรับเฉพาะ checklist ในภาพของ LAN/WAN, CCTV และ Radio โดยไม่ต้องแบ่งบล็อกเท่ากัน จึงเลือก `featureLayout: 'flow'` ผ่าน service data เฉพาะ 3 รายการ ให้บล็อกกว้างตามข้อความและไม่ตัดบรรทัดตั้งแต่ `lg`; เมื่อจอแคบให้ข้อความยาวขึ้นบรรทัดได้เพื่อไม่ล้นจอ คงข้อความ/สี/ขนาดตัวอักษร/spacing เดิมและ grid ของอีก 4 หน้า Solutions
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจสามหน้า TH/EN ที่ 375/768/1024/1440px: desktop ทุก label บรรทัดเดียว ไม่มี overflow; อีก 4 หน้าใช้ grid เดิม · ตรวจ screenshot desktop และ mobile แล้ว · ยังไม่ commit/push/deploy งาน D44
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว

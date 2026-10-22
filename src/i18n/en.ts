@@ -85,7 +85,7 @@ export const en = {
     viewAllBrands: 'View all brands',
     brandPartnersNote: 'Equipment and software brands for communication and security systems.',
     gallery: 'Systems & Equipment',
-    galleryNote: 'System diagrams and product images from ESI’s company profile.',
+    galleryNote: 'Equipment examples and system diagrams.',
     viewImage: 'View full image (opens in a new tab)',
     overview: 'Overview',
     whatWeDeliver: 'What we deliver',

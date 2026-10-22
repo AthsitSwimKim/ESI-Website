@@ -89,7 +89,7 @@ export const th: DeepPartial<Dictionary> = {
     viewAllBrands: 'ดูแบรนด์ทั้งหมด',
     brandPartnersNote: 'แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย',
     gallery: 'ระบบและอุปกรณ์',
-    galleryNote: 'แผนผังระบบและภาพผลิตภัณฑ์จาก Company Profile ของ ESI',
+    galleryNote: 'ตัวอย่างอุปกรณ์และแผนผังการทำงานของระบบ',
     viewImage: 'ดูภาพเต็ม (เปิดในแท็บใหม่)',
     overview: 'ภาพรวม',
     whatWeDeliver: 'สิ่งที่เราส่งมอบ',

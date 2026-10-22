@@ -105,7 +105,7 @@ export function SolutionDetailPage() {
             title={t('solutions.whatWeDeliver')}
             spacing="compact"
           />
-          <SolutionFeatures features={service.features} />
+          <SolutionFeatures features={service.features} layout={service.featureLayout} />
         </Container>
       </section>
 
