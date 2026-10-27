@@ -93,7 +93,7 @@ export const th: DeepPartial<Dictionary> = {
     brandPartnersNote: 'แบรนด์อุปกรณ์และซอฟต์แวร์สำหรับงานระบบสื่อสารและความปลอดภัย',
     gallery: 'ระบบและอุปกรณ์',
     galleryNote: 'ตัวอย่างอุปกรณ์และแผนผังการทำงานของระบบ',
-    viewImage: 'ดูภาพเต็ม (เปิดในแท็บใหม่)',
+    viewImage: 'ดูภาพขยาย',
     overview: 'ภาพรวม',
     whatWeDeliver: 'สิ่งที่เราส่งมอบ',
     industriesServed: 'อุตสาหกรรมที่ให้บริการ',
@@ -112,6 +112,7 @@ export const th: DeepPartial<Dictionary> = {
     industriesServed: 'อุตสาหกรรมที่ให้บริการ',
   },
   a11y: {
+    closeImage: 'ปิดภาพขยาย',
     skipToContent: 'ข้ามไปยังเนื้อหา',
     mainNav: 'เมนูหลัก',
     openMenu: 'เปิดเมนู',

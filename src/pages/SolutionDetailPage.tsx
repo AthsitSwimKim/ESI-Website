@@ -8,6 +8,7 @@ import { SolutionFeatures } from '@/components/sections/shared/SolutionFeatures'
 import { Container } from '@/components/ui/Container'
 import { DiagonalLines } from '@/components/ui/DiagonalLines'
 import { Icon } from '@/components/ui/Icon'
+import { ImageViewer } from '@/components/ui/ImageViewer'
 import { PageHero } from '@/components/ui/PageHero'
 import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
@@ -73,12 +74,14 @@ export function SolutionDetailPage() {
             </p>
           </Reveal>
           <Reveal variants={scaleIn} immediate>
-            <a
-              href={service.image}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`${l(primaryImage.caption)} — ${t('solutions.viewImage')}`}
-              className="block rounded-[4px] border border-esi-border bg-white p-4"
+            <ImageViewer
+              key={service.image}
+              src={service.image}
+              caption={l(primaryImage.caption)}
+              width={primaryImage.width}
+              height={primaryImage.height}
+              label={`${l(primaryImage.caption)} — ${t('solutions.viewImage')}`}
+              className="block w-full rounded-[4px] border border-esi-border bg-white p-4"
             >
               <img
                 src={service.image}
@@ -88,7 +91,7 @@ export function SolutionDetailPage() {
                 height={primaryImage.height}
                 className="aspect-[3/2] w-full object-contain"
               />
-            </a>
+            </ImageViewer>
           </Reveal>
         </Container>
       </section>

@@ -1,6 +1,7 @@
-import { ArrowUpRight } from 'lucide-react'
+import { ZoomIn } from 'lucide-react'
 
 import { Container } from '@/components/ui/Container'
+import { ImageViewer } from '@/components/ui/ImageViewer'
 import { Reveal } from '@/components/ui/Reveal'
 import { SectionTitle } from '@/components/ui/SectionTitle'
 import { useT } from '@/i18n'
@@ -23,12 +24,13 @@ export function SolutionGallery({ service }: { service: Service }) {
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {images.map((image) => (
             <Reveal as="li" key={image.src}>
-              <a
-                href={image.src}
-                target="_blank"
-                rel="noreferrer"
-                className="group block h-full overflow-hidden rounded-[4px] border border-esi-border bg-white transition-colors hover:border-esi-accent"
-                aria-label={`${l(image.caption)} — ${t('solutions.viewImage')}`}
+              <ImageViewer
+                src={image.src}
+                caption={l(image.caption)}
+                width={image.width}
+                height={image.height}
+                className="group block h-full w-full overflow-hidden rounded-[4px] border border-esi-border bg-white transition-colors hover:border-esi-accent"
+                label={`${l(image.caption)} — ${t('solutions.viewImage')}`}
               >
                 <img
                   src={image.src}
@@ -42,9 +44,9 @@ export function SolutionGallery({ service }: { service: Service }) {
                   <span className="text-sm leading-relaxed font-medium text-esi-navy">
                     {l(image.caption)}
                   </span>
-                  <ArrowUpRight aria-hidden size={18} className="mt-0.5 shrink-0 text-esi-blue" />
+                  <ZoomIn aria-hidden size={18} className="mt-0.5 shrink-0 text-esi-blue" />
                 </div>
-              </a>
+              </ImageViewer>
             </Reveal>
           ))}
         </ul>
