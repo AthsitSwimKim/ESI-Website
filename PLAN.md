@@ -3,6 +3,7 @@
 > **สถานะปัจจุบัน:** งานฝั่งเว็บไซต์และ Final visual QA เสร็จแล้ว 🟡 — copy TH/EN ครบ, ภาพ Hero/About/Industries ครบ, ภาพโครงการที่หายหรือความละเอียดต่ำถูกแทนด้วยภาพประกอบที่ระบุประเภทชัดเจน, เพิ่ม trust evidence จากข้อมูลอ้างอิงจริง, เก็บ Mobile/Project case study แล้ว · typecheck/lint/test/build/audit ผ่าน · **ยังไม่ deploy ตามคำสั่งเจ้าของโครงการ** เหลือ ESI ตรวจอนุมัติ copy/ภาพประกอบ, ส่งรูปถ่ายจริงทดแทนเมื่อมี, เลือก hosting และ deploy จริง
 > **อัปเดตล่าสุด:** 2026-10-22 — ปรับรอยต่อแบรนด์พาร์ทเนอร์/องค์กรให้โปร่งและกระชับโดยไม่มีเส้นเต็มจอ (D46); เพิ่มส่วนองค์กรบน Home พร้อมทั้ง GC และ PTT Global Chemical (D45) · เจ้าของอนุมัติ commit/push งาน D45–D46 ไปที่ `SolFrontend` แล้ว (ไม่ deploy)
 > **ปรับเพิ่มเติม:** ลบบรรทัดหมายเหตุใต้ตัวเลขใน `TrustEvidence` ตามวงของเจ้าของ (2026-10-21)
+> **งานปรับ local ล่าสุด:** 2026-10-27 — เปลี่ยนการดูภาพในหน้า Solutions ให้ขยายใน modal บนหน้าเดิม ครบทั้ง Overview/Gallery (D47) · เจ้าของอนุมัติ commit แล้ว โดยยังไม่ push/deploy
 > **คู่มือ agent:** `AGENTS.md` ที่ root — ทุกเครื่องมืออ่านไฟล์เดียวกัน (`CLAUDE.md` ชี้มาที่ไฟล์นี้) · skill `.claude/skills/esi-website/` โหลดอัตโนมัติใน Claude Code
 > **Spec ต้นฉบับ:** `.claude/skills/esi-website/references/spec-source.md` · **Mockup:** `.claude/skills/esi-website/assets/homepage-mockup.png`
 
@@ -148,6 +149,10 @@
 **D46 (2026-10-22):** เจ้าของวงรอยต่อระหว่าง Brand Partners กับ Organizations ให้ปรับความสวยงาม จึงลบเส้น border ที่พาดเต็มจอและลด top padding ของ Organizations จาก 56/80px เป็น 24/32px (mobile/desktop) โดยคงสอง section แยกกันผ่านหัวข้อและพื้นที่ว่าง; ไม่เปลี่ยนโลโก้ ลำดับ ข้อความ หรือ Brand Partners ของหน้าอื่น
 
 > ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · ตรวจ screenshot TH/EN ที่ 375/768/1024/1440px ไม่มีเส้นเต็มจอ ระยะด้านบนตรง 24/32px ไม่มี overflow และยังคงรายการโลโก้ 12/44 ตามเดิม · ยังไม่ commit/push/deploy งาน D46
+
+**D47 (2026-10-27):** เจ้าของให้กดดูรูปแล้วไม่เปิดหน้าใหม่ จึงเปลี่ยนรูปใน Overview และ Systems & Equipment ของทั้ง 7 หน้า Solutions เป็น `ImageViewer` ที่ใช้ native modal dialog ขยายรูปบนหน้าเดิม มี caption และปุ่มปิด 44px, ปิดได้ด้วย X/Escape/คลิก backdrop, ล็อก scroll พื้นหลัง และคืน focus ให้ปุ่มรูปเดิม; เปลี่ยนคำอธิบาย TH/EN กับไอคอน Gallery เป็นการขยายภาพ · คงรูปต้นฉบับและ layout ของ thumbnails
+
+> ✅ typecheck/lint/21 tests/build/Prettier ผ่าน · audit สะอาด 18 routes × 4 widths · เปิดครบ 35 รูปต่อภาษาในทั้ง 7 หน้า TH/EN: URL/จำนวนแท็บไม่เปลี่ยน, Escape คืน focus และ scroll; ตรวจ modal ที่ 375/768/1024/1440px ผ่าน axe WCAG 2 A/AA พร้อม X/Enter/backdrop/Tab/Shift+Tab · ตรวจ SPA Back ขณะเปิดภาพ Overview/Gallery ที่ mobile/desktop ปิด dialog และคืน scroll แล้ว · กล่องภาพสูงตามรูปและพอดี viewport · ยังไม่ push/deploy ตามคำสั่งเจ้าของ
 
 - [x] ยืนยันที่อยู่ / โทร / อีเมล (D1) — ตรงกับเว็บเดิม · Facebook ได้แล้ว (D9) — [ ] LinkedIn/YouTube ถ้ามี
 - [ ] **ESI แก้ที่อยู่ในโปรไฟล์ Google Business ให้เป็น ถ.จันทอุดม ต.เชิงเนิน (D24)** — ข้อมูลบนเว็บถูกต้องแล้ว

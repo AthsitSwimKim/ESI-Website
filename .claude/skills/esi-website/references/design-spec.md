@@ -373,8 +373,13 @@ Owner typography update (2026-10-21): the Thai compact Home PA/GA card explicitl
 after “ระบบประกาศเสียงและ”, placing “สัญญาณเตือนภัย” together on the next line. Store this
 compact presentation in the service's `compactName`; reuse it in the Desktop dropdown and
 Mobile Solutions accordion per the owner's follow-up screenshot. Full service names remain in `name`.
-Detail overview images and galleries also show the complete source image, with full-image
-links. Brand Partners show only original-colour logos on a continuous white background,
+Detail overview images and galleries also show the complete source image. Owner update
+2026-10-27 (D47): clicking any solution image opens an accessible native modal on the same
+page rather than navigating to an image or opening another tab. Use a white panel with the
+image caption, a 44px close button and navy backdrop; contain the entire image within the
+viewport. Close with X, Escape or a backdrop click, lock background scrolling, keep keyboard
+focus in the dialog and restore focus to the image trigger when closed. Gallery zoom icons
+replace external-link arrows; TH/EN labels describe image enlargement. Brand Partners show only original-colour logos on a continuous white background,
 without table rules, cell borders or visible brand-name captions (owner update 2026-10-21,
 D39). Use a centred wrapping logo row, 2 / 3 / 6 across, with generous horizontal/vertical
 spacing. Each image retains its brand name as accessible alt text. Each logo/gallery item reveals independently so long lists still appear

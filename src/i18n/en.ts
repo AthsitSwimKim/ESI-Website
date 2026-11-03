@@ -89,7 +89,7 @@ export const en = {
     brandPartnersNote: 'Equipment and software brands for communication and security systems.',
     gallery: 'Systems & Equipment',
     galleryNote: 'Equipment examples and system diagrams.',
-    viewImage: 'View full image (opens in a new tab)',
+    viewImage: 'View larger image',
     overview: 'Overview',
     whatWeDeliver: 'What we deliver',
     industriesServed: 'Industries served',
@@ -108,6 +108,7 @@ export const en = {
     industriesServed: 'Industries Served',
   },
   a11y: {
+    closeImage: 'Close image',
     skipToContent: 'Skip to content',
     mainNav: 'Main navigation',
     openMenu: 'Open menu',
