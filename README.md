@@ -98,9 +98,11 @@ Run `npm run dev`, then open `/admin` directly on the localhost URL printed by V
 The editor API accepts requests from the local machine. The page is excluded from public
 navigation and the sitemap and carries `noindex, nofollow, noarchive`.
 
-**Website views (local)** counts public page loads and changes of page path on localhost.
-Admin pages, previews, 404 pages and filter changes are excluded. The total is saved to
-`.esi-admin/traffic.json` and refreshed when the editor opens or regains focus.
+**Website visitors** reads the same cumulative total as the footer on `esi-th.com`.
+The local editor proxies a read-only GET to the hosting counter to avoid browser CORS issues.
+The card refreshes when opened, when the window regains focus and every minute. Local browsing
+and opening the admin page do not add visits. If hosting cannot be reached, the card shows an
+unavailable state instead of substituting the old local total in `.esi-admin/traffic.json`.
 
 - **Save draft** saves to the workspace on disk and shows a confirmation. You can reopen
   the draft from another browser on this machine or after restarting Vite.
@@ -120,6 +122,19 @@ Drafts are stored in `.esi-admin/workspace.json`. Published changes are stored i
 are stored as files in the project. Keep these files together when backing up the workspace.
 `npm run build` creates a static `dist/` with the published project pages and sitemap.
 The editor runs with Vite locally, and updating hosting requires uploading a new build.
+
+## Website visitor count
+
+For Chaiyo Hosting, run `npm run build:chaiyo` and upload the contents of `dist/` to `httpdocs`
+on the PHP-enabled domain. The first public visit creates `.esi-visitor-count/` beside `httpdocs`
+and increments the total from zero. PHP needs write access to that private directory and permission
+to access it under the domain's `open_basedir` setting. Preserve it across deployments and backups.
+
+The counter counts a given IP address and browser user agent once per day in Thailand and filters
+common bot signatures. It stores the total and hashes for the latest counted day. The footer reads
+the total through PHP. GET returns only the total without writing files or counting a visitor;
+POST records a public visit. Upload the updated `visitor-count.php` for the admin's read-only
+lookup to work. The standard `npm run build` is the static build and shows `000000`.
 
 ## Quality gates
 

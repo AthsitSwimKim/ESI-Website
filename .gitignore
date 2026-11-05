@@ -30,3 +30,5 @@ Thumbs.db
 !.env.example
 screenshots
 .esi-admin/
+.esi-visitor-count/
+/ESI-Chaiyo-Hosting.zip

@@ -89,36 +89,29 @@ const browser = await chromium.launch({ channel: 'chrome' })
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } })
   const page = await context.newPage()
-  const readViews = async () =>
-    (await (await context.request.get(baseUrl + '/api/admin/traffic')).json()).views
-
+  // Keep UI checks deterministic and avoid querying production during the route sweep.
+  let websiteVisitors = 123456
+  const trafficMethods = []
+  await context.route('**/api/admin/traffic', async (route) => {
+    trafficMethods.push(route.request().method())
+    await route.fulfill({ json: { views: websiteVisitors } })
+  })
   if (auditServer) {
-    const initialViews = await readViews()
-    const trafficRecorded = (response) =>
-      response.url() === baseUrl + '/api/admin/traffic' &&
-      response.request().method() === 'POST' &&
-      response.ok()
-    await Promise.all([
-      page.waitForResponse(trafficRecorded),
-      page.goto(baseUrl + '/', { waitUntil: 'domcontentloaded' }),
-    ])
-    await Promise.all([
-      page.waitForResponse(trafficRecorded),
-      page.locator('header a[href="/projects"]').filter({ visible: true }).click(),
-    ])
+    await page.goto(baseUrl + '/', { waitUntil: 'networkidle' })
+    await page.locator('header a[href="/projects"]').filter({ visible: true }).click()
     await page.getByRole('button', { name: /CCTV/ }).click()
     await page.waitForURL('**/projects?category=cctv')
-    if ((await readViews()) !== initialViews + 2)
-      note('/admin', 'traffic', 'the homepage and SPA navigation should count once each')
-    await Promise.all([
-      page.waitForResponse(trafficRecorded),
-      page.reload({ waitUntil: 'domcontentloaded' }),
-    ])
+    await page.reload({ waitUntil: 'networkidle' })
+    if (trafficMethods.length)
+      note('/admin', 'traffic', 'local public pages must not record website visits')
     await page.goto(baseUrl + '/admin', { waitUntil: 'networkidle' })
-    const viewsCard = page.getByText('Website views (local)', { exact: true }).locator('..')
-    await viewsCard.getByText(String(initialViews + 3), { exact: true }).waitFor()
-    if ((await readViews()) !== initialViews + 3)
-      note('/admin', 'traffic', 'reload should count one view and admin should count none')
+    const viewsCard = page.getByText('Website visitors', { exact: true }).locator('..')
+    await viewsCard.getByText('123,456', { exact: true }).waitFor()
+    websiteVisitors++
+    await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+    await viewsCard.getByText('123,457', { exact: true }).waitFor()
+    if (trafficMethods.some((method) => method !== 'GET'))
+      note('/admin', 'traffic', 'the admin card must only read website visitors')
   }
 
   const consoleErrors = []
@@ -358,7 +351,6 @@ try {
 
     // Restart the actual Vite/API server and verify the same on-disk record remains available.
     const savedPort = Number(new URL(baseUrl).port)
-    const viewsBeforeRestart = await readViews()
     await auditServer.close()
     auditServer = await createServer({
       root: auditRoot,
@@ -371,8 +363,6 @@ try {
       },
     })
     await auditServer.listen()
-    if ((await readViews()) !== viewsBeforeRestart)
-      note('/admin', 'traffic', 'traffic count was lost after server restart')
     const restartedWorkspace = await (
       await freshContext.request.get(baseUrl + '/api/admin/projects')
     ).json()
