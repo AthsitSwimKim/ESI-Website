@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import { iconMap } from './icons'
 import { industries } from './industries'
-import { getRelatedProjects, projectFilters, projects } from './projects'
+import { getRelatedProjects, projectFilters, projects, projectReferences } from './projects'
 import { services } from './services'
 import { brandPartners } from './profileAssets'
 import { aboutFeatures, aboutPage, whyEsi } from './about'
@@ -68,7 +68,7 @@ describe('projects', () => {
   })
 
   it('has complete Thai case-study copy', () => {
-    for (const p of projects) {
+    for (const p of projectReferences) {
       expect(p.titleTh?.trim(), `${p.slug}: titleTh`).toBeTruthy()
       expect(p.descriptionTh?.trim(), `${p.slug}: descriptionTh`).toBeTruthy()
       expect(p.locationTh?.trim(), `${p.slug}: locationTh`).toBeTruthy()

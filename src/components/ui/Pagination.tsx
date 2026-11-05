@@ -9,7 +9,6 @@ interface PaginationProps {
   page: number
   totalPages: number
   onChange: (page: number) => void
-  className?: string
 }
 
 /** Round 40px control — filter-pill height and colours, but circular (design-spec §5, D26). */
@@ -22,12 +21,12 @@ const current = 'border-esi-blue bg-esi-blue text-white'
  * Page switcher for the Projects grid. Renders nothing for a single page, so a category filter
  * that returns one screenful simply has no control under it.
  */
-export function Pagination({ page, totalPages, onChange, className }: PaginationProps) {
+function Pagination({ page, totalPages, onChange }: PaginationProps) {
   const { t } = useT()
   if (totalPages <= 1) return null
 
   return (
-    <nav aria-label={t('pagination.label')} className={cn('flex items-center gap-1.5', className)}>
+    <nav aria-label={t('pagination.label')} className="flex flex-wrap items-center gap-1.5">
       <button
         type="button"
         onClick={() => onChange(page - 1)}
@@ -71,5 +70,35 @@ export function Pagination({ page, totalPages, onChange, className }: Pagination
         <ChevronRight aria-hidden size={18} strokeWidth={2.25} />
       </button>
     </nav>
+  )
+}
+
+export function ProjectPagination({
+  page,
+  total,
+  perPage,
+  onChange,
+}: Omit<PaginationProps, 'totalPages'> & { total: number; perPage: number }) {
+  const { t } = useT()
+  if (total === 0) return null
+
+  const totalPages = Math.ceil(total / perPage)
+  const first = (page - 1) * perPage + 1
+  const range = totalPages > 1 ? `${first}–${Math.min(page * perPage, total)}` : String(total)
+
+  return (
+    <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-esi-border pt-6">
+      <p aria-live="polite" className="text-sm text-esi-muted">
+        {t('projects.showing')} <span className="font-semibold text-esi-navy">{range}</span>{' '}
+        {totalPages > 1 && (
+          <>
+            {t('projects.rangeOf')}{' '}
+            <span className="font-semibold text-esi-navy">{total}</span>{' '}
+          </>
+        )}
+        {t('projects.items')}
+      </p>
+      <Pagination page={page} totalPages={totalPages} onChange={onChange} />
+    </div>
   )
 }

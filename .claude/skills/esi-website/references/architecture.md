@@ -1,8 +1,9 @@
 # ESI Website — Architecture & Conventions
 
-Frontend-only static site. There is **no backend, database, auth, CMS, admin, or upload** —
-if a task seems to need one, it is out of scope (spec §7); solve it with static data, a
-`mailto:` link, an embed, or an external service the user explicitly approves.
+Production uses a frontend-only static build. The owner approved a local project editor
+with a loopback-only Vite API for saving drafts, uploading images, and publishing into the
+project's data files. The static build uses those published records. The original production
+scope in spec §7 applies to deployed hosting.
 
 ## 1. Stack (use current stable versions — do not pin to old majors)
 

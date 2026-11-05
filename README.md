@@ -92,6 +92,35 @@ pass the same value as `basename` to `createBrowserRouter` in `src/routes/index.
 **Before the first deploy:** confirm `siteUrl` in `src/data/company.ts` — canonical URLs, the
 sitemap and Open Graph tags are all built from it.
 
+## Local project editor
+
+Run `npm run dev`, then open `/admin` directly on the localhost URL printed by Vite.
+The editor API accepts requests from the local machine. The page is excluded from public
+navigation and the sitemap and carries `noindex, nofollow, noarchive`.
+
+**Website views (local)** counts public page loads and changes of page path on localhost.
+Admin pages, previews, 404 pages and filter changes are excluded. The total is saved to
+`.esi-admin/traffic.json` and refreshed when the editor opens or regains focus.
+
+- **Save draft** saves to the workspace on disk and shows a confirmation. You can reopen
+  the draft from another browser on this machine or after restarting Vite.
+- **Save & preview** saves and opens the draft using the same layout as a project detail page.
+- **Publish** saves your changes and opens the regular project page. The project also
+  appears on the local `/projects` list. For an existing published project, visitors see
+  the previously published version while you edit a draft.
+- **Unpublish** removes the project from the local public pages and keeps it in the editor.
+  **Delete project** removes it from both after confirmation.
+
+Choose a JPG, PNG or WebP from your device for the main photo. The optional gallery supports
+up to 10 additional photos and is hidden when empty. **Fill sample project** loads a labelled
+example with bilingual scope and two gallery images.
+
+Drafts are stored in `.esi-admin/workspace.json`. Published changes are stored in
+`src/data/projectContent.json` and overlaid on the original project references. Image uploads
+are stored as files in the project. Keep these files together when backing up the workspace.
+`npm run build` creates a static `dist/` with the published project pages and sitemap.
+The editor runs with Vite locally, and updating hosting requires uploading a new build.
+
 ## Quality gates
 
 Current state of the production build (Lighthouse mobile): **Performance 89–92 · Accessibility

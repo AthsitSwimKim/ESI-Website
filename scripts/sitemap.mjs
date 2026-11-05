@@ -9,12 +9,21 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { applyProjectContent } from '../shared/project-content.mjs'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read = (p) => readFileSync(path.join(root, p), 'utf8')
 
 /** Pull values out of the data files with a regex — no bundler needed for a build script. */
 const slugsIn = (file) => [...read(file).matchAll(/slug: '([a-z0-9-]+)'/g)].map((m) => m[1])
+const projectSource = read('src/data/projects.ts')
+const references = [...projectSource.matchAll(/id: (\d+),\s+slug: '([a-z0-9-]+)'/g)].map(
+  (match) => ({ id: Number(match[1]), slug: match[2] }),
+)
+const publishedProjects = applyProjectContent(
+  references,
+  JSON.parse(read('src/data/projectContent.json')),
+)
 const siteUrl = (read('src/data/company.ts').match(/siteUrl: '([^']+)'/) ?? [])[1]
 if (!siteUrl) throw new Error('siteUrl not found in src/data/company.ts')
 
@@ -30,7 +39,7 @@ const pages = [
   })),
   { loc: '/industries', priority: '0.7', changefreq: 'yearly' },
   { loc: '/projects', priority: '0.9', changefreq: 'monthly' },
-  ...slugsIn('src/data/projects.ts').map((slug) => ({
+  ...publishedProjects.map(({ slug }) => ({
     loc: `/projects/${slug}`,
     priority: '0.6',
     changefreq: 'yearly',

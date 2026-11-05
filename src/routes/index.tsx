@@ -1,4 +1,4 @@
-import { createBrowserRouter, type LoaderFunctionArgs } from 'react-router-dom'
+import { createBrowserRouter, replace, type LoaderFunctionArgs } from 'react-router-dom'
 
 import { PageSkeleton, RootLayout, type RouteHandle } from '@/components/layout/RootLayout'
 import { getProjectBySlug } from '@/data/projects'
@@ -20,12 +20,34 @@ const hideCta: RouteHandle = { hideCta: true }
 /** Routes exactly as spec §9. Home is eager; every other page is code-split. */
 export const router = createBrowserRouter([
   {
+    path: '/admin',
+    loader: ({ request }) => {
+      const url = new URL(request.url)
+      const id = url.searchParams.get('project')
+      if (!id || !/^\d+$/.test(id)) return null
+      url.searchParams.delete('project')
+      return replace(`/admin/projects/${id}${url.search}`)
+    },
+    HydrateFallback: PageSkeleton,
+    lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
+  },
+  {
+    path: '/admin/projects/:projectId',
+    HydrateFallback: PageSkeleton,
+    lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
+  },
+  {
     path: '/',
     element: <RootLayout />,
     errorElement: <RootLayout errorBoundary />,
     HydrateFallback: PageSkeleton,
     children: [
       { index: true, element: <HomePage /> },
+      {
+        path: 'admin/preview/:id',
+        lazy: () =>
+          import('@/pages/AdminPreviewPage').then((m) => ({ Component: m.AdminPreviewPage })),
+      },
       {
         path: 'about',
         lazy: () => import('@/pages/AboutPage').then((m) => ({ Component: m.AboutPage })),
