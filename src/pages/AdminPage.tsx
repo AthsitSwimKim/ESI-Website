@@ -160,13 +160,19 @@ export function AdminPage() {
   }, [pathname])
 
   useEffect(() => {
-    if (!import.meta.env.DEV || editing) return
+    if (editing) return
     const controller = new AbortController()
     const refresh = async () => {
       try {
-        const response = await fetch('/api/admin/traffic', { signal: controller.signal })
+        const response = await fetch(
+          import.meta.env.DEV
+            ? '/api/admin/traffic'
+            : `${import.meta.env.BASE_URL}visitor-count.php`,
+          { cache: 'no-store', signal: controller.signal },
+        )
         if (!response.ok) throw new Error('Traffic count unavailable')
-        const { views } = await response.json()
+        const data = await response.json()
+        const views = import.meta.env.DEV ? data?.views : data?.count
         if (!Number.isSafeInteger(views) || views < 0) throw new Error('Invalid traffic count')
         if (!controller.signal.aborted) setWebsiteViews(views)
       } catch {
@@ -174,9 +180,11 @@ export function AdminPage() {
       }
     }
     void refresh()
+    const interval = window.setInterval(() => void refresh(), 60_000)
     window.addEventListener('focus', refresh)
     return () => {
       controller.abort()
+      window.clearInterval(interval)
       window.removeEventListener('focus', refresh)
     }
   }, [editing])
@@ -385,7 +393,7 @@ export function AdminPage() {
       <main id="admin-main" className="mx-auto max-w-[1600px] px-5 py-7 lg:px-8 lg:py-10">
         {!editing ? (
           <>
-            <Reveal>
+            <Reveal immediate>
               <div className="mb-7 flex flex-wrap items-end justify-between gap-5">
                 <div>
                   <h1 className="display-title text-3xl text-esi-blue">{t('admin.title')}</h1>

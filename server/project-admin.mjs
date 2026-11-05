@@ -3,6 +3,7 @@ import { mkdir, readFile, realpath, rename, unlink, writeFile } from 'node:fs/pr
 import path from 'node:path'
 
 import { applyProjectContent } from '../shared/project-content.mjs'
+import { readWebsiteVisitors } from './visitor-traffic.mjs'
 
 export class ProjectStoreError extends Error {
   constructor(code, status = 400) {
@@ -316,14 +317,6 @@ export function projectAdminPlugin() {
       }
     },
     configureServer(server) {
-      const trafficFile = path.join(server.config.root, '.esi-admin', 'traffic.json')
-      let trafficWrites = Promise.resolve()
-      const readTraffic = async () => {
-        const count = await readJson(trafficFile, 0)
-        if (!Number.isSafeInteger(count) || count < 0)
-          throw new ProjectStoreError('STORE_CORRUPT', 500)
-        return count
-      }
       const refreshPublished = () => {
         server.moduleGraph.invalidateAll()
         server.ws.send({ type: 'custom', event: 'esi:projects-published' })
@@ -381,8 +374,12 @@ export function projectAdminPlugin() {
             throw new ProjectStoreError('FORBIDDEN', 403)
           const pathname = new URL(request.url ?? '/', host).pathname
           if (request.method === 'GET' && pathname === '/traffic') {
-            await trafficWrites
-            return send(200, { views: await readTraffic() })
+            try {
+              const { company } = await server.ssrLoadModule('/src/data/company.ts')
+              return send(200, { views: await readWebsiteVisitors(company.siteUrl) })
+            } catch {
+              throw new ProjectStoreError('TRAFFIC_UNAVAILABLE', 503)
+            }
           }
           if (request.method === 'GET' && pathname === '/projects')
             return send(200, await (await getRepository()).get())
@@ -392,16 +389,7 @@ export function projectAdminPlugin() {
             !request.headers['content-type']?.startsWith('application/json')
           )
             throw new ProjectStoreError('FORBIDDEN', 403)
-          if (pathname === '/traffic') {
-            const write = trafficWrites.then(async () => {
-              const views = (await readTraffic()) + 1
-              await writeJson(trafficFile, views)
-            })
-            trafficWrites = write.catch(() => {})
-            await write
-            response.statusCode = 204
-            return response.end()
-          }
+          if (pathname === '/traffic') throw new ProjectStoreError('NOT_FOUND', 404)
           const store = await getRepository()
           let length = 0
           const chunks = []

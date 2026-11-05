@@ -13,6 +13,8 @@ import { useT } from '@/i18n'
 import { socialLabels, type SocialNetwork } from '@/lib/social'
 import { cn } from '@/lib/utils'
 
+import { FooterVisitorCount } from './FooterVisitorCount'
+
 const linkClass =
   'text-[14px] text-white/85 transition-colors hover:text-white hover:underline underline-offset-4'
 
@@ -33,7 +35,7 @@ function FooterColumn({ children, className }: { children: ReactNode; className?
  * separated by hairline dividers on a navy surface with a faint network graphic.
  * Certifications render only when real ones exist (D2). No calendar / search / "powered by".
  */
-export function Footer() {
+export function Footer({ showVisitorCount }: { showVisitorCount: boolean }) {
   const { t, l, label, lang } = useT()
   const socials = (Object.keys(socialLabels) as SocialNetwork[]).filter((n) => company.social[n])
   const year = new Date().getFullYear()
@@ -83,6 +85,7 @@ export function Footer() {
                 ))}
               </ul>
             )}
+            {showVisitorCount && <FooterVisitorCount />}
           </div>
 
           {/* Contact */}
