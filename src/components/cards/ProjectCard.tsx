@@ -1,5 +1,5 @@
-import { ArrowUpRight, ChevronRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { ArrowUpRight, ChevronRight, Pencil } from 'lucide-react'
+import { Link, type To } from 'react-router-dom'
 
 import { Chip } from '@/components/ui/Chip'
 import { getIndustry } from '@/data/industries'
@@ -16,9 +16,22 @@ interface ProjectCardProps {
    */
   variant?: 'horizontal' | 'vertical'
   className?: string
+  to?: To
+  editor?: {
+    label: string
+    status: string
+  }
 }
 
-export function ProjectCard({ project, variant = 'horizontal', className }: ProjectCardProps) {
+const stretchedAction = "after:absolute after:inset-0 after:content-['']"
+
+export function ProjectCard({
+  project,
+  variant = 'horizontal',
+  className,
+  to,
+  editor,
+}: ProjectCardProps) {
   const { t, l, lang } = useT()
   const horizontal = variant === 'horizontal'
   const industry = getIndustry(project.industry)
@@ -60,7 +73,7 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
           aria-hidden
           className="absolute top-3 right-3 flex size-9 translate-y-1 items-center justify-center rounded-full bg-white/95 text-esi-blue opacity-0 shadow-card transition-[translate,opacity] duration-300 group-hover:translate-y-0 group-hover:opacity-100"
         >
-          <ArrowUpRight size={18} strokeWidth={2.25} />
+          {editor ? <Pencil size={17} /> : <ArrowUpRight size={18} strokeWidth={2.25} />}
         </span>
       </div>
 
@@ -82,10 +95,10 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
               : 'line-clamp-3 text-[17px]',
           )}
         >
-          {/* Stretched link: the whole card is clickable, the title is the accessible link */}
           <Link
-            to={`/projects/${project.slug}`}
-            className="after:absolute after:inset-0 after:content-['']"
+            to={to ?? `/projects/${project.slug}`}
+            aria-label={editor ? `${editor.label} ${copy.title}` : undefined}
+            className={stretchedAction}
           >
             {copy.title}
           </Link>
@@ -103,15 +116,18 @@ export function ProjectCard({ project, variant = 'horizontal', className }: Proj
         >
           {copy.description}
         </p>
-        <span className="mt-auto inline-flex items-center gap-1 pt-4 text-[13px] font-semibold text-esi-blue">
-          {t('cta.viewProject')}
-          <ChevronRight
-            aria-hidden
-            size={16}
-            strokeWidth={2.25}
-            className="transition-transform duration-200 group-hover:translate-x-1"
-          />
-        </span>
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-4">
+          <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-esi-blue">
+            {editor?.label ?? t('cta.viewProject')}
+            <ChevronRight
+              aria-hidden
+              size={16}
+              strokeWidth={2.25}
+              className="transition-transform duration-200 group-hover:translate-x-1"
+            />
+          </span>
+          {editor && <Chip>{editor.status}</Chip>}
+        </div>
       </div>
     </article>
   )

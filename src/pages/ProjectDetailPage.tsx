@@ -15,15 +15,16 @@ import { pageTitle } from '@/data/seo'
 import { getServiceByCategory } from '@/data/services'
 import { useT } from '@/i18n'
 import { projectText } from '@/lib/projectText'
+import type { Project } from '@/types'
 
 /**
  * /projects/:slug (spec §30, design-spec §5): hero → meta strip → overview → scope →
  * solutions used → gallery → related projects → CTA. The route loader 404s unknown slugs.
  */
-export function ProjectDetailPage() {
+export function ProjectDetailPage({ previewProject }: { previewProject?: Project }) {
   const { slug } = useParams()
   const { t, l, lang } = useT()
-  const project = getProjectBySlug(slug)
+  const project = previewProject ?? getProjectBySlug(slug)
   if (!project) return null
 
   const industry = getIndustry(project.industry)
@@ -50,8 +51,8 @@ export function ProjectDetailPage() {
       <Seo
         title={pageTitle(copy.title)}
         description={copy.description.slice(0, 160)}
-        path={`/projects/${project.slug}`}
-        image={project.image}
+        path={previewProject ? `/admin/preview/${project.id}` : `/projects/${project.slug}`}
+        image={project.image.startsWith('/') ? project.image : undefined}
         type="article"
       />
       <PageHero
@@ -68,7 +69,7 @@ export function ProjectDetailPage() {
         <div className="mt-5 flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-[3px] border border-white/25 bg-esi-navy/45 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">
             <BadgeCheck aria-hidden size={16} />
-            {t('projects.referenceRecord')}
+            {t(previewProject ? 'admin.previewDraft' : 'projects.referenceRecord')}
           </span>
           {project.imageKind === 'illustration' && (
             <span className="inline-flex items-center gap-1.5 rounded-[3px] border border-white/25 bg-esi-navy/45 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">

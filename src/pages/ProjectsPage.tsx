@@ -11,7 +11,7 @@ import { Reveal, RevealItem } from '@/components/ui/Reveal'
 import { FilterTabs, type FilterOption } from '@/components/ui/FilterTabs'
 import { Icon } from '@/components/ui/Icon'
 import { PageHero } from '@/components/ui/PageHero'
-import { Pagination } from '@/components/ui/Pagination'
+import { ProjectPagination } from '@/components/ui/Pagination'
 import { Seo } from '@/components/ui/Seo'
 import { getIndustry, industries } from '@/data/industries'
 import { pageHeroes } from '@/data/pages'
@@ -72,10 +72,6 @@ export function ProjectsPage() {
   // A stale or hand-typed ?page= (filter first, then page 3 of a 1-page result) falls back to 1.
   const page = clampPage(params.get('page'), totalPages)
   const visible = results.slice((page - 1) * PER_PAGE, page * PER_PAGE)
-  const first = (page - 1) * PER_PAGE + 1
-  // One page of results needs no range, just the count: "Showing 5 projects".
-  const rangeLabel =
-    totalPages > 1 ? `${first}–${first + visible.length - 1}` : String(results.length)
 
   /** Counts reflect the industry filter so a tab never promises results it cannot show. */
   const options: FilterOption<CategoryValue>[] = projectFilters.map((f) => ({
@@ -207,22 +203,12 @@ export function ProjectsPage() {
             )}
           </div>
 
-          {results.length > 0 && (
-            <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-esi-border pt-6">
-              <p aria-live="polite" className="text-sm text-esi-muted">
-                {t('projects.showing')}{' '}
-                <span className="font-semibold text-esi-navy">{rangeLabel}</span>{' '}
-                {totalPages > 1 && (
-                  <>
-                    {t('projects.rangeOf')}{' '}
-                    <span className="font-semibold text-esi-navy">{results.length}</span>{' '}
-                  </>
-                )}
-                {t('projects.items')}
-              </p>
-              <Pagination page={page} totalPages={totalPages} onChange={goToPage} />
-            </div>
-          )}
+          <ProjectPagination
+            page={page}
+            total={results.length}
+            perPage={PER_PAGE}
+            onChange={goToPage}
+          />
 
           {/* Quick jump to the other industries — keeps deep-linked views navigable */}
           {industry && (

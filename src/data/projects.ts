@@ -1,4 +1,6 @@
 import type { IndustrySlug, Project, ProjectCategory } from '@/types'
+import { applyProjectContent } from '../../shared/project-content.mjs'
+import projectContent from './projectContent.json'
 
 /**
  * Project references — 22 real projects published on the previous website
@@ -20,7 +22,7 @@ import type { IndustrySlug, Project, ProjectCategory } from '@/types'
  * Array order = display order (newest first). `id` is stable and chronological — a new
  * project gets the next id and goes at the TOP of the array (spec §50).
  */
-export const projects: Project[] = [
+export const projectReferences: Project[] = [
   {
     id: 22,
     slug: 'map-ta-phut-tank-terminal-cctv',
@@ -528,6 +530,13 @@ export const projects: Project[] = [
     source: 'https://esi-th.com/refference/klu/',
   },
 ]
+
+/** Published content is shared by every public page and included in static builds. */
+// The local editor validates each project before writing this generated JSON file.
+export const projects: Project[] = applyProjectContent(projectReferences, {
+  records: projectContent.records as Project[],
+  removedIds: projectContent.removedIds,
+})
 
 /** Filter tabs on /projects (spec §27) — 'all' plus the six categories, in display order. */
 export const projectFilters: { value: ProjectCategory | 'all'; labelKey: string }[] = [
