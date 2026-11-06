@@ -32,6 +32,7 @@ export const th: DeepPartial<Dictionary> = {
     seeRelatedProjects: 'ดูผลงานที่เกี่ยวข้อง',
   },
   footer: {
+    visitorCount: 'ผู้เข้าชมเว็บไซต์',
     contactUs: 'ติดต่อเรา',
     quickLinks: 'เมนูหลัก',
     solutions: 'โซลูชัน',
@@ -205,8 +206,8 @@ export const th: DeepPartial<Dictionary> = {
     total: 'ผลงานทั้งหมด',
     featuredCount: 'ผลงานเด่น',
     imageCount: 'รูปภาพ',
-    websiteViews: 'ยอดเข้าชมเว็บไซต์ (บนเครื่อง)',
-    viewsHelp: 'ยอดเปิดหน้าสาธารณะสะสม',
+    websiteViews: 'ผู้เข้าชมเว็บไซต์',
+    viewsHelp: 'ยอดสะสมจาก esi-th.com',
     viewsUnavailable: 'โหลดสถิติไม่ได้',
     publish: 'เผยแพร่',
     unpublish: 'ยกเลิกเผยแพร่',

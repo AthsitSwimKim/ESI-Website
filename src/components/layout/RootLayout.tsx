@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense } from 'react'
 import {
   isRouteErrorResponse,
   Outlet,
@@ -63,25 +63,10 @@ function RouteError() {
 export function RootLayout({ errorBoundary = false }: { errorBoundary?: boolean }) {
   const matches = useMatches()
   const { pathname } = useLocation()
-  const lastViewedPath = useRef<string | null>(null)
   const { t } = useT()
   const hideCta =
     errorBoundary || matches.some((m) => (m.handle as RouteHandle | undefined)?.hideCta)
-
-  useEffect(() => {
-    if (!import.meta.env.DEV) return
-    const path = pathname.replace(/\/+$/, '') || '/'
-    if (errorBoundary || /^\/admin(?:\/|$)/i.test(path)) {
-      lastViewedPath.current = null
-      return
-    }
-    if (lastViewedPath.current === path) return
-    lastViewedPath.current = path
-    void fetch('/api/admin/traffic', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-ESI-Admin': '1' },
-    }).catch(() => {})
-  }, [pathname, errorBoundary])
+  const isPublicPage = !errorBoundary && !/^\/admin(?:\/|$)/i.test(pathname)
 
   return (
     <>
@@ -112,7 +97,7 @@ export function RootLayout({ errorBoundary = false }: { errorBoundary?: boolean 
         )}
       </main>
       {!hideCta && <CtaBand />}
-      <Footer />
+      <Footer showVisitorCount={isPublicPage} />
     </>
   )
 }

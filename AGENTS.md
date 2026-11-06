@@ -15,10 +15,11 @@ online company profile: Home, About, Solutions (+6 detail pages), Industries, Pr
 **Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · motion ·
 lucide-react · oxlint · Prettier · Vitest · Playwright.
 
-**Hard constraint — do not design around it:** this is a **frontend-only static site**. No
-backend, API, database, auth, login, CMS, admin panel or file upload, ever. `npm run build`
-produces a static `dist/` that is uploaded to any host. If a request implies a server, say so
-and offer the static alternative (`mailto:`, an embed, or static data).
+**Production site:** `npm run build` produces a static `dist/`. The owner approved one
+exception for Chaiyo Hosting. `npm run build:chaiyo` adds a single PHP visitor counter
+that stores its data outside the web root. Other production features stay static, with no
+database, auth, login, CMS, admin panel or file upload. If another request implies a server,
+explain the constraint and offer the static alternative (`mailto:`, an embed, or static data).
 
 ## Read these before changing anything
 

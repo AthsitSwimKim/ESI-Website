@@ -28,6 +28,7 @@ export const en = {
     seeRelatedProjects: 'See related projects',
   },
   footer: {
+    visitorCount: 'Website visitors',
     contactUs: 'Contact Us',
     quickLinks: 'Quick Links',
     solutions: 'Solutions',
@@ -205,8 +206,8 @@ export const en = {
     total: 'Total projects',
     featuredCount: 'Featured projects',
     imageCount: 'Images',
-    websiteViews: 'Website views (local)',
-    viewsHelp: 'Total views of public pages',
+    websiteViews: 'Website visitors',
+    viewsHelp: 'Cumulative total from esi-th.com',
     viewsUnavailable: 'Traffic data is unavailable',
     publish: 'Publish',
     unpublish: 'Unpublish',
