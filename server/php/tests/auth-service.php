@@ -348,6 +348,9 @@ try {
     $legacyPdo = new TlsSessionPdo('', '');
     initializeDatabaseSession($legacyPdo, $parsedLegacy);
     check($legacyPdo->queries === [] && count($legacyPdo->commands) === 4, 'explicit legacy connection does not silently attempt or fall back from TLS');
+    $writeConfig(array_replace($legacyConfig, ['environment' => 'production',
+        'allowed_origins' => ['https://esi-th.com', 'https://www.esi-th.com'], 'cookie_secure' => true]));
+    check(loadConfig($configFile)['environment'] === 'production', 'explicit Chaiyo production supports approved origins and secure cookies');
     foreach ([
         ['database_target' => 'local'],
         ['environment' => 'production', 'allowed_origins' => ['https://example.test'], 'cookie_secure' => true],
@@ -357,7 +360,7 @@ try {
         ['dsn' => 'mysql:host=mysql-5.5.chaiyohosting.com;port=3306;dbname=other_database;charset=utf8mb4'],
     ] as $override) {
         $writeConfig(array_replace($legacyConfig, $override));
-        expectConfigurationError(fn() => loadConfig($configFile), 'legacy is restricted to the exact approved Chaiyo development profile');
+        expectConfigurationError(fn() => loadConfig($configFile), 'legacy is restricted to the approved Chaiyo endpoint, credentials and origins');
     }
     $writeConfig(array_replace($validConfig, ['database_transport' => 'legacy']));
     expectConfigurationError(fn() => loadConfig($configFile), 'local profile cannot opt into remote legacy protocol');

@@ -2,6 +2,7 @@ import { adminStorageKey } from '@/data/admin'
 import { parseProjectDrafts } from '@/lib/admin'
 import { AdminAuthError, notifyAdminUnauthorized, requireAdminCsrfToken } from '@/lib/adminAuth'
 import { storage } from '@/lib/utils'
+import { refreshPublishedProjects } from '@/lib/publishedProjects'
 import type { Project } from '@/types'
 
 export interface ProjectWorkspace {
@@ -58,6 +59,8 @@ async function request<T>(path = '', body?: unknown): Promise<T> {
   const result = await response.json()
   if (!response.ok)
     throw new ProjectApiError(typeof result.error === 'string' ? result.error : 'SAVE_FAILED')
+  if (['/publish', '/remove', '/unpublish'].includes(path))
+    await refreshPublishedProjects().catch(() => {})
   return result as T
 }
 

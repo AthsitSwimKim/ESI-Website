@@ -2,8 +2,9 @@
 
 Corporate website for **Engineering System Integration Co., Ltd. (ESI)**, Rayong — industrial
 communication and system integration. The public website builds to static files. The local
-Admin editor now has a PHP/MySQL login in **Dev only**; its project content still uses the
-existing local data-file workflow. No PHP Admin backend has been deployed to Hosting.
+Admin editor has PHP/MySQL authentication and an optional complete Chaiyo production package.
+Project content uses a private file repository; authentication and audit use MySQL.
+The owner installs the Hosting package and private config separately.
 
 **Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · Motion · lucide-react
 
@@ -145,9 +146,9 @@ See [`database/README.md`](database/README.md) for the schema, verification SQL 
 requirements. The first application Admin account `esi_admin` was created on 2026-11-06;
 its private credentials are in the gitignored `.esi-admin/initial-admin-credentials.txt`.
 PHP Login/Logout and session protection are now implemented in Dev against a separate local
-database and account. Production login/API/uploads have not been deployed; the Hosting account
-cannot log in to the website until production authentication is connected. The public website
-uses its current build.
+database and account. The complete Chaiyo package now includes production PHP authentication,
+project CRUD/uploads/publication and SQL audit (D59). The owner uploads the package and private
+config; this does not automatically deploy changes to Hosting.
 
 The owner also approved connecting Dev authentication to Chaiyo on 2026-11-10 (D57).
 An explicit Chaiyo profile and read-only connection check are separate from the local database
@@ -170,8 +171,15 @@ See [`database/audit-log.md`](database/audit-log.md) for scope, privacy and reco
 
 ## Website visitor count
 
-For Chaiyo Hosting, run `npm run build:chaiyo` and upload the contents of `dist/` to `httpdocs`
-on the PHP-enabled domain. The first public visit creates `.esi-visitor-count/` beside `httpdocs`
+For Chaiyo Hosting, run `npm run build:chaiyo` and use **`ESI-Chaiyo-Hosting.zip`**, which includes
+`httpdocs/` and the sibling private `.esi-admin-production/`. Extract at the domain directory
+that contains `httpdocs`, then upload the separately prepared private config. **Uploading only
+`dist/` omits the Admin backend.** See [`database/chaiyo-production.md`](database/chaiyo-production.md)
+for exact placement, PHP 8.1+ requirements and verification. `npm run test:production` tests the
+extracted ZIP using disposable local SQL and production HTTPS cookies. It models Apache routing
+with a test-only router; actual Hosting rewrite/PHP settings still need checking after upload.
+
+The first public visit creates `.esi-visitor-count/` beside `httpdocs`
 and increments the total from zero. PHP needs write access to that private directory and permission
 to access it under the domain's `open_basedir` setting. Preserve it across deployments and backups.
 

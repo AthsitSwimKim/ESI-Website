@@ -10,13 +10,19 @@ function isLoopback(string $address): bool
     return in_array($address, ['127.0.0.1', '::1', '::ffff:127.0.0.1'], true);
 }
 
+/** Hosting bootstrap supplies the actual document root, never a request header. */
+function adminPublicDirectory(): string|false
+{
+    return realpath(defined('ESI_ADMIN_PUBLIC_ROOT') ? ESI_ADMIN_PUBLIC_ROOT : __DIR__ . '/../public');
+}
+
 function outsidePublicDirectory(string $directory): string
 {
     if (!is_dir($directory) && !mkdir($directory, 0700, true) && !is_dir($directory)) {
         throw new RuntimeException('Private directory unavailable');
     }
     $resolved = realpath($directory);
-    $public = realpath(__DIR__ . '/../public');
+    $public = adminPublicDirectory();
     if ($resolved === false || $public === false) {
         throw new RuntimeException('Private directory unavailable');
     }
@@ -67,7 +73,7 @@ function requirePrivateCaFile(mixed $filename): string
 {
     if (!is_string($filename) || $filename === '') throw new RuntimeException('A trusted database CA file is required');
     $resolved = realpath($filename);
-    $public = realpath(__DIR__ . '/../public');
+    $public = adminPublicDirectory();
     if ($resolved === false || !is_file($resolved) || $public === false) {
         throw new RuntimeException('Database CA file unavailable');
     }
@@ -89,7 +95,7 @@ function loadConfig(?string $filename = null): array
 {
     $filename ??= getenv('ESI_ADMIN_CONFIG') ?: '';
     $resolved = $filename !== '' ? realpath($filename) : false;
-    $public = realpath(__DIR__ . '/../public');
+    $public = adminPublicDirectory();
     if ($resolved === false || !is_file($resolved) || $public === false) {
         throw new RuntimeException('Private configuration is required');
     }
@@ -148,8 +154,11 @@ function loadConfig(?string $filename = null): array
             throw new RuntimeException('Local database profile must use loopback');
         }
     } else {
-        if ($config['environment'] !== 'development'
-            || $database['host'] !== 'mysql-5.5.chaiyohosting.com' || $database['port'] !== 3306
+        if ($config['environment'] === 'production'
+            && array_diff($config['allowed_origins'], ['https://esi-th.com', 'https://www.esi-th.com']) !== []) {
+            throw new RuntimeException('Chaiyo production origins must match the approved website');
+        }
+        if ($database['host'] !== 'mysql-5.5.chaiyohosting.com' || $database['port'] !== 3306
             || $database['dbname'] !== 'esithcom_website' || $config['username'] !== 'esi_webapp'
             || $config['password'] === '') {
             throw new RuntimeException('Chaiyo requires the explicit approved database endpoint and private credentials');

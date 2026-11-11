@@ -194,7 +194,7 @@ export function AdminLoginPage() {
                     onClick={() => setVisible((current) => !current)}
                     className="absolute inset-y-0 right-0 flex min-w-11 items-center justify-center rounded-sm text-esi-muted transition-colors hover:text-esi-blue"
                   >
-                    {visible ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
+                    {visible ? <Eye size={18} aria-hidden /> : <EyeOff size={18} aria-hidden />}
                   </button>
                 </div>
                 <button

@@ -1,5 +1,23 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
+- [x] ปรับไอคอนรหัสผ่านหน้า Login ตามเจ้าของ: ซ่อนรหัสใช้ EyeOff และแสดงรหัสใช้ Eye; คงปุ่มสลับและ accessible labels เดิม; Chrome ตรวจ type/icon/value/mobile ผ่าน, typecheck/lint/52 tests/Chaiyo build ผ่าน และอัปเดต ZIP แล้ว (2026-11-11)
+- [x] เจ้าของต้องการชุดอัปเดตเฉพาะไฟล์ที่เปลี่ยนแทน ZIP ทั้งเว็บ: เตรียม `ESI-Password-Icon-Update.zip` 236,680 bytes สำหรับแตกทับใน httpdocs โดยตรง; เทียบกับชุด production ก่อนแก้ไอคอนและตรวจหลังแตกทับว่าตรงกับ build ใหม่ทุกไฟล์; งานอัปเดตต่อไปให้ส่ง patch ตามรุ่นที่ติดตั้งเมื่อทำได้
+
+### Chaiyo production Admin (2026-11-11, D59)
+
+**D59:** เจ้าของต้องการ ZIP ที่อัปโหลดแล้วใช้ Admin บน Chaiyo ได้ จึงขยายขอบเขตจาก Dev ไป production
+สำหรับ Login/Logout, project CRUD, Draft/Publish/Unpublish, ภาพอัปโหลด และ Audit Log
+ชุด static เดิมที่ส่งให้ไม่มี PHP API และใช้งาน Admin ไม่ได้ ต้องแทนที่ด้วยชุดติดตั้งเต็ม
+บัญชี/session/audit ใช้ MySQL Chaiyo เดิม; ผลงานเก็บ JSON ส่วนตัวบน Hosting ตามสถาปัตยกรรมไฟล์เดิม
+ไม่ migrate ตาราง SQL ผลงานในรอบนี้ และไม่ส่งข้อมูลทดสอบไปฐานจริง
+
+- [x] เพิ่ม production PHP repository/API, actual-webroot config validation, ปิด Dev bridge endpoints
+- [x] เพิ่ม public project feed และ sitemap ที่เปลี่ยนตาม Publish โดยไม่ rebuild
+- [x] สร้าง ZIP แยก `httpdocs` และ private sibling พร้อม config ส่วนตัวแยกนอก ZIP
+- [x] ทดสอบ ZIP ที่แตกจริง, production HTTPS cookie, project CRUD/upload/publish และ SQL audit รวม SQL outage/replay; 52 unit tests, 190 PHP security + 232 HTTP checks, 9 transport tests, typecheck/lint/build และ audit 23 routes × 4 widths ผ่าน
+- [ ] เจ้าของอัปโหลดชุดเต็ม/config และตรวจการทำงานบน Hosting จริง
+- [x] แก้ ZIP หลัง Plesk แจ้ง backslash path warning: สร้าง entry ด้วย `/` ชัดเจนแทน Windows CreateFromDirectory; ตรวจ raw central/local headers และแตกด้วย Info-ZIP exit 0 ไม่มี warning ก่อนทดสอบ production รวม 1,218 checks ผ่าน; log จากเจ้าของยังแสดงการแตกผิดชั้น `httpdocs/httpdocs` จึงต้องแตกใหม่ที่โฟลเดอร์หลักของโดเมน
+
 - [x] เอาปุ่ม “กรอกผลงานตัวอย่าง” พร้อม sample URL/autofill และคำแปลออกจาก Admin ตามเจ้าของ (2026-11-11); ข้อมูล fixture สำหรับทดสอบย้ายไป `src/test/fixtures/` และ audit ใช้เฉพาะ workspace แยก; typecheck/lint/52 tests/build และ audit 23 routes × 4 widths ผ่าน รวมฟอร์มใหม่/URL ตัวอย่างเก่าต้องว่าง; ภาพจริง `screenshots/admin-actions-removed.png`
 
 ### Admin Audit Log (2026-11-11, D58)

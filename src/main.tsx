@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import App from './App'
+import { refreshPublishedProjects } from './lib/publishedProjects'
 import './styles/index.css'
 
 if (import.meta.hot) {
@@ -12,8 +12,15 @@ if (import.meta.hot) {
   import.meta.hot.dispose(() => import.meta.hot?.off('esi:projects-published', refreshPublished))
 }
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+async function start() {
+  // Retain the packaged public catalogue during a temporary API outage.
+  await refreshPublishedProjects().catch(() => {})
+  const { default: App } = await import('./App')
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  )
+}
+
+void start()

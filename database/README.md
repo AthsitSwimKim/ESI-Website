@@ -84,8 +84,10 @@ phpMyAdmin มีคำสั่งภายในแทรก ทำให้ `
 เก็บ ID/slug/ลำดับเดิม รวม partners/source และเครดิตรูปที่อยู่ใน comments
 ข้อมูล `[Sample]` เป็นตัวอย่างที่เคยอนุมัติให้ทดลองในเครื่อง ไม่ถือเป็นผลงานจริงสำหรับ migration
 
-API ปัจจุบันเป็น Vite plugin ที่ทำงานเฉพาะ localhost ไม่มี production login/API อยู่ใน build
-การมีตาราง `admin_users` จึงยังไม่ได้ทำให้ `/admin` บน Hosting ล็อกอินหรือบันทึกข้อมูลได้
+Dev ใช้ Vite plugin ส่วนชุด Chaiyo production (D59) มี PHP API สำหรับ Login/ผลงาน/ภาพ/Audit
+ต้องติดตั้ง ZIP เต็มและ private config ตาม `chaiyo-production.md`; `dist/` อย่างเดียวไม่มี backend
+บัญชี/session/audit ใช้ MySQL ส่วนข้อมูลผลงาน production เก็บ JSON นอก web root
+ตาราง SQL ผลงานยังรอ migration ตามแนวทางข้างต้น
 
 `002_verify_schema.sql` ตรวจ metadata แบบ read-only ส่วน `003_smoke_test.sql` ทดสอบข้อมูล
 TH/EN, draft/published และความสัมพันธ์ภายใน transaction แล้ว `ROLLBACK` คืนทั้งหมด

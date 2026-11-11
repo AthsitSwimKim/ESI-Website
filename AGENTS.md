@@ -19,17 +19,25 @@ lucide-react · oxlint · Prettier · Vitest · Playwright.
 visitor counter for Chaiyo Hosting; `npm run build:chaiyo` adds it and stores its data outside
 the web root. The owner also approved preparing the Admin database schema in
 `esithcom_website` (D54, 2026-11-06); SQL and verification notes are in `database/`.
-The schema is not connected to the production website. The owner approved PHP Login/Logout
+The owner approved PHP Login/Logout
 and session/CSRF protection in Dev only (D56); `npm run dev` starts the private local PHP/MariaDB
 runtime and Vite. See `database/dev-auth.md`; Dev credentials/data are separate from Hosting.
-Local project editing still uses its existing data-file repository. Production Admin deployment,
-MySQL project-storage migration, CMS and server uploads remain future work.
+Local project editing still uses its existing data-file repository.
 The owner approved an opt-in Dev-to-Chaiyo auth database connection (D57, 2026-11-10).
 See `database/chaiyo-connection.md`; the owner supplies the MySQL password in a private file.
 The existing endpoint uses an explicit legacy transport; verified TLS is a separate mode with
 no automatic downgrade. Default Dev/audit/test databases remain local and isolated.
 The owner approved a custom Admin Audit Log in Dev (D58, 2026-11-11), using the existing
 `admin_events` table. See `database/audit-log.md`; project records still use local files.
+The owner requested a complete Chaiyo upload package including production Admin (D59,
+2026-11-11). `npm run build:chaiyo` now prepares `ESI-Chaiyo-Hosting.zip` with public
+`httpdocs/` and sibling private `.esi-admin-production/`. PHP handles authentication,
+project CRUD, publication, image uploads and audit. Production account/session/audit records
+use Chaiyo MySQL; project content remains in private Hosting JSON files with locks, atomic
+writes, backups and durable audit outbox. Public pages and sitemap read published records
+from PHP. MySQL project-content migration remains future work. Private config is prepared
+separately and NEVER included in the ZIP. See `database/chaiyo-production.md`.
+Run `npm run test:production` against the extracted ZIP with isolated local SQL before delivery.
 If another request implies server behavior beyond this scope,
 explain the constraint and offer the static alternative (`mailto:`, an embed, or static data).
 

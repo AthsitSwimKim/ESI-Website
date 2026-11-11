@@ -3,7 +3,8 @@
 เจ้าของสั่งทำ Audit Log ภายใน Admin (D58, 2026-11-11) เปิดที่ `/admin/audit-logs`
 ใน Dev โดยใช้ตาราง `admin_events` เดิมของ Database profile ที่เลือก
 Chaiyo ใช้ `esithcom_website` ส่วน Local/audit/tests ใช้ฐานแยกตามเดิม
-ไม่มีบริการภายนอกหรือการ deploy production เพิ่ม
+D59 ขยายให้ใช้บน production ผ่านชุดติดตั้ง PHP ใน `chaiyo-production.md` ด้วย
+ไม่มีบริการ Audit ภายนอก; เจ้าของอัปโหลดแพ็กเกจและ config เอง
 
 ## เหตุการณ์ที่เก็บ
 
