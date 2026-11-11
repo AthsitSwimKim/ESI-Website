@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 
 import { Container } from '@/components/ui/Container'
+import { AdminAccountMenu } from '@/components/admin/AdminAccountMenu'
 import { Seo } from '@/components/ui/Seo'
 import { useT } from '@/i18n'
 import { projectApi, projectApiMessage } from '@/lib/projectApi'
@@ -58,6 +59,7 @@ export function AdminPreviewPage() {
           >
             {t('admin.back')}
           </Link>
+          <AdminAccountMenu />
         </Container>
       </aside>
       {!loaded ? (

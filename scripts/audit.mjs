@@ -18,6 +18,7 @@ import path from 'node:path'
 
 import { chromium } from 'playwright'
 import { createServer } from 'vite'
+import { startDevAuth } from './dev-auth.mjs'
 
 const require = createRequire(import.meta.url)
 const axePath = require.resolve('axe-core/axe.min.js')
@@ -26,6 +27,7 @@ const axeSource = require('node:fs').readFileSync(axePath, 'utf8')
 const repositoryRoot = fileURLToPath(new URL('../', import.meta.url))
 let auditRoot
 let auditServer
+let authRuntime
 let baseUrl = process.env.BASE_URL
 if (!baseUrl) {
   const parent = path.join(repositoryRoot, '.esi-admin')
@@ -38,6 +40,7 @@ if (!baseUrl) {
     'shared',
     'vite.config.ts',
     'package.json',
+    'database',
     'index.html',
     'tsconfig.json',
     'tsconfig.app.json',
@@ -53,6 +56,18 @@ if (!baseUrl) {
   })
   await auditServer.listen()
   baseUrl = auditServer.resolvedUrls.local[0].replace(/\/$/, '')
+  try {
+    authRuntime = await startDevAuth({
+      root: auditRoot,
+      privateRoot: path.join(auditRoot, '.esi-admin/dev'),
+      origins: [baseUrl],
+      port: 0,
+      writeBridge: true,
+    })
+  } catch (error) {
+    await auditServer.close()
+    throw error
+  }
   console.log(
     'Audit uses an isolated project copy; saved projects and photos in your working site are not changed.',
   )
@@ -77,6 +92,8 @@ const routes = [
   '/projects/klongluang-utilities-spp-systems',
   '/contact',
   '/admin',
+  '/admin/login',
+  '/admin/audit-logs',
   '/admin/projects/new',
   '/admin/preview/missing',
   '/this-route-does-not-exist',
@@ -84,6 +101,26 @@ const routes = [
 
 const problems = []
 const note = (route, kind, detail) => problems.push({ route, kind, detail })
+
+async function loginContext(context) {
+  const anonymous = await (await context.request.get(baseUrl + '/api/admin/auth/session')).json()
+  const response = await context.request.post(baseUrl + '/api/admin/auth/login', {
+    headers: { Origin: baseUrl, 'X-ESI-CSRF': anonymous.csrfToken },
+    data: { username: authRuntime.username, password: authRuntime.password },
+  })
+  if (!response.ok() || !(await response.json()).authenticated)
+    throw new Error('Audit development login failed')
+}
+
+async function logoutContext(context) {
+  const current = await (await context.request.get(baseUrl + '/api/admin/auth/session')).json()
+  if (!current.authenticated) return
+  const response = await context.request.post(baseUrl + '/api/admin/auth/logout', {
+    headers: { Origin: baseUrl, 'X-ESI-CSRF': current.csrfToken },
+    data: {},
+  })
+  if (!response.ok()) throw new Error('Audit development logout failed')
+}
 
 const browser = await chromium.launch({ channel: 'chrome' })
 try {
@@ -97,6 +134,70 @@ try {
     await route.fulfill({ json: { views: websiteVisitors } })
   })
   if (auditServer) {
+    // Real PHP/MySQL authentication, with private audit-only credentials.
+    const anonymousProjects = await context.request.get(baseUrl + '/api/admin/projects')
+    if (anonymousProjects.status() !== 401)
+      note('/api/admin', 'security', 'anonymous clients could read project drafts')
+    const anonymousAudit = await context.request.get(baseUrl + '/api/admin/audit-logs')
+    if (anonymousAudit.status() !== 401)
+      note('/api/admin/audit-logs', 'security', 'anonymous clients could read audit logs')
+    const publicIngest = await context.request.post(baseUrl + '/api/admin/audit-events', {
+      data: {},
+    })
+    if (publicIngest.status() !== 404)
+      note('/api/admin/audit-events', 'security', 'internal audit ingestion was exposed')
+    const forgedHeader = await context.request.post(baseUrl + '/api/admin/projects/save', {
+      headers: { Origin: baseUrl, 'X-ESI-Admin': '1' },
+      data: {},
+    })
+    if (forgedHeader.status() !== 401)
+      note('/api/admin', 'security', 'the old admin header bypassed authentication')
+    const internal = await context.request.get(baseUrl + '/api/admin/auth/authorize', {
+      headers: { 'X-ESI-Internal-Key': 'forged-key' },
+    })
+    if (internal.status() !== 404)
+      note('/api/admin', 'security', 'the internal authorization route is exposed')
+    for (const privatePath of [
+      '/.esi-admin/dev/dev-secrets.json',
+      '/.esi-admin/dev/bridge.json',
+      '/server/php/config.example.php',
+      `/@fs/${auditRoot.replaceAll('\\', '/')}/.esi-admin/dev/dev-secrets.json`,
+    ]) {
+      const response = await context.request.get(baseUrl + privatePath)
+      if (![403, 404].includes(response.status()))
+        note(privatePath, 'security', 'private server files were accessible over HTTP')
+    }
+    await page.goto(baseUrl + '/admin/projects/new', { waitUntil: 'networkidle' })
+    await page.waitForURL('**/admin/login?**')
+    await page.getByLabel('Username', { exact: true }).fill(authRuntime.username)
+    await page.getByLabel('Password', { exact: true }).fill('wrong-audit-password')
+    await page.getByRole('button', { name: 'Log in', exact: true }).click()
+    await page
+      .getByRole('alert')
+      .filter({ hasText: 'The username or password is incorrect.' })
+      .waitFor()
+    await page.getByLabel('Password', { exact: true }).fill(authRuntime.password)
+    await page.getByRole('button', { name: 'Log in', exact: true }).click()
+    await page.waitForURL('**/admin/projects/new')
+    const sessionCookie = (await context.cookies()).find(
+      (cookie) => cookie.name === 'esi_admin_dev_session',
+    )
+    if (!sessionCookie?.httpOnly || sessionCookie.sameSite !== 'Strict')
+      note('/admin/login', 'security', 'session cookie is missing HttpOnly or SameSite Strict')
+    const noCsrf = await context.request.post(baseUrl + '/api/admin/projects/save', {
+      headers: { Origin: baseUrl, 'X-ESI-Admin': '1' },
+      data: {},
+    })
+    if (noCsrf.status() !== 403)
+      note('/api/admin', 'security', 'authenticated writes without CSRF were accepted')
+    await page.getByRole('button', { name: 'Log out', exact: true }).click()
+    await page.waitForURL('**/admin/login?**')
+    if ((await context.request.get(baseUrl + '/api/admin/projects')).status() !== 401)
+      note('/admin/login', 'security', 'logout left project access active')
+    await loginContext(context)
+    console.log(
+      '✓ auth flow: real PHP/MySQL login, safe redirect, generic errors, HttpOnly cookie, CSRF, logout, private-file and API protection',
+    )
     await page.goto(baseUrl + '/', { waitUntil: 'networkidle' })
     await page.locator('header a[href="/projects"]').filter({ visible: true }).click()
     await page.getByRole('button', { name: /CCTV/ }).click()
@@ -121,6 +222,7 @@ try {
   const seoRows = []
   for (const route of routes) {
     consoleErrors.length = 0
+    if (authRuntime && route === '/admin/login') await logoutContext(context)
     await page.goto(baseUrl + route, { waitUntil: 'networkidle' })
     await page.locator('h1').waitFor({ timeout: 15000 })
     await page.waitForTimeout(1000)
@@ -213,6 +315,7 @@ try {
     await page.setViewportSize({ width: 1440, height: 900 })
 
     consoleErrors.forEach((e) => note(route, 'console', e))
+    if (authRuntime && route === '/admin/login') await loginContext(context)
   }
 
   // --- gallery uploads persist and remain optional (isolated audit context) ---
@@ -253,10 +356,34 @@ try {
       note('/admin', 'navigation', 'returning to the list lost the search filter')
     await page.getByRole('searchbox').clear()
     await page.waitForURL((url) => url.pathname === '/admin' && !url.searchParams.has('q'))
-    await page.getByRole('link', { name: 'Fill sample project', exact: true }).click()
-    await page.waitForURL(
-      (url) => url.pathname === '/admin/projects/new' && url.searchParams.has('sample'),
+    await page.getByRole('link', { name: 'Add project', exact: true }).click()
+    await page.waitForURL((url) => url.pathname === '/admin/projects/new')
+    if (await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).inputValue())
+      note('/admin', 'new project', 'new project form was not blank')
+    await page.goto(baseUrl + '/admin/projects/new?sample=1', { waitUntil: 'networkidle' })
+    if (await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).inputValue())
+      note('/admin', 'new project', 'removed sample URL still filled the form')
+    // Seed only the isolated audit workspace; there is no sample-fill feature in the app.
+    const { createTestProject } = await auditServer.ssrLoadModule(
+      '/src/test/fixtures/admin-project.ts',
     )
+    const fixtureWorkspace = await (
+      await context.request.get(baseUrl + '/api/admin/projects')
+    ).json()
+    const fixtureSession = await (
+      await context.request.get(baseUrl + '/api/admin/auth/session')
+    ).json()
+    const fixtureResponse = await context.request.post(baseUrl + '/api/admin/projects/save', {
+      headers: { Origin: baseUrl, 'X-ESI-Admin': '1', 'X-ESI-CSRF': fixtureSession.csrfToken },
+      data: {
+        project: createTestProject(fixtureWorkspace.projects),
+        revision: fixtureWorkspace.revision,
+        isNew: true,
+      },
+    })
+    if (!fixtureResponse.ok()) throw new Error('Isolated audit fixture could not be saved')
+    const fixture = await fixtureResponse.json()
+    await page.goto(baseUrl + `/admin/projects/${fixture.project.id}`, { waitUntil: 'networkidle' })
     const testTitle = `[QA] Local publishing ${Date.now()}`
     await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).fill(testTitle)
     const gallery = page.locator('section[aria-labelledby="admin-gallery-label"]')
@@ -343,6 +470,7 @@ try {
     const publishedLink = visitor.locator(`a[href="/projects/${savedProject.slug}"]`)
     if (await publishedLink.count())
       note('/admin', 'publishing', 'an unpublished draft appeared on the normal Projects page')
+    await loginContext(freshContext)
     const crossBrowser = await (
       await freshContext.request.get(baseUrl + '/api/admin/projects')
     ).json()
@@ -431,6 +559,32 @@ try {
     })
     if (withoutHeader.status() !== 403)
       note('/api/admin', 'security', 'write without the admin header was not rejected')
+    const auditResponse = await context.request.get(baseUrl + '/api/admin/audit-logs')
+    if (!auditResponse.ok())
+      note('/admin/audit-logs', 'audit', 'audit history could not be read after project changes')
+    else {
+      const history = await auditResponse.json()
+      for (const action of ['save_draft', 'publish', 'unpublish', 'delete', 'upload']) {
+        const response = await context.request.get(
+          baseUrl + `/api/admin/audit-logs?action=${action}`,
+        )
+        const result = await response.json()
+        if (
+          !response.ok() ||
+          !result.items?.some((item) => item.action === action && item.result === 'success')
+        )
+          note('/admin/audit-logs', 'audit', `${action} was not recorded`)
+      }
+      if (!history.items?.length || JSON.stringify(history).includes('password_hash'))
+        note('/admin/audit-logs', 'audit', 'history was empty or exposed private fields')
+    }
+    await page.goto(baseUrl + '/admin/audit-logs', { waitUntil: 'networkidle' })
+    await page.getByRole('heading', { level: 1 }).waitFor()
+    if (!(await page.getByRole('table').count()))
+      note('/admin/audit-logs', 'audit', 'audit table did not render')
+    console.log(
+      '✓ audit history: real authentication and project events, action filters, private ingestion and anonymous protection',
+    )
     await freshContext.close()
     console.log(
       '✓ management flow: durable drafts, fresh browser, server restart, publish, update, unpublish, delete and request-origin protection',
@@ -499,6 +653,7 @@ try {
 } finally {
   await browser.close()
   if (auditServer) await auditServer.close()
+  if (authRuntime) await authRuntime.stop()
   if (auditRoot) {
     const expectedParent = path.resolve(repositoryRoot, '.esi-admin')
     if (

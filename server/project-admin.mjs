@@ -4,6 +4,8 @@ import path from 'node:path'
 
 import { applyProjectContent } from '../shared/project-content.mjs'
 import { readWebsiteVisitors } from './visitor-traffic.mjs'
+import { AdminAuthError, authorizeAdminRequest, flushAdminAuditEvents } from './dev-admin-auth.mjs'
+import { createProjectAuditEvents, enqueueAdminAudit } from './admin-audit.mjs'
 
 export class ProjectStoreError extends Error {
   constructor(code, status = 400) {
@@ -112,6 +114,7 @@ export function createProjectRepository({ root, references, validateProject }) {
       validateState(journal.workspace, journal.content)
       await writeJson(workspaceFile, journal.workspace)
       await writeJson(publishedFile, journal.content)
+      for (const event of journal.auditEvents ?? []) await enqueueAdminAudit(root, event)
       await unlink(journalFile)
     }
     const workspace = await readJson(workspaceFile, emptyWorkspace)
@@ -149,7 +152,7 @@ export function createProjectRepository({ root, references, validateProject }) {
     if (featured < 3 || featured > 6) throw new ProjectStoreError('FEATURED_LIMIT')
   }
 
-  async function commit(before, workspace, content) {
+  async function commit(before, workspace, content, auditEvents = []) {
     await mkdir(path.join(stateDir, 'backups'), { recursive: true })
     await writeJson(path.join(stateDir, 'backups', `${Date.now()}-${randomUUID()}.json`), {
       workspace: before.workspace,
@@ -157,13 +160,12 @@ export function createProjectRepository({ root, references, validateProject }) {
     })
     const nextWorkspace = { ...workspace, revision: before.workspace.revision + 1 }
     const contentChanged = JSON.stringify(before.content) !== JSON.stringify(content)
-    if (contentChanged) {
-      content = { ...content, revision: before.content.revision + 1 }
-      await writeJson(journalFile, { workspace: nextWorkspace, content })
-      await writeJson(publishedFile, content)
-      await writeJson(workspaceFile, nextWorkspace)
-      await unlink(journalFile)
-    } else await writeJson(workspaceFile, nextWorkspace)
+    if (contentChanged) content = { ...content, revision: before.content.revision + 1 }
+    await writeJson(journalFile, { workspace: nextWorkspace, content, auditEvents })
+    if (contentChanged) await writeJson(publishedFile, content)
+    await writeJson(workspaceFile, nextWorkspace)
+    for (const event of auditEvents) await enqueueAdminAudit(root, event)
+    await unlink(journalFile)
     return snapshot({
       workspace: nextWorkspace,
       published: applyProjectContent(references, content),
@@ -220,7 +222,7 @@ export function createProjectRepository({ root, references, validateProject }) {
     return project
   }
 
-  async function save(input, revision, publish, isNew) {
+  async function save(input, revision, publish, isNew, auditContext) {
     const state = await load()
     expectRevision(state, revision)
     const project = await materialize(input)
@@ -238,20 +240,34 @@ export function createProjectRepository({ root, references, validateProject }) {
       ensurePublished(applyProjectContent(references, content))
       workspace.drafts = workspace.drafts.filter((p) => p.id !== project.id)
     } else workspace.drafts = [project, ...workspace.drafts.filter((p) => p.id !== project.id)]
-    const result = await commit(state, workspace, content)
+    const uploadCount = [input.image, ...(input.gallery ?? [])].filter(
+      (image) => typeof image === 'string' && image.startsWith('data:'),
+    ).length
+    const events = createProjectAuditEvents(
+      auditContext,
+      publish ? 'publish' : 'save_draft',
+      'success',
+      {
+        projectId: project.id,
+        title: project.title,
+        created: isNew,
+        uploadCount,
+      },
+    )
+    const result = await commit(state, workspace, content, events)
     return { ...result, project }
   }
 
   return {
     get: () => exclusive(async () => snapshot(await load())),
-    save: (project, revision, publish = false, isNew = false) =>
-      exclusive(() => save(project, revision, publish, isNew)),
-    remove: (id, revision, unpublish = false) =>
+    save: (project, revision, publish = false, isNew = false, auditContext) =>
+      exclusive(() => save(project, revision, publish, isNew, auditContext)),
+    remove: (id, revision, unpublish = false, auditContext) =>
       exclusive(async () => {
         const state = await load()
         expectRevision(state, revision)
-        if (!snapshot(state).projects.some((p) => p.id === id))
-          throw new ProjectStoreError('NOT_FOUND', 404)
+        const project = snapshot(state).projects.find((p) => p.id === id)
+        if (!project) throw new ProjectStoreError('NOT_FOUND', 404)
         const workspace = structuredClone(state.workspace)
         const content = structuredClone(state.content)
         if (!unpublish) workspace.drafts = workspace.drafts.filter((p) => p.id !== id)
@@ -262,9 +278,17 @@ export function createProjectRepository({ root, references, validateProject }) {
           if (unpublish && !workspace.drafts.some((p) => p.id === id))
             workspace.drafts.unshift(state.published.find((p) => p.id === id))
         }
-        return commit(state, workspace, content)
+        return commit(
+          state,
+          workspace,
+          content,
+          createProjectAuditEvents(auditContext, unpublish ? 'unpublish' : 'delete', 'success', {
+            projectId: id,
+            title: project.title,
+          }),
+        )
       }),
-    migrate: (legacy, revision) =>
+    migrate: (legacy, revision, auditContext) =>
       exclusive(async () => {
         const state = await load()
         expectRevision(state, revision)
@@ -291,7 +315,14 @@ export function createProjectRepository({ root, references, validateProject }) {
           workspace.drafts.unshift(project)
         }
         workspace.migrations.push(hash)
-        return commit(state, workspace, state.content)
+        return commit(
+          state,
+          workspace,
+          state.content,
+          createProjectAuditEvents(auditContext, 'save_draft', 'success', {
+            migratedCount: legacy.length,
+          }),
+        )
       }),
   }
 }
@@ -356,7 +387,26 @@ export function projectAdminPlugin() {
           )
         return repository
       }
+      const retryAudit = () => {
+        void flushAdminAuditEvents(server.config.root).catch(() =>
+          server.config.logger.warn(
+            'Audit delivery deferred; events remain in the private outbox.',
+          ),
+        )
+      }
+      server.httpServer?.once('listening', () => {
+        void readFile(path.join(server.config.root, '.esi-admin/transaction.json'))
+          .then(async () => {
+            await (await getRepository()).get()
+            retryAudit()
+          })
+          .catch((error) => {
+            if (error.code !== 'ENOENT')
+              server.config.logger.warn('Project journal recovery deferred.')
+          })
+      })
       server.middlewares.use('/api/admin', async (request, response) => {
+        let auditContext, pathname, body
         const send = (status, body) => {
           response.statusCode = status
           response.setHeader('Content-Type', 'application/json; charset=utf-8')
@@ -372,7 +422,9 @@ export function projectAdminPlugin() {
             throw new ProjectStoreError('LOCAL_ONLY', 403)
           if (request.headers.origin && new URL(request.headers.origin).host !== host.host)
             throw new ProjectStoreError('FORBIDDEN', 403)
-          const pathname = new URL(request.url ?? '/', host).pathname
+          const actor = await authorizeAdminRequest(server.config.root, request)
+          auditContext = { actorId: actor.id, scope: actor.auditScope }
+          pathname = new URL(request.url ?? '/', host).pathname
           if (request.method === 'GET' && pathname === '/traffic') {
             try {
               const { company } = await server.ssrLoadModule('/src/data/company.ts')
@@ -398,9 +450,10 @@ export function projectAdminPlugin() {
             if (length > 16 * 1024 * 1024) throw new ProjectStoreError('TOO_LARGE', 413)
             chunks.push(chunk)
           }
-          let body
           try {
             body = JSON.parse(Buffer.concat(chunks).toString('utf8'))
+            if (!body || typeof body !== 'object' || Array.isArray(body))
+              throw new Error('Invalid body')
           } catch {
             throw new ProjectStoreError('INVALID_PROJECT')
           }
@@ -410,7 +463,9 @@ export function projectAdminPlugin() {
               body.revision,
               pathname.endsWith('/publish'),
               body.isNew === true,
+              auditContext,
             )
+            retryAudit()
             if (pathname.endsWith('/publish')) refreshPublished()
             return send(200, result)
           }
@@ -419,18 +474,48 @@ export function projectAdminPlugin() {
               body.id,
               body.revision,
               pathname.endsWith('/unpublish'),
+              auditContext,
             )
+            retryAudit()
             refreshPublished()
             return send(200, result)
           }
-          if (pathname === '/projects/migrate')
-            return send(200, await store.migrate(body.projects, body.revision))
+          if (pathname === '/projects/migrate') {
+            const result = await store.migrate(body.projects, body.revision, auditContext)
+            retryAudit()
+            return send(200, result)
+          }
           throw new ProjectStoreError('NOT_FOUND', 404)
         } catch (error) {
-          if (!(error instanceof ProjectStoreError))
+          const action = {
+            '/projects/save': 'save_draft',
+            '/projects/publish': 'publish',
+            '/projects/remove': 'delete',
+            '/projects/unpublish': 'unpublish',
+            '/projects/migrate': 'save_draft',
+          }[pathname]
+          if (
+            auditContext &&
+            request.method === 'POST' &&
+            action &&
+            error instanceof ProjectStoreError
+          ) {
+            try {
+              for (const event of createProjectAuditEvents(auditContext, action, 'failure', {
+                projectId: body?.project?.id ?? body?.id,
+                reason: error.code,
+              }))
+                await enqueueAdminAudit(server.config.root, event)
+              retryAudit()
+            } catch {
+              server.config.logger.warn('Audit failure could not be queued.')
+            }
+          }
+          if (!(error instanceof ProjectStoreError) && !(error instanceof AdminAuthError))
             server.config.logger.error(`Project admin: ${error.message}`)
-          send(error instanceof ProjectStoreError ? error.status : 500, {
-            error: error instanceof ProjectStoreError ? error.code : 'SAVE_FAILED',
+          const expected = error instanceof ProjectStoreError || error instanceof AdminAuthError
+          send(expected ? error.status : 500, {
+            error: expected ? error.code : 'SAVE_FAILED',
           })
         }
       })

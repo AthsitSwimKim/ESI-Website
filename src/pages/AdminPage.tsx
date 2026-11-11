@@ -23,6 +23,7 @@ import {
 } from 'react-router-dom'
 
 import logo from '@/assets/logo/esi-logo.png'
+import { AdminAccountMenu } from '@/components/admin/AdminAccountMenu'
 import { ProjectCard } from '@/components/cards/ProjectCard'
 import { AdminImageUpload } from '@/components/ui/AdminImageUpload'
 import { AdminGalleryUpload } from '@/components/ui/AdminGalleryUpload'
@@ -31,16 +32,11 @@ import { LangSwitch } from '@/components/ui/LangSwitch'
 import { ProjectPagination } from '@/components/ui/Pagination'
 import { Reveal } from '@/components/ui/Reveal'
 import { Seo } from '@/components/ui/Seo'
-import {
-  adminListFields,
-  adminLongFields,
-  adminTextFields,
-  createProjectDraft,
-  createExampleProject,
-} from '@/data/admin'
+import { adminListFields, adminLongFields, adminTextFields, createProjectDraft } from '@/data/admin'
 import { industries } from '@/data/industries'
 import { useT } from '@/i18n'
 import { downloadProjectDrafts, hasDuplicateSlug, isProject } from '@/lib/admin'
+import { notifyAdminUnauthorized } from '@/lib/adminAuth'
 import { clampPage } from '@/lib/pagination'
 import {
   projectApi,
@@ -65,8 +61,7 @@ export function AdminPage() {
   const { projectId } = useParams()
   const [params, setParams] = useSearchParams()
   const editing = projectId !== undefined
-  const sample = projectId === 'new' && params.has('sample')
-  const loadKey = sample ? `${pathname}?sample` : pathname
+  const loadKey = pathname
   const searchParam = params.get('q') ?? ''
   const [search, setSearch] = useState(searchParam)
   const [previousLocationKey, setPreviousLocationKey] = useState(locationKey)
@@ -136,10 +131,8 @@ export function AdminPage() {
       .then((data) => {
         if (!active) return
         const item = structuredClone(
-          sample
-            ? createExampleProject(data.projects)
-            : (data.projects.find((p) => String(p.id) === projectId) ??
-                createProjectDraft(data.projects)),
+          data.projects.find((p) => String(p.id) === projectId) ??
+            createProjectDraft(data.projects),
         )
         setWorkspace(data)
         setSelected(item)
@@ -153,7 +146,7 @@ export function AdminPage() {
     return () => {
       active = false
     }
-  }, [loadKey, projectId, sample])
+  }, [loadKey, projectId])
 
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -170,6 +163,7 @@ export function AdminPage() {
             : `${import.meta.env.BASE_URL}visitor-count.php`,
           { cache: 'no-store', signal: controller.signal },
         )
+        if (response.status === 401) notifyAdminUnauthorized()
         if (!response.ok) throw new Error('Traffic count unavailable')
         const data = await response.json()
         const views = import.meta.env.DEV ? data?.views : data?.count
@@ -377,8 +371,19 @@ export function AdminPage() {
               {t('admin.workspace')}
             </span>
           </div>
-          <div className="flex items-center gap-5">
+          <div className="flex max-w-full min-w-0 flex-wrap items-center justify-end gap-x-4 gap-y-2">
             <LangSwitch />
+            <AdminAccountMenu
+              disabled={uploading || saving}
+              beforeLogout={() => {
+                if (editing && dirty && !window.confirm(t('admin.discard'))) return false
+                allowNavigation.current = true
+                return true
+              }}
+              onLogoutFailed={() => {
+                allowNavigation.current = false
+              }}
+            />
             <Link
               to={editing ? listLocation : '/projects'}
               className="inline-flex items-center gap-2 text-sm font-semibold text-esi-blue"
@@ -400,15 +405,6 @@ export function AdminPage() {
                   <div className="mt-3 h-[3px] w-10 bg-esi-blue" />
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Link
-                    className={buttonClass}
-                    to={{
-                      pathname: '/admin/projects/new',
-                      search: new URLSearchParams([...listParams, ['sample', '1']]).toString(),
-                    }}
-                  >
-                    {t('admin.loadExample')}
-                  </Link>
                   <button
                     type="button"
                     className={buttonClass}
