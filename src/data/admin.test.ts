@@ -1,24 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { createExampleProject, createProjectDraft } from '@/data/admin'
+import { createProjectDraft } from '@/data/admin'
 import { projects } from '@/data/projects'
 import { hasDuplicateSlug, parseProjectDrafts } from '@/lib/admin'
 import { checkImageFile, isInlineDraftImage, prepareDraftImages } from '@/lib/adminImages'
 
 describe('admin draft boundary', () => {
-  it('creates an explicitly labelled example without touching public data or colliding with existing records', () => {
-    const example = createExampleProject(projects)
-    expect(example.title).toContain('[Sample]')
-    expect(example.titleTh).toContain('[ตัวอย่าง]')
-    expect(example.scopeTh?.length).toBeGreaterThan(0)
-    expect(example.gallery?.length).toBeGreaterThan(0)
-    expect(parseProjectDrafts(JSON.stringify([example, ...projects]))).toHaveLength(
-      projects.length + 1,
-    )
-    const secondExample = createExampleProject([example, ...projects])
-    expect(secondExample.slug).not.toBe(example.slug)
-    expect(projects.some((item) => item.slug === example.slug)).toBe(false)
-  })
   it('round trips every existing field without changing public project data', () => {
     const restored = parseProjectDrafts(JSON.stringify(projects))
     expect(restored).toEqual(projects)

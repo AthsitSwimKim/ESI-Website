@@ -1,5 +1,6 @@
 import { adminStorageKey } from '@/data/admin'
 import { parseProjectDrafts } from '@/lib/admin'
+import { AdminAuthError, notifyAdminUnauthorized, requireAdminCsrfToken } from '@/lib/adminAuth'
 import { storage } from '@/lib/utils'
 import type { Project } from '@/types'
 
@@ -20,17 +21,37 @@ export class ProjectApiError extends Error {
 }
 
 async function request<T>(path = '', body?: unknown): Promise<T> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'X-ESI-Admin': '1',
+  }
+  if (body !== undefined) {
+    try {
+      headers['X-ESI-CSRF'] = await requireAdminCsrfToken()
+    } catch (error) {
+      throw new ProjectApiError(
+        error instanceof AdminAuthError && error.code === 'AUTH_REQUIRED'
+          ? 'AUTH_REQUIRED'
+          : 'BACKEND_UNAVAILABLE',
+      )
+    }
+  }
   let response: Response
   try {
     response = await fetch(`/api/admin/projects${path}`, {
       method: body === undefined ? 'GET' : 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-ESI-Admin': '1' },
+      credentials: 'same-origin',
+      headers,
       body: body === undefined ? undefined : JSON.stringify(body),
       cache: 'no-store',
       signal: AbortSignal.timeout(20000),
     })
   } catch {
     throw new ProjectApiError('BACKEND_UNAVAILABLE')
+  }
+  if (response.status === 401) {
+    notifyAdminUnauthorized()
+    throw new ProjectApiError('AUTH_REQUIRED')
   }
   if (!response.headers.get('content-type')?.includes('application/json'))
     throw new ProjectApiError('BACKEND_UNAVAILABLE')
@@ -79,8 +100,10 @@ export function projectApiMessage(
   | 'invalid'
   | 'featuredLimit'
   | 'imageMissing'
+  | 'authRequired'
   | 'saveError' {
   if (!(error instanceof ProjectApiError)) return 'saveError'
+  if (error.code === 'AUTH_REQUIRED') return 'authRequired'
   if (error.code === 'BACKEND_UNAVAILABLE' || error.code === 'LOCAL_ONLY')
     return 'backendUnavailable'
   if (error.code === 'CONFLICT') return 'conflict'

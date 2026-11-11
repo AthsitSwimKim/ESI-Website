@@ -1,9 +1,9 @@
 # ESI Website
 
 Corporate website for **Engineering System Integration Co., Ltd. (ESI)**, Rayong — industrial
-communication and system integration. A **frontend-only static site**: no backend, database,
-CMS or login. All content lives in typed data files, so adding a project or service is a data
-edit, not a code change.
+communication and system integration. The public website builds to static files. The local
+Admin editor now has a PHP/MySQL login in **Dev only**; its project content still uses the
+existing local data-file workflow. No PHP Admin backend has been deployed to Hosting.
 
 **Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · Motion · lucide-react
 
@@ -13,6 +13,7 @@ edit, not a code change.
 
 ```bash
 npm install
+npm run dev:setup    # first time on Windows x64: portable PHP + MariaDB, verified ZIPs
 npm run dev          # http://localhost:5173
 ```
 
@@ -20,7 +21,11 @@ npm run dev          # http://localhost:5173
 
 | Command                                            | What it does                                                                                                                                                                                                                         |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `npm run dev`                                      | Dev server with hot reload                                                                                                                                                                                                           |
+| `npm run dev`                                      | Starts loopback-only PHP/MariaDB authentication and Vite with hot reload                                                                                                                                                             |
+| `npm run dev:setup`                                | Downloads official, checksum-verified portable PHP/MariaDB into the ignored local tools directory                                                                                                                                    |
+| `npm run dev:auth`                                 | Starts only the private PHP/MariaDB authentication service                                                                                                                                                                           |
+| `npm run dev:frontend`                             | Starts only Vite; Admin fails closed if its PHP service is unavailable                                                                                                                                                               |
+| `npm run test:auth`                                | PHP security unit checks and actual HTTP/PDO checks in an isolated local database                                                                                                                                                    |
 | `npm run build`                                    | Regenerates the sitemap, typechecks, then builds to `dist/`                                                                                                                                                                          |
 | `npm run preview`                                  | Serves the production build locally (port 4173)                                                                                                                                                                                      |
 | `npm run typecheck`                                | TypeScript, all projects (app + tests)                                                                                                                                                                                               |
@@ -95,7 +100,11 @@ sitemap and Open Graph tags are all built from it.
 ## Local project editor
 
 Run `npm run dev`, then open `/admin` directly on the localhost URL printed by Vite.
-The editor API accepts requests from the local machine. The page is excluded from public
+The editor redirects to `/admin/login` before showing private data. The Dev account is
+`esi_dev_admin`; its generated password is in `.esi-admin/dev/dev-admin-credentials.txt`.
+This is separate from the `esi_admin` account on Hosting. The editor API checks the live PHP
+session, account status/role and CSRF on every write; it accepts requests from the local machine.
+The page is excluded from public
 navigation and the sitemap and carries `noindex, nofollow, noarchive`.
 
 **Website visitors** reads the same cumulative total as the footer on `esi-th.com`.
@@ -114,14 +123,50 @@ unavailable state instead of substituting the old local total in `.esi-admin/tra
   **Delete project** removes it from both after confirmation.
 
 Choose a JPG, PNG or WebP from your device for the main photo. The optional gallery supports
-up to 10 additional photos and is hidden when empty. **Fill sample project** loads a labelled
-example with bilingual scope and two gallery images.
+up to 10 additional photos and is hidden when empty. **Add project** opens a blank form.
 
 Drafts are stored in `.esi-admin/workspace.json`. Published changes are stored in
 `src/data/projectContent.json` and overlaid on the original project references. Image uploads
 are stored as files in the project. Keep these files together when backing up the workspace.
 `npm run build` creates a static `dist/` with the published project pages and sitemap.
 The editor runs with Vite locally, and updating hosting requires uploading a new build.
+PHP authentication uses a separate local MariaDB database. Project drafts/uploads/publishing
+still use the local data files described above; migrating project storage into MySQL is a later
+step. See [`database/dev-auth.md`](database/dev-auth.md) for private configuration and startup.
+
+## Admin database preparation
+
+The owner approved creating the planned Admin schema in Chaiyo's `esithcom_website`
+database on 2026-11-06. It has 10 InnoDB/utf8mb4 tables and 15 foreign keys, including
+separate draft/published versions and tables for application users and sessions.
+The bilingual transaction smoke test passed and rolled back all fixture data.
+
+See [`database/README.md`](database/README.md) for the schema, verification SQL and API
+requirements. The first application Admin account `esi_admin` was created on 2026-11-06;
+its private credentials are in the gitignored `.esi-admin/initial-admin-credentials.txt`.
+PHP Login/Logout and session protection are now implemented in Dev against a separate local
+database and account. Production login/API/uploads have not been deployed; the Hosting account
+cannot log in to the website until production authentication is connected. The public website
+uses its current build.
+
+The owner also approved connecting Dev authentication to Chaiyo on 2026-11-10 (D57).
+An explicit Chaiyo profile and read-only connection check are separate from the local database
+initializer. The owner enters the MySQL password in a private ignored config. The existing
+endpoint uses an explicitly selected legacy transport without TLS; verified TLS is a separate
+mode with no automatic downgrade. Activation follows a successful connection check.
+The connection is verified: Dev login/logout with `esi_admin` succeeded and a revoked test
+session was confirmed in Chaiyo. Project records/photos still use the local file repository.
+See [`database/chaiyo-connection.md`](database/chaiyo-connection.md) for commands and the
+private settings. Plain `npm run dev` and audit continue to select the local database.
+
+## Admin audit log
+
+Open `/admin/audit-logs` with an `admin` account to inspect real authentication and project
+events. Filter by action, result, actor and Bangkok date range; pagination runs in SQL with
+25 rows per page. Events use the selected Local/Chaiyo profile. Project writes keep a durable
+private outbox and retry without duplicating events. Logs begin when this feature is enabled;
+the app does not invent historical records or expose an edit/delete-log endpoint.
+See [`database/audit-log.md`](database/audit-log.md) for scope, privacy and recovery behavior.
 
 ## Website visitor count
 
@@ -140,7 +185,7 @@ lookup to work. The standard `npm run build` is the static build and shows `0000
 
 Current state of the production build (Lighthouse mobile): **Performance 89–92 · Accessibility
 100 · Best Practices 100 · SEO 100**, above the project targets of 85/90/90/90.
-`npm run audit` reports zero accessibility violations across all 16 routes.
+`npm run audit` reports zero accessibility violations across all 23 audited routes.
 
 ## For AI coding agents
 

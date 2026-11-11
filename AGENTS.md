@@ -15,10 +15,22 @@ online company profile: Home, About, Solutions (+6 detail pages), Industries, Pr
 **Stack:** React 19 · TypeScript · Vite · Tailwind CSS v4 · React Router v7 · motion ·
 lucide-react · oxlint · Prettier · Vitest · Playwright.
 
-**Production site:** `npm run build` produces a static `dist/`. The owner approved one
-exception for Chaiyo Hosting. `npm run build:chaiyo` adds a single PHP visitor counter
-that stores its data outside the web root. Other production features stay static, with no
-database, auth, login, CMS, admin panel or file upload. If another request implies a server,
+**Production site:** `npm run build` produces a static `dist/`. The owner approved a PHP
+visitor counter for Chaiyo Hosting; `npm run build:chaiyo` adds it and stores its data outside
+the web root. The owner also approved preparing the Admin database schema in
+`esithcom_website` (D54, 2026-11-06); SQL and verification notes are in `database/`.
+The schema is not connected to the production website. The owner approved PHP Login/Logout
+and session/CSRF protection in Dev only (D56); `npm run dev` starts the private local PHP/MariaDB
+runtime and Vite. See `database/dev-auth.md`; Dev credentials/data are separate from Hosting.
+Local project editing still uses its existing data-file repository. Production Admin deployment,
+MySQL project-storage migration, CMS and server uploads remain future work.
+The owner approved an opt-in Dev-to-Chaiyo auth database connection (D57, 2026-11-10).
+See `database/chaiyo-connection.md`; the owner supplies the MySQL password in a private file.
+The existing endpoint uses an explicit legacy transport; verified TLS is a separate mode with
+no automatic downgrade. Default Dev/audit/test databases remain local and isolated.
+The owner approved a custom Admin Audit Log in Dev (D58, 2026-11-11), using the existing
+`admin_events` table. See `database/audit-log.md`; project records still use local files.
+If another request implies server behavior beyond this scope,
 explain the constraint and offer the static alternative (`mailto:`, an embed, or static data).
 
 ## Read these before changing anything
@@ -58,6 +70,9 @@ already resolved — check it before re-litigating one.
 ```bash
 npm run typecheck && npm run lint && npm test && npm run build
 ```
+
+For authentication/backend changes, also run `npm run test:auth` (actual PHP and isolated local
+MySQL). `npm run dev:setup` installs the pinned portable runtimes on a fresh Windows checkout.
 
 Then, with `npm run dev` running:
 

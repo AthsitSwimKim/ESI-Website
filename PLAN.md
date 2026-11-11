@@ -1,5 +1,76 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
+- [x] เอาปุ่ม “กรอกผลงานตัวอย่าง” พร้อม sample URL/autofill และคำแปลออกจาก Admin ตามเจ้าของ (2026-11-11); ข้อมูล fixture สำหรับทดสอบย้ายไป `src/test/fixtures/` และ audit ใช้เฉพาะ workspace แยก; typecheck/lint/52 tests/build และ audit 23 routes × 4 widths ผ่าน รวมฟอร์มใหม่/URL ตัวอย่างเก่าต้องว่าง; ภาพจริง `screenshots/admin-actions-removed.png`
+
+### Admin Audit Log (2026-11-11, D58)
+
+- [x] เจ้าของสั่งสร้างหน้า Audit Log ภายใน Admin; แสดง rendered mockup desktop/mobile ก่อนทำหน้าจริง
+- [x] หน้า `/admin/audit-logs` TH/EN เฉพาะ admin พร้อมตัวกรองกิจกรรม/ผลลัพธ์/ผู้ใช้/วันที่ และ SQL pagination 25 รายการ แสดงเวลาไทย
+- [x] บันทึก Login/Logout และคำสั่งผลงานจริงลง `admin_events` ของ profile ที่ใช้งาน โดยไม่สร้างประวัติย้อนหลังหรือ fake logs บน Hosting
+- [x] เพิ่ม durable outbox กับ journal ของผลงานในเครื่องและ idempotent ingestion เพื่อ retry โดยไม่เกิด log ซ้ำ
+- [x] typecheck/lint/53 Vitest tests/build ผ่าน; PHP security 189 + HTTP/MySQL 232 checks ผ่าน; audit สะอาด 23 routes × 4 widths รวม private ingest/admin-only/event filters และประวัติการทำผลงานจริงในฐานทดสอบแยก
+- [x] ทดสอบ Login/Logout และอ่าน log จริงจาก Chaiyo ผ่าน 200 โดยไม่แก้ผลงาน; ตรวจ empty table/axe, วันที่กลับลำดับ, Clear ที่ล้างค่าร่างผิดและ Apply/Clear ค่าเดิม refresh ได้ ภาพ TH desktop/mobile อยู่ใน `screenshots/admin-audit/`
+
+**D58 (2026-11-11):** เจ้าของขอสร้าง Audit Log เองใน Admin จึงเพิ่มหน้า/API และเก็บเหตุการณ์ใน Database เดิมจาก Dev ตาม D57. ใช้ server-side actor, จำกัด admin อ่าน, ไม่เก็บ secrets/IP/เนื้อหาผลงานเต็ม และไม่เปิดการแก้/ล้าง log ผ่าน UI. Project storage ยังเป็นไฟล์ ไม่ใส่ FK ปลอมไป MySQL และไม่ deploy production; รายละเอียด `database/audit-log.md`.
+
+### เชื่อม Dev กับ Database Chaiyo (2026-11-10, D57)
+
+- [x] เจ้าของสั่งให้เชื่อม Database Chaiyo โดยยังยึด Dev ก่อนตาม D56; ใช้ auth/session ของฐานเดิมและไม่ย้าย project storage หรือ deploy Admin สาธารณะ
+- [x] ตรวจ Plesk ยืนยัน host `mysql-5.5.chaiyohosting.com:3306`, ฐาน `esithcom_website`, user `esi_webapp`; SSH access เป็น `Forbidden`
+- [x] ตรวจ DNS/TCP/MySQL greeting แบบไม่ส่ง credentials: server `5.5.44-cll-lve` ติดต่อได้ แต่ `CLIENT_SSL` เป็น 0
+- [x] เตรียม opt-in profile และ read-only connection check พร้อม private config แยกจาก Local; เลือก legacy ตาม endpoint เดิมอย่างชัดเจนและรองรับ verified TLS โดยไม่ fallback อัตโนมัติ
+- [x] ตรวจ typecheck/lint/43 Vitest tests/build, 9 connector tests, PHP security 148 checks + HTTP/PDO 118 checks ผ่าน; audit สะอาด 22 routes × 4 widths โดยใช้ฐาน Local แยก
+- [x] เจ้าของกรอกและแก้ password เองใน private config; ตรวจเชื่อมต่อฐาน `esithcom_website` สำเร็จ พบบัญชี admin ที่ active 1 บัญชี และสลับ Vite bridge ไป PHP profile Chaiyo ที่ `127.0.0.1:8788`
+- [x] Login ด้วย `esi_admin` ผ่าน 200, protected projects API ผ่าน 200, Logout ผ่าน 200 และ API หลัง Logout ตอบ 401; query ฐาน Chaiyo ยืนยัน session ของการทดสอบถูก revoke 1 รายการ โดยไม่แสดง password/token/hash และไม่เปลี่ยน schema หรือ project data
+- [x] ตรวจ connection/config/bridge อยู่ใน Git ignore, private routes ของ Chaiyo ตอบ 404 ผ่าน Vite และไม่พบรหัส Database/internal key ใน client build
+
+**D57 (2026-11-10):** เจ้าของอนุมัติเชื่อม Database Chaiyo และยืนยันใช้ข้อมูล Connection info ของ Plesk ตาม endpoint เดิม. เตรียม connector สำหรับ Dev แยกจาก initializer/audit ในเครื่อง ใช้ legacy transport อย่างชัดเจนตาม MySQL 5.5 ของผู้ให้บริการ (ไม่มี TLS); verified TLS เป็นอีกโหมดหนึ่งที่ไม่ fallback อัตโนมัติ. เจ้าของกรอก password เองใน `.esi-admin/chaiyo/connection.json` ที่ Git ignore. ดู `database/chaiyo-connection.md` สำหรับการตั้งค่า/ตรวจ connection. Project storage และเว็บไซต์ production ยังอยู่ในขอบเขตเดิมตาม D56.
+
+ผลตรวจจริง: ช่วงแรก MySQL ตอบ 1045; Plesk role เป็น Read and Write และ query `CURRENT_USER()` ส่วน host คืน `%`. หลังเจ้าของแก้รหัสใน private config connection/Login/Logout ผ่านครบ. ทดสอบผ่าน Vite bridge และ query session ที่ revoke แล้วบน Chaiyo เพื่อยืนยันว่าไม่ใช้ฐาน Local แทน. กระบวนการ `dev:chaiyo` เปิดไว้ให้เจ้าของใช้งานต่อ; ไม่ reset password, ไม่เพิ่ม GRANT และไม่ migrate ผลงาน.
+
+### PHP Login และ Database ใน Dev (2026-11-06, D56)
+
+- [x] ปรับสัดส่วนหน้า Login ตามภาพเจ้าของ (2026-11-10): desktop แสดงภาพเต็มด้วย `object-contain` ในพื้นที่ซ้าย แยกฟอร์มขวากว้าง 320–400px และจัดกลางแนวตั้งตามพื้นที่หน้าจอ; คงภาพเหนือฟอร์มบนมือถือ ตรวจภาพจริง 8 ขนาดรวม 1897×867/1518×694/1366×768 พร้อม keyboard ใน `screenshots/auth-fit/`; typecheck/lint/43 tests/build ผ่าน และ audit สะอาด 22 routes × 4 widths
+- [x] ใส่ภาพหุ่นยนต์ ESI ที่เจ้าของแนบเป็นพื้นหลังหน้า Login ใน Dev (`src/assets/admin/login-background.png`); desktop วางฟอร์มขวาและมือถือ/แท็บเล็ตวางใต้ภาพ ตรวจ rendered screenshot 375/768/1024/1440px ใน `screenshots/auth-background/`; typecheck/lint/43 tests/build ผ่าน และ audit สะอาด 22 routes × 4 widths
+- [x] เอาข้อความ “ระบบทดสอบในเครื่อง” / “Local development” ใต้ฟอร์ม Login ออกตามภาพเจ้าของ (2026-11-06) · typecheck/lint/43 tests/build ผ่าน, audit สะอาด 22 routes × 4 widths; ตรวจภาพ TH ที่ desktop/mobile ใน `screenshots/auth-dev/admin-login-th-*.png`
+- [x] เจ้าของอนุมัติให้ทำขั้นต่อไปโดยกำชับ Dev ก่อน; งานนี้ทำ connection และ Login/Logout/ป้องกัน API ก่อน ยังไม่ deploy Chaiyo
+- [x] แสดง rendered mockup หน้า Login ก่อนนำไปทำ React จริง; ใช้สี/ฟอนต์ ESI เดิม รองรับ TH/EN และมือถือ
+- [x] เตรียม PHP 8.3.36 / MariaDB 11.4.13 แบบ portable ตรวจ publisher SHA-256; config/tools/data/credentials อยู่ใน `.esi-admin/dev/` ไม่แก้ PATH หรือติดตั้ง Windows service
+- [x] แยกฐาน `esi_dev` กับบัญชี `esi_dev_admin` จาก Hosting; PDO ใช้ utf8mb4/strict/UTC และ Dev config ปฏิเสธ DSN/origin ที่ไม่ใช่ loopback
+- [x] เพิ่ม `/admin/login`, Logout, safe return URL, ตรวจ active/role/session, session rotation/revocation, idle/absolute expiry, rate limiting และ CSRF
+- [x] ป้องกัน API เดิมผ่าน PHP authorization จริงทุก request; ปิด route internal authorization และการเข้าถึง private files ผ่าน Vite รวม `@fs`
+- [x] เพิ่มคำสั่ง Dev แบบเดียวเปิด PHP/MariaDB/Vite และ `test:auth`; ตรวจ 43 Vitest tests, PHP security checks 91 และ actual HTTP/PDO checks 118 ผ่าน
+- [x] audit สะอาด 22 routes × 4 widths: axe WCAG 2 A/AA, SEO/overflow/ภาพ/ลิงก์/console, Login จริงและการป้องกัน API/private files, gallery และ management flows เดิมผ่าน
+- [x] ตรวจ typecheck/lint/build ผ่าน, Dev session ตอบ 200, private files ตอบ 404 และไม่พบค่า secrets ของ Dev ใน client build; เปิด PHP/MariaDB ให้ลองที่ localhost พร้อมไฟล์บัญชี Dev แยก
+- [ ] ย้าย project CRUD/upload/publish จาก local data files เข้า MySQL และเตรียม production deployment — อยู่นอกงาน authentication รอบนี้
+
+**D56 (2026-11-06):** เจ้าของสั่ง “ทำได้เลยครับ แต่ต้องทำใน Dev ก่อนนะ” หลังแนะนำเริ่ม connection/Login ก่อน จึงทำ PHP authentication และป้องกัน Admin/API บนเครื่อง โดยแยกบัญชี/ฐานข้อมูล/secrets จาก Hosting ทั้งหมด. โปรเจกต์ยังเก็บ draft/published/images ในไฟล์แบบเดิม แต่ต้องมี session และ CSRF จึงเรียก API ได้ ไม่ได้ migrate เนื้อหาหรือ deploy PHP API ขึ้น Chaiyo. `npm run dev` เปิด runtime ในเครื่อง; บัญชีทดสอบอยู่ที่ `.esi-admin/dev/dev-admin-credentials.txt`. Audit ใช้ PHP/MariaDB และข้อมูลชุดแยกแต่ละรอบ ตรวจ login จริงพร้อม gallery/publishing เดิม โดยไม่เปลี่ยนงานในเครื่องของเจ้าของ. ภาพ Login จริงอยู่ใน `screenshots/auth-dev/`.
+
+### เตรียมบัญชี Admin แรก (2026-11-06, D55)
+
+- [x] เจ้าของสั่งให้สร้างบัญชีแอดมิน เตรียมชื่อ `esi_admin`, display name `ESI Administrator`, role `admin`
+- [x] สร้างรหัสผ่านสุ่ม 32 bytes ในเครื่องและ bcrypt `$2y$` cost 12; ตรวจ PHP documentation test vector, correct-password และ wrong-password ผ่าน โดยไม่แสดง plaintext ใน output หรือใส่ใน SQL
+- [x] เก็บ credentials/private state/SQL ใน `.esi-admin/` ที่ Git ignore; SQL ใช้ INSERT แบบ guarded ไม่เขียนทับบัญชีเดิม
+- [x] เจ้าของล็อกอิน Plesk ใหม่และยืนยัน ณ ขั้นเพิ่มสิทธิ์ตาม Browser Use policy แล้ว; เปิด phpMyAdmin ผ่าน Web Admin ของ Plesk เพื่อออก SSO session ใหม่ก่อน INSERT
+- [x] สร้าง `esi_admin` id 1, role `admin`, `is_active=1` บน Hosting จริง; ตรวจ matching accounts/active admins/expected hash matches เป็น 1/1/1 และไม่มี session ค้าง
+- [x] เก็บไฟล์ credentials `.esi-admin/initial-admin-credentials.txt` สถานะ created-in-database พร้อมส่งลิงก์ส่วนตัวให้เจ้าของ; ภาพหลักฐาน `screenshots/database/admin-account-created.jpg` ไม่แสดงรหัสผ่านหรือ hash
+
+**D55 (2026-11-06):** เจ้าของอนุมัติสร้างบัญชี Admin แรกและตอบ “ล็อกอินแล้ว ยืนยันสร้าง esi_admin” หลัง Plesk session หมดอายุ จึงสร้างบัญชี id 1 สำเร็จด้วย bcrypt `$2y$` cost 12 และรหัสผ่านสุ่มจาก 32 bytes ในเครื่อง เก็บ credentials เฉพาะ `.esi-admin/` ที่ Git ignore. ใช้ bcryptjs 3.0.3 เฉพาะเครื่องมือส่วนตัว ไม่เพิ่ม dependency ให้เว็บไซต์; ตรวจ compatibility ด้วย PHP documentation test vector, correct/wrong password และตรวจ hash ที่บันทึกตรงกับที่เตรียมไว้โดยไม่ดึง hash/รหัสผ่านจริงมาแสดงในผล query. phpMyAdmin แสดง “1 row inserted” และ metadata ยืนยันหนึ่งบัญชี แต่ SELECT ROW_COUNT() แสดง 0 เพราะมีคำสั่งภายในแทรก จึงใช้ query ตรวจ metadata/จำนวนบัญชี/hash equality ยืนยันแทน และไม่ INSERT ซ้ำ. ยังไม่ได้เปิด production login/API; บัญชีพร้อมใน Database แต่ยังล็อกอินเว็บไซต์ไม่ได้จนกว่าจะเชื่อม backend.
+
+### เตรียม Database สำหรับ Admin บน Chaiyo (2026-11-06, D54)
+
+- [x] เจ้าของอนุมัติให้สร้างตารางจริงใน `esithcom_website` ผ่าน phpMyAdmin หลังตรวจและอธิบายแบบแล้ว
+- [x] สร้าง 10 ตาราง InnoDB / `utf8mb4_unicode_ci` พร้อม 15 foreign keys รองรับ MySQL `5.5.44-cll-lve`
+- [x] แยก identity ผลงานกับ version และ draft/published pointers แบบ composite FK เพื่อกันอ้างฉบับของผลงานอื่น
+- [x] เตรียมตารางบัญชี/hashed password/session/event และข้อมูล TH/EN, หมวดหมู่, scope/partners และ metadata รูปภาพ
+- [x] ทดสอบ TH/EN รวมอักขระ 4-byte, แยกฉบับร่าง/เผยแพร่, คง published slug และเชื่อมรูปผ่าน transaction; `ROLLBACK` แล้วตรวจทั้ง 10 ตารางเป็น 0 rows
+- [x] ตรวจจาก Hosting จริงครบ 10 ตาราง InnoDB/utf8mb4 และ 15 foreign keys; SQL ที่ใช้มี fingerprint ตรงกับ `database/001_admin_schema.sql` เมื่อ normalize comments/whitespace/identifier quotes
+- [x] เก็บ schema, คำสั่งตรวจ และ smoke test ใน `database/`; ภาพหลักฐาน `screenshots/database/schema-created.jpg`
+- [x] ตรวจ typecheck/lint/40 tests/build ผ่าน และ audit สะอาด 21 routes × 4 widths รวม gallery/management flows; tests ตั้ง TEMP/TMP ใน workspace และ audit รันนอก sandbox เพื่อให้ Chrome เข้าถึง localhost ได้
+- [ ] เชื่อม production PHP API/login/upload/publish — การมี schema และบัญชีแรกตาม D55 ยังไม่ทำให้หน้า `/admin` ใช้งาน Database ได้
+
+**D54 (2026-11-06):** เจ้าของขอออกแบบ Database ก่อนและให้รอคำสั่ง จากนั้นมอบหมายให้สร้างตารางจริงใน `esithcom_website` ที่สร้างพร้อม MySQL user `esi_webapp` แล้ว จึงสร้างเฉพาะ schema ตามแบบ ไม่แตะฐาน `esithcom_` เดิม ไม่สร้าง default password/account/session ไม่ย้ายผลงานและไม่ deploy API/UI. MySQL ที่บัญชีให้ใช้คือ 5.5.44; แนะนำให้ย้ายรุ่นที่ยังได้รับการสนับสนุนก่อนเปิด Admin จริง. phpMyAdmin เปลี่ยน context เป็น `information_schema` เมื่อรวม metadata query กับ DML จน insert ถูกปฏิเสธ; แยก metadata แบบ read-only ออกจาก smoke test แล้วตรวจผ่านและ rollback ครบ โดยไม่เพิ่ม GRANT ให้ user. Chrome extension ยังไม่อนุญาต file-URL access จึงวาง SQL ผ่าน editor และตรวจข้อความครบก่อนรันแทน Import; ไม่เปลี่ยนสิทธิ์ส่วนขยาย.
+
 - [x] เพิ่มยอดผู้เข้าชมเว็บไซต์ใต้ Facebook ใน Footer ทั้ง TH/EN
 - [x] จัดตัวนับเป็นช่องละหนึ่งหลัก เติมศูนย์ด้านหน้าให้ครบหกหลัก
 - [x] แสดงหัวข้อกับตัวนับทันทีเป็น `000000` และแทนด้วยยอดจริงเมื่อ PHP ตอบกลับ
@@ -73,7 +144,7 @@
 | ข้อมูล  | Static data ใน `src/data/*.ts` — เพิ่ม Project/Service โดยแก้ไฟล์ data (spec §50–51)                                |
 | ภาษา    | EN เป็นหลัก + สวิตช์ TH/EN — copy อังกฤษและไทยครบทั้ง site แล้ว รอ ESI ตรวจอนุมัติถ้อยคำขั้นสุดท้าย                 |
 | หน้าตา  | **ยึดตาม mockup หน้า Home** ทุก section แล้วขยาย design language เดียวกันไปหน้าอื่น (รายละเอียดใน `design-spec.md`) |
-| หน้า    | Home, About, Solutions (+7 detail ตาม Company Profile), Industries, Projects (+detail), Contact, 404               |
+| หน้า    | Home, About, Solutions (+7 detail ตาม Company Profile), Industries, Projects (+detail), Contact, 404                |
 | Deploy  | `npm run build` → `dist/` ขึ้น Vercel / Netlify / Cloudflare Pages / Apache / Nginx ได้ทันที                        |
 
 ## 2. หลักการทำงานทุก Phase
@@ -99,7 +170,7 @@
 | D7  | โลโก้ต้นฉบับเป็น PNG พื้นขาว                                                                                                                                                                                          | ทำเวอร์ชันพื้นโปร่งใส (น้ำเงิน/ขาว) ไว้ใน skill assets แล้ว — ขอไฟล์ SVG/AI ต้นฉบับถ้ามี                                                                                                                                                                                                                                                                                                        | ⏳ ขอไฟล์ vector                         |
 | D8  | Project มีชื่อแค่ 3 โครงการ (spec ตัวอย่างใช้ `id: 15`)                                                                                                                                                               | **ใส่ 22 โครงการจริง** จากหน้า Site Reference ของเว็บเดิม (2017–2024) ใน `src/data/projects.ts` — ชื่อปรับเป็นรูปแบบ "ลูกค้า – ระบบ", scope ตามข้อความเดิม, สถานที่บางส่วนอนุมาน (`// to confirm`); ลูกค้าที่ไม่ใช่อุตสาหกรรม (รีสอร์ต/สำนักงาน/หน่วยงานรัฐ) จัดในหมวด Industrial Infrastructure                                                                                                | ✅ ได้ข้อมูลแล้ว — รอ ESI ตรวจรายละเอียด |
 | D9  | Social media (LinkedIn, Facebook, YouTube) ไม่มี URL                                                                                                                                                                  | Facebook: facebook.com/engineeringsystemintegration (จากเว็บเดิม) · LinkedIn/YouTube ยังไม่มี → ไอคอนซ่อนอัตโนมัติ                                                                                                                                                                                                                                                                              | ✅ บางส่วน (2026-09-22)                  |
-| D10 | Domain / hosting                                                                                                                                                                                           | Domain จริงคือ **esi-th.com** (เว็บเดิมเป็น WordPress) → `siteUrl = https://esi-th.com`; เจ้าของ deploy บน Chaiyo Hosting แล้ว และตรวจ live QA/deep links ผ่าน (2026-10-22)                                                                                                                                                                                                                                               | ✅ Chaiyo Hosting · deploy แล้ว            |
+| D10 | Domain / hosting                                                                                                                                                                                                      | Domain จริงคือ **esi-th.com** (เว็บเดิมเป็น WordPress) → `siteUrl = https://esi-th.com`; เจ้าของ deploy บน Chaiyo Hosting แล้ว และตรวจ live QA/deep links ผ่าน (2026-10-22)                                                                                                                                                                                                                     | ✅ Chaiyo Hosting · deploy แล้ว          |
 | D11 | Font ไม่ระบุใน spec                                                                                                                                                                                                   | Display: **Kanit** (bold italic uppercase — รองรับไทย, เอียงตามโลโก้) · Body: **Inter + Noto Sans Thai**                                                                                                                                                                                                                                                                                        | ✅ เสนอใช้ (เปลี่ยนได้)                  |
 | D12 | Contact form                                                                                                                                                                                                          | ไม่ทำฟอร์ม — ใช้ปุ่ม `mailto:` + `tel:` ตาม spec §35 แนะนำ (ถ้าต้องการฟอร์มจริงค่อยเพิ่ม EmailJS/Formspree ภายหลัง)                                                                                                                                                                                                                                                                             | ✅ ตัดสินใจแล้ว                          |
 | D13 | Google Maps                                                                                                                                                                                                           | ใช้ iframe embed จากที่อยู่ ไม่ต้องใช้ API key                                                                                                                                                                                                                                                                                                                                                  | ✅ ตัดสินใจแล้ว                          |

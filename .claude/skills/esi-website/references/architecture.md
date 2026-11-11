@@ -5,6 +5,30 @@ with a loopback-only Vite API for saving drafts, uploading images, and publishin
 project's data files. The static build uses those published records. The original production
 scope in spec §7 applies to deployed hosting.
 
+Owner-approved Dev authentication (D56, 2026-11-06): `npm run dev` now starts PHP 8.3,
+an isolated local MariaDB database and Vite. Admin routes require login; the Vite editor API
+checks PHP sessions, user status/role and mutation CSRF server-side. Auth tables use local SQL;
+project storage remains the existing file-backed repository. Private configuration, credentials
+and portable tools live under gitignored `.esi-admin/dev/`, outside the PHP web root and denied
+by Vite. No Hosting API, credentials or project records are used by this development runtime.
+See `database/dev-auth.md`. Production deployment and MySQL project migration are separate steps.
+
+The owner separately approved a Chaiyo auth-database profile (D57, 2026-11-10).
+`prepare:chaiyo` creates a private blank-password config; `check:chaiyo` reads database metadata;
+`dev:chaiyo` starts loopback PHP on port 8788 and switches the Vite bridge only after checking
+the configured connection. The owner supplies the MySQL password themselves. This profile
+explicitly chooses the provider's existing legacy transport or verified TLS, with no automatic
+downgrade. Only the approved host/database/user are accepted. Default Dev and all audits/tests
+remain local; the remote launcher never initializes, imports or seeds the Chaiyo database.
+See `database/chaiyo-connection.md`. Project data and photos still use the local repository.
+
+Custom Admin Audit Log (D58, 2026-11-11): `/admin/audit-logs` reads the selected database's
+existing `admin_events` table with admin-only SQL pagination/filtering. Authentication logs
+are written in PHP; local project changes journal a private durable outbox and deliver through
+a loopback/internal-key endpoint with UUID deduplication. The browser cannot submit audit
+events or choose actors. No project foreign keys are forged before project migration.
+See `database/audit-log.md`; tests/audit exercise actual local SQL and queue recovery.
+
 ## 1. Stack (use current stable versions — do not pin to old majors)
 
 | Concern | Choice | Notes |

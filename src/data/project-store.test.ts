@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { createProjectRepository } from '../../server/project-admin.mjs'
 import { applyProjectContent } from '../../shared/project-content.mjs'
-import { createExampleProject } from '@/data/admin'
+import { createTestProject } from '@/test/fixtures/admin-project'
 import { projectReferences } from '@/data/projects'
 import { isProject } from '@/lib/admin'
 
@@ -33,7 +33,7 @@ async function fixture() {
     root,
     store: createProjectRepository(options),
     reopen: () => createProjectRepository(options),
-    project: createExampleProject(projectReferences),
+    project: createTestProject(projectReferences),
   }
 }
 

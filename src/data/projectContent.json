@@ -1,46 +1,9 @@
 {
   "version": 1,
-  "revision": 1,
-  "records": [
-    {
-      "id": 23,
-      "slug": "sample-factory-cctv-network-23",
-      "title": "[Sample] Factory CCTV & Network",
-      "titleTh": "[ตัวอย่าง] ระบบกล้องวงจรปิดและเครือข่ายโรงงาน",
-      "client": "Example Factory (sample data)",
-      "categories": [
-        "cctv",
-        "network"
-      ],
-      "industry": "manufacturing",
-      "location": "Rayong, Thailand (sample)",
-      "locationTh": "จ.ระยอง ประเทศไทย (ข้อมูลตัวอย่าง)",
-      "image": "/images/projects/map-ta-phut-tank-terminal-cctv.webp",
-      "description": "Sample project for reviewing the page layout only. This is not an ESI project reference. The images illustrate CCTV and network systems.",
-      "descriptionTh": "ผลงานตัวอย่างสำหรับทดลองกรอกข้อมูลและดูรูปแบบหน้าเว็บเท่านั้น ไม่ใช่ผลงานอ้างอิงจริงของ ESI รูปภาพใช้ประกอบตัวอย่างระบบกล้องวงจรปิดและเครือข่าย",
-      "scope": [
-        "Install CCTV cameras and a video recorder (sample)",
-        "Install a network cabinet and test connectivity (sample)"
-      ],
-      "scopeTh": [
-        "ติดตั้งกล้องวงจรปิดและเครื่องบันทึกภาพ (ตัวอย่าง)",
-        "ติดตั้งตู้เครือข่ายและทดสอบการเชื่อมต่อ (ตัวอย่าง)"
-      ],
-      "gallery": [
-        "/images/projects/map-ta-phut-tank-terminal-cctv.webp",
-        "/images/projects/long-son-petrochemical-network.webp"
-      ],
-      "year": 2026,
-      "partners": [
-        "Owner: Example Factory (sample)",
-        "Main contractor: Example Contractor (sample)"
-      ],
-      "partnersTh": [
-        "เจ้าของโครงการ: โรงงานตัวอย่าง (ข้อมูลทดสอบ)",
-        "ผู้รับเหมาหลัก: บริษัทผู้รับเหมาตัวอย่าง (ข้อมูลทดสอบ)"
-      ],
-      "imageKind": "illustration"
-    }
-  ],
-  "removedIds": []
+  "revision": 4,
+  "records": [],
+  "removedIds": [
+    24,
+    23
+  ]
 }

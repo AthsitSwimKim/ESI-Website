@@ -21,20 +21,46 @@ const hideCta: RouteHandle = { hideCta: true }
 export const router = createBrowserRouter([
   {
     path: '/admin',
-    loader: ({ request }) => {
-      const url = new URL(request.url)
-      const id = url.searchParams.get('project')
-      if (!id || !/^\d+$/.test(id)) return null
-      url.searchParams.delete('project')
-      return replace(`/admin/projects/${id}${url.search}`)
-    },
     HydrateFallback: PageSkeleton,
-    lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
-  },
-  {
-    path: '/admin/projects/:projectId',
-    HydrateFallback: PageSkeleton,
-    lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
+    lazy: () =>
+      import('@/components/admin/AdminAuthLayout').then((m) => ({ Component: m.AdminAuthLayout })),
+    children: [
+      {
+        index: true,
+        loader: ({ request }) => {
+          const url = new URL(request.url)
+          const id = url.searchParams.get('project')
+          if (!id || !/^\d+$/.test(id)) return null
+          url.searchParams.delete('project')
+          return replace(`/admin/projects/${id}${url.search}`)
+        },
+        lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
+      },
+      {
+        path: 'login',
+        lazy: () => import('@/pages/AdminLoginPage').then((m) => ({ Component: m.AdminLoginPage })),
+      },
+      {
+        path: 'projects/:projectId',
+        lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
+      },
+      {
+        path: 'audit-logs',
+        lazy: () =>
+          import('@/pages/AdminAuditLogPage').then((m) => ({ Component: m.AdminAuditLogPage })),
+      },
+      {
+        path: 'preview',
+        element: <RootLayout />,
+        children: [
+          {
+            path: ':id',
+            lazy: () =>
+              import('@/pages/AdminPreviewPage').then((m) => ({ Component: m.AdminPreviewPage })),
+          },
+        ],
+      },
+    ],
   },
   {
     path: '/',
@@ -43,11 +69,6 @@ export const router = createBrowserRouter([
     HydrateFallback: PageSkeleton,
     children: [
       { index: true, element: <HomePage /> },
-      {
-        path: 'admin/preview/:id',
-        lazy: () =>
-          import('@/pages/AdminPreviewPage').then((m) => ({ Component: m.AdminPreviewPage })),
-      },
       {
         path: 'about',
         lazy: () => import('@/pages/AboutPage').then((m) => ({ Component: m.AboutPage })),

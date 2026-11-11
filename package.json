@@ -4,7 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:setup": "node scripts/dev-auth-install.mjs",
+    "dev:auth": "node scripts/dev-auth.mjs start",
+    "dev:frontend": "vite",
+    "dev:chaiyo": "node scripts/chaiyo-auth.mjs start",
+    "prepare:chaiyo": "node scripts/chaiyo-auth.mjs prepare",
+    "check:chaiyo": "node scripts/chaiyo-auth.mjs check",
     "build": "npm run sitemap && tsc -b && vite build",
     "build:chaiyo": "npm run build -- --mode chaiyo && node -e \"require('node:fs').copyFileSync('server/visitor-count.php', 'dist/visitor-count.php')\"",
     "preview": "vite preview",
@@ -14,6 +20,8 @@
     "format:check": "prettier --check .",
     "screenshot": "node scripts/screenshot.mjs",
     "test": "vitest run",
+    "test:auth": "node scripts/test-dev-auth.mjs",
+    "test:chaiyo": "node --test scripts/test-chaiyo-auth.mjs",
     "test:watch": "vitest",
     "sitemap": "node scripts/sitemap.mjs",
     "audit": "node scripts/audit.mjs"
