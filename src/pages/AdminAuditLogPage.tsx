@@ -478,7 +478,7 @@ export function AdminAuditLogPage() {
       <Seo
         title={`${t('audit.title')} | ESI`}
         description={t('audit.description')}
-        path="/admin/audit-logs"
+        path="/admin-portal-update/audit-logs"
       />
       <meta name="robots" content="noindex, nofollow, noarchive" />
       <a
@@ -509,7 +509,7 @@ export function AdminAuditLogPage() {
               <span aria-hidden className="mt-3 block h-[3px] w-10 bg-esi-blue" />
               <p className="mt-[18px] text-sm leading-relaxed text-esi-muted">{t('audit.intro')}</p>
             </div>
-            <Link to="/admin" className={buttonClass}>
+            <Link to="/admin-portal-update/" className={buttonClass}>
               <ArrowLeft size={16} aria-hidden />
               {t('audit.back')}
             </Link>

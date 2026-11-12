@@ -20,7 +20,7 @@ const hideCta: RouteHandle = { hideCta: true }
 /** Routes exactly as spec §9. Home is eager; every other page is code-split. */
 export const router = createBrowserRouter([
   {
-    path: '/admin',
+    path: '/admin-portal-update',
     HydrateFallback: PageSkeleton,
     lazy: () =>
       import('@/components/admin/AdminAuthLayout').then((m) => ({ Component: m.AdminAuthLayout })),
@@ -32,7 +32,7 @@ export const router = createBrowserRouter([
           const id = url.searchParams.get('project')
           if (!id || !/^\d+$/.test(id)) return null
           url.searchParams.delete('project')
-          return replace(`/admin/projects/${id}${url.search}`)
+          return replace(`/admin-portal-update/projects/${id}${url.search}`)
         },
         lazy: () => import('@/pages/AdminPage').then((m) => ({ Component: m.AdminPage })),
       },

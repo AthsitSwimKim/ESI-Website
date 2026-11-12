@@ -31,7 +31,7 @@
 4. PHP ต้องอ่านโฟลเดอร์ `.esi-admin-production` และเขียน `.esi-admin-production/data` กับ `httpdocs/images/uploads` ได้
    ถ้า Plesk จำกัด open_basedir ให้ใช้ขอบเขตโฟลเดอร์โดเมน ไม่จำกัดเฉพาะ httpdocs
 5. เปิด `https://esi-th.com/api/admin/auth/session` ต้องได้ JSON ที่มี `authenticated: false`
-   จากนั้นเปิด `/admin` และล็อกอินบัญชี `esi_admin` ด้วยรหัสผ่าน Admin เดิม (คนละรหัสกับ MySQL)
+   จากนั้นเปิด `/admin-portal-update` และล็อกอินบัญชี `esi_admin` ด้วยรหัสผ่าน Admin เดิม (คนละรหัสกับ MySQL)
 6. ตรวจสร้าง Draft → Preview → Publish → หน้า Projects/รายละเอียด → Audit Log → Logout
 
 ข้อมูลบัญชี/session/Audit Log ใช้ MySQL `esithcom_website` ที่ Chaiyo ตารางเดิม ไม่สร้างบัญชีหรือ reset รหัสผ่าน

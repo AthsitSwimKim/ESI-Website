@@ -1,5 +1,16 @@
 # แผนพัฒนาเว็บไซต์ ESI — Corporate Website Redesign
 
+### เปลี่ยน URL Admin (2026-11-11, D60)
+
+เจ้าของขอเปลี่ยนทางเข้าจาก `/admin` เป็น `/admin-portal-update/` ตามลูกค้า
+เปลี่ยน frontend routes, Login return URL, ลิงก์จัดการผลงาน/Preview/Audit และการแยก public visitor count ให้ครบ
+เส้นทางหน้าเดิมตอบ 404 โดยไม่ redirect ไป URL ใหม่; API `/api/admin/*` และการตรวจ session/role/CSRF ยังคงเดิม
+การเปลี่ยน URL ช่วยลดการสแกนเส้นทางทั่วไป ไม่ใช้แทนการยืนยันตัวตนและการตรวจสิทธิ์
+
+- [x] typecheck/lint/build, 52 tests, PHP security 190 + HTTP 232 checks และ extracted production ZIP 1,224 checks ผ่าน รวม Login ทางใหม่/old URL 404
+- [x] audit สะอาด 23 routes × 4 widths รวมเส้นทางใหม่/ตัวกรอง/Preview/Publish/Audit และจัดทำ `ESI-Admin-Portal-Update.zip` 35 ไฟล์ 237,552 bytes สำหรับแตกทับ httpdocs; ตรวจหลังแตกทับรุ่นเดิมว่าตรง build ใหม่ครบทุกไฟล์
+- [ ] เจ้าของอัปโหลด patch และตรวจ URL ใหม่บน Hosting จริง
+
 - [x] ปรับไอคอนรหัสผ่านหน้า Login ตามเจ้าของ: ซ่อนรหัสใช้ EyeOff และแสดงรหัสใช้ Eye; คงปุ่มสลับและ accessible labels เดิม; Chrome ตรวจ type/icon/value/mobile ผ่าน, typecheck/lint/52 tests/Chaiyo build ผ่าน และอัปเดต ZIP แล้ว (2026-11-11)
 - [x] เจ้าของต้องการชุดอัปเดตเฉพาะไฟล์ที่เปลี่ยนแทน ZIP ทั้งเว็บ: เตรียม `ESI-Password-Icon-Update.zip` 236,680 bytes สำหรับแตกทับใน httpdocs โดยตรง; เทียบกับชุด production ก่อนแก้ไอคอนและตรวจหลังแตกทับว่าตรงกับ build ใหม่ทุกไฟล์; งานอัปเดตต่อไปให้ส่ง patch ตามรุ่นที่ติดตั้งเมื่อทำได้
 

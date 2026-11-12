@@ -91,11 +91,11 @@ const routes = [
   '/projects/map-ta-phut-tank-terminal-cctv',
   '/projects/klongluang-utilities-spp-systems',
   '/contact',
-  '/admin',
-  '/admin/login',
-  '/admin/audit-logs',
-  '/admin/projects/new',
-  '/admin/preview/missing',
+  '/admin-portal-update',
+  '/admin-portal-update/login',
+  '/admin-portal-update/audit-logs',
+  '/admin-portal-update/projects/new',
+  '/admin-portal-update/preview/missing',
   '/this-route-does-not-exist',
 ]
 
@@ -167,8 +167,8 @@ try {
       if (![403, 404].includes(response.status()))
         note(privatePath, 'security', 'private server files were accessible over HTTP')
     }
-    await page.goto(baseUrl + '/admin/projects/new', { waitUntil: 'networkidle' })
-    await page.waitForURL('**/admin/login?**')
+    await page.goto(baseUrl + '/admin-portal-update/projects/new', { waitUntil: 'networkidle' })
+    await page.waitForURL('**/admin-portal-update/login?**')
     await page.getByLabel('Username', { exact: true }).fill(authRuntime.username)
     await page.getByLabel('Password', { exact: true }).fill('wrong-audit-password')
     await page.getByRole('button', { name: 'Log in', exact: true }).click()
@@ -178,12 +178,16 @@ try {
       .waitFor()
     await page.getByLabel('Password', { exact: true }).fill(authRuntime.password)
     await page.getByRole('button', { name: 'Log in', exact: true }).click()
-    await page.waitForURL('**/admin/projects/new')
+    await page.waitForURL('**/admin-portal-update/projects/new')
     const sessionCookie = (await context.cookies()).find(
       (cookie) => cookie.name === 'esi_admin_dev_session',
     )
     if (!sessionCookie?.httpOnly || sessionCookie.sameSite !== 'Strict')
-      note('/admin/login', 'security', 'session cookie is missing HttpOnly or SameSite Strict')
+      note(
+        '/admin-portal-update/login',
+        'security',
+        'session cookie is missing HttpOnly or SameSite Strict',
+      )
     const noCsrf = await context.request.post(baseUrl + '/api/admin/projects/save', {
       headers: { Origin: baseUrl, 'X-ESI-Admin': '1' },
       data: {},
@@ -191,9 +195,9 @@ try {
     if (noCsrf.status() !== 403)
       note('/api/admin', 'security', 'authenticated writes without CSRF were accepted')
     await page.getByRole('button', { name: 'Log out', exact: true }).click()
-    await page.waitForURL('**/admin/login?**')
+    await page.waitForURL('**/admin-portal-update/login?**')
     if ((await context.request.get(baseUrl + '/api/admin/projects')).status() !== 401)
-      note('/admin/login', 'security', 'logout left project access active')
+      note('/admin-portal-update/login', 'security', 'logout left project access active')
     await loginContext(context)
     console.log(
       '✓ auth flow: real PHP/MySQL login, safe redirect, generic errors, HttpOnly cookie, CSRF, logout, private-file and API protection',
@@ -204,15 +208,15 @@ try {
     await page.waitForURL('**/projects?category=cctv')
     await page.reload({ waitUntil: 'networkidle' })
     if (trafficMethods.length)
-      note('/admin', 'traffic', 'local public pages must not record website visits')
-    await page.goto(baseUrl + '/admin', { waitUntil: 'networkidle' })
+      note('/admin-portal-update', 'traffic', 'local public pages must not record website visits')
+    await page.goto(baseUrl + '/admin-portal-update', { waitUntil: 'networkidle' })
     const viewsCard = page.getByText('Website visitors', { exact: true }).locator('..')
     await viewsCard.getByText('123,456', { exact: true }).waitFor()
     websiteVisitors++
     await page.evaluate(() => window.dispatchEvent(new Event('focus')))
     await viewsCard.getByText('123,457', { exact: true }).waitFor()
     if (trafficMethods.some((method) => method !== 'GET'))
-      note('/admin', 'traffic', 'the admin card must only read website visitors')
+      note('/admin-portal-update', 'traffic', 'the admin card must only read website visitors')
   }
 
   const consoleErrors = []
@@ -222,7 +226,7 @@ try {
   const seoRows = []
   for (const route of routes) {
     consoleErrors.length = 0
-    if (authRuntime && route === '/admin/login') await logoutContext(context)
+    if (authRuntime && route === '/admin-portal-update/login') await logoutContext(context)
     await page.goto(baseUrl + route, { waitUntil: 'networkidle' })
     await page.locator('h1').waitFor({ timeout: 15000 })
     await page.waitForTimeout(1000)
@@ -239,7 +243,7 @@ try {
       duplicateDescriptions: document.querySelectorAll('meta[name="description"]').length,
     }))
     seoRows.push({ route, ...head })
-    if (route.startsWith('/admin')) {
+    if (route.startsWith('/admin-portal-update')) {
       const robots = await page.locator('meta[name="robots"]').getAttribute('content')
       if (!robots?.includes('noindex')) note(route, 'seo', 'admin page is not marked noindex')
     }
@@ -315,12 +319,12 @@ try {
     await page.setViewportSize({ width: 1440, height: 900 })
 
     consoleErrors.forEach((e) => note(route, 'console', e))
-    if (authRuntime && route === '/admin/login') await loginContext(context)
+    if (authRuntime && route === '/admin-portal-update/login') await loginContext(context)
   }
 
   // --- gallery uploads persist and remain optional (isolated audit context) ---
   if (auditServer) {
-    await page.goto(baseUrl + '/admin', { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + '/admin-portal-update', { waitUntil: 'networkidle' })
     await page.getByRole('searchbox').fill('Long Son')
     await page.waitForURL((url) => url.searchParams.get('q') === 'Long Son')
     const projectLink = page.getByRole('link', { name: /^Edit project Long Son/ })
@@ -328,14 +332,19 @@ try {
     await page.keyboard.press('Enter')
     await page.waitForURL(
       (url) =>
-        /^\/admin\/projects\/\d+$/.test(url.pathname) && url.searchParams.get('q') === 'Long Son',
+        /^\/admin-portal-update\/projects\/\d+$/.test(url.pathname) &&
+        url.searchParams.get('q') === 'Long Son',
     )
     await page.getByRole('heading', { level: 1, name: 'Edit project' }).waitFor()
     if (await page.getByRole('searchbox').count())
-      note('/admin', 'navigation', 'project list still rendered beside the separate editor')
+      note(
+        '/admin-portal-update',
+        'navigation',
+        'project list still rendered beside the separate editor',
+      )
     const editTitle = page.getByRole('textbox', { name: 'Title (EN) *', exact: true })
     if (!(await editTitle.inputValue()).startsWith('Long Son'))
-      note('/admin', 'navigation', 'project link did not load its own editor')
+      note('/admin-portal-update', 'navigation', 'project link did not load its own editor')
     await editTitle.fill('Unsaved navigation check')
     const backToList = page.getByRole('link', { name: 'Back to project list', exact: true })
     await Promise.all([
@@ -344,25 +353,29 @@ try {
     ])
     await editTitle.waitFor()
     if ((await editTitle.inputValue()) !== 'Unsaved navigation check')
-      note('/admin', 'navigation', 'cancelling navigation discarded unsaved work')
+      note('/admin-portal-update', 'navigation', 'cancelling navigation discarded unsaved work')
     await Promise.all([
       page.waitForEvent('dialog').then((dialog) => dialog.accept()),
       backToList.click(),
     ])
     await page.waitForURL(
-      (url) => url.pathname === '/admin' && url.searchParams.get('q') === 'Long Son',
+      (url) => url.pathname === '/admin-portal-update/' && url.searchParams.get('q') === 'Long Son',
     )
     if ((await page.getByRole('searchbox').inputValue()) !== 'Long Son')
-      note('/admin', 'navigation', 'returning to the list lost the search filter')
+      note('/admin-portal-update', 'navigation', 'returning to the list lost the search filter')
     await page.getByRole('searchbox').clear()
-    await page.waitForURL((url) => url.pathname === '/admin' && !url.searchParams.has('q'))
+    await page.waitForURL(
+      (url) => url.pathname === '/admin-portal-update/' && !url.searchParams.has('q'),
+    )
     await page.getByRole('link', { name: 'Add project', exact: true }).click()
-    await page.waitForURL((url) => url.pathname === '/admin/projects/new')
+    await page.waitForURL((url) => url.pathname === '/admin-portal-update/projects/new')
     if (await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).inputValue())
-      note('/admin', 'new project', 'new project form was not blank')
-    await page.goto(baseUrl + '/admin/projects/new?sample=1', { waitUntil: 'networkidle' })
+      note('/admin-portal-update', 'new project', 'new project form was not blank')
+    await page.goto(baseUrl + '/admin-portal-update/projects/new?sample=1', {
+      waitUntil: 'networkidle',
+    })
     if (await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).inputValue())
-      note('/admin', 'new project', 'removed sample URL still filled the form')
+      note('/admin-portal-update', 'new project', 'removed sample URL still filled the form')
     // Seed only the isolated audit workspace; there is no sample-fill feature in the app.
     const { createTestProject } = await auditServer.ssrLoadModule(
       '/src/test/fixtures/admin-project.ts',
@@ -383,7 +396,9 @@ try {
     })
     if (!fixtureResponse.ok()) throw new Error('Isolated audit fixture could not be saved')
     const fixture = await fixtureResponse.json()
-    await page.goto(baseUrl + `/admin/projects/${fixture.project.id}`, { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + `/admin-portal-update/projects/${fixture.project.id}`, {
+      waitUntil: 'networkidle',
+    })
     const testTitle = `[QA] Local publishing ${Date.now()}`
     await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).fill(testTitle)
     const gallery = page.locator('section[aria-labelledby="admin-gallery-label"]')
@@ -395,7 +410,7 @@ try {
     })
     await gallery.getByText('Choose a JPG, PNG or WebP image.', { exact: true }).waitFor()
     if ((await gallery.getByRole('img').count()) !== 2)
-      note('/admin', 'gallery', 'invalid file changed existing images')
+      note('/admin-portal-update', 'gallery', 'invalid file changed existing images')
     await galleryInput.setInputFiles([
       fileURLToPath(
         new URL('../public/images/projects/senior-aerospace-access-control.webp', import.meta.url),
@@ -408,13 +423,13 @@ try {
     await page.getByRole('button', { name: 'Save draft', exact: true }).first().click()
     const saveDialog = page.getByRole('dialog', { name: 'Draft saved', exact: true })
     await saveDialog.waitFor()
-    await page.waitForURL((url) => /^\/admin\/projects\/\d+$/.test(url.pathname))
+    await page.waitForURL((url) => /^\/admin-portal-update\/projects\/\d+$/.test(url.pathname))
     await page.evaluate(axeSource)
     const saveDialogAxe = await page.evaluate(async () =>
       window.axe.run({ runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } }),
     )
     for (const issue of saveDialogAxe.violations)
-      note('/admin', 'save-dialog/a11y', `${issue.id}: ${issue.help}`)
+      note('/admin-portal-update', 'save-dialog/a11y', `${issue.id}: ${issue.help}`)
     await mkdir(new URL('../screenshots/', import.meta.url), { recursive: true })
     await saveDialog.screenshot({
       path: fileURLToPath(new URL('../screenshots/admin-save-popup.png', import.meta.url)),
@@ -433,29 +448,29 @@ try {
     await page.reload({ waitUntil: 'networkidle' })
     await gallery.getByRole('img').nth(3).waitFor()
     if ((await gallery.getByRole('img').count()) !== 4)
-      note('/admin', 'gallery', 'uploaded images did not survive reload')
+      note('/admin-portal-update', 'gallery', 'uploaded images did not survive reload')
     await gallery.getByRole('button', { name: 'Remove photo 4', exact: true }).click()
     if ((await gallery.getByRole('img').count()) !== 3)
-      note('/admin', 'gallery', 'remove did not update thumbnails')
+      note('/admin-portal-update', 'gallery', 'remove did not update thumbnails')
     await mkdir(new URL('../screenshots/', import.meta.url), { recursive: true })
     await gallery.screenshot({
       path: fileURLToPath(new URL('../screenshots/admin-gallery-upload.png', import.meta.url)),
     })
     await page.getByRole('button', { name: 'Save & preview', exact: true }).click()
-    await page.waitForURL('**/admin/preview/*')
+    await page.waitForURL('**/admin-portal-update/preview/*')
     const renderedGallery = page.locator('section[aria-labelledby="project-gallery-title"]')
     await renderedGallery.getByRole('img').nth(2).waitFor()
     if ((await renderedGallery.getByRole('img').count()) !== 3)
-      note('/admin', 'gallery', 'preview did not render the saved photos')
+      note('/admin-portal-update', 'gallery', 'preview did not render the saved photos')
     await page.getByRole('link', { name: 'Back to editor', exact: true }).click()
-    await page.waitForURL((url) => /^\/admin\/projects\/\d+$/.test(url.pathname))
+    await page.waitForURL((url) => /^\/admin-portal-update\/projects\/\d+$/.test(url.pathname))
     for (let count = 3; count > 0; count--)
       await gallery.getByRole('button', { name: 'Remove photo 1', exact: true }).click()
     await page.getByRole('button', { name: 'Save & preview', exact: true }).click()
-    await page.waitForURL('**/admin/preview/*')
+    await page.waitForURL('**/admin-portal-update/preview/*')
     await page.locator('h1').filter({ hasText: testTitle }).waitFor()
     if ((await renderedGallery.count()) !== 0)
-      note('/admin', 'gallery', 'empty gallery should be hidden')
+      note('/admin-portal-update', 'gallery', 'empty gallery should be hidden')
     console.log(
       '✓ gallery flow: invalid file, multi-upload, save/reload, removal, detail preview, optional empty gallery',
     )
@@ -469,13 +484,17 @@ try {
     await visitor.goto(baseUrl + '/projects', { waitUntil: 'networkidle' })
     const publishedLink = visitor.locator(`a[href="/projects/${savedProject.slug}"]`)
     if (await publishedLink.count())
-      note('/admin', 'publishing', 'an unpublished draft appeared on the normal Projects page')
+      note(
+        '/admin-portal-update',
+        'publishing',
+        'an unpublished draft appeared on the normal Projects page',
+      )
     await loginContext(freshContext)
     const crossBrowser = await (
       await freshContext.request.get(baseUrl + '/api/admin/projects')
     ).json()
     if (!crossBrowser.projects.some((project) => project.id === savedId))
-      note('/admin', 'persistence', 'fresh browser could not read the saved draft')
+      note('/admin-portal-update', 'persistence', 'fresh browser could not read the saved draft')
 
     // Restart the actual Vite/API server and verify the same on-disk record remains available.
     const savedPort = Number(new URL(baseUrl).port)
@@ -495,8 +514,10 @@ try {
       await freshContext.request.get(baseUrl + '/api/admin/projects')
     ).json()
     if (!restartedWorkspace.projects.some((project) => project.id === savedId))
-      note('/admin', 'persistence', 'draft was lost after server restart')
-    await page.goto(baseUrl + `/admin/projects/${savedId}`, { waitUntil: 'networkidle' })
+      note('/admin-portal-update', 'persistence', 'draft was lost after server restart')
+    await page.goto(baseUrl + `/admin-portal-update/projects/${savedId}`, {
+      waitUntil: 'networkidle',
+    })
     await page.getByRole('button', { name: 'Publish', exact: true }).click()
     await page.waitForURL(`**/projects/${savedProject.slug}`)
     await visitor.goto(baseUrl + '/projects', { waitUntil: 'networkidle' })
@@ -509,7 +530,9 @@ try {
     })
 
     // Updates to a published project do not leak from a draft; publishing makes them visible to a fresh browser.
-    await page.goto(baseUrl + `/admin/projects/${savedId}`, { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + `/admin-portal-update/projects/${savedId}`, {
+      waitUntil: 'networkidle',
+    })
     const editedTitle = '[Sample] Updated and published project'
     await page.getByRole('textbox', { name: 'Title (EN) *', exact: true }).fill(editedTitle)
     await page.getByRole('button', { name: 'Save draft', exact: true }).first().click()
@@ -525,7 +548,9 @@ try {
     await visitor.locator('h1').filter({ hasText: editedTitle }).waitFor()
 
     // Unpublish returns the record to a draft. Republish and delete must change the normal site too.
-    await page.goto(baseUrl + `/admin/projects/${savedId}`, { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + `/admin-portal-update/projects/${savedId}`, {
+      waitUntil: 'networkidle',
+    })
     await page.getByRole('button', { name: 'Unpublish', exact: true }).click()
     await page
       .getByText('Project unpublished. The saved draft remains available in the editor.', {
@@ -534,10 +559,12 @@ try {
       .waitFor()
     await visitor.goto(baseUrl + '/projects', { waitUntil: 'networkidle' })
     if (await visitor.getByRole('link', { name: editedTitle, exact: true }).count())
-      note('/admin', 'publishing', 'unpublished project remained on the normal list')
+      note('/admin-portal-update', 'publishing', 'unpublished project remained on the normal list')
     await page.getByRole('button', { name: 'Publish', exact: true }).click()
     await page.waitForURL(`**/projects/${savedProject.slug}`)
-    await page.goto(baseUrl + `/admin/projects/${savedId}`, { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + `/admin-portal-update/projects/${savedId}`, {
+      waitUntil: 'networkidle',
+    })
     await page.getByRole('button', { name: 'Delete project', exact: true }).click()
     await page
       .getByRole('group', { name: 'Delete this project from the system and website?', exact: true })
@@ -546,7 +573,7 @@ try {
     await page.getByText('Project deleted from the system and website.', { exact: true }).waitFor()
     await visitor.goto(baseUrl + '/projects', { waitUntil: 'networkidle' })
     if (await visitor.getByRole('link', { name: editedTitle, exact: true }).count())
-      note('/admin', 'publishing', 'deleted project remained on the normal list')
+      note('/admin-portal-update', 'publishing', 'deleted project remained on the normal list')
 
     const forbidden = await freshContext.request.post(baseUrl + '/api/admin/projects/save', {
       headers: { Origin: 'https://untrusted.example', 'X-ESI-Admin': '1' },
@@ -561,7 +588,11 @@ try {
       note('/api/admin', 'security', 'write without the admin header was not rejected')
     const auditResponse = await context.request.get(baseUrl + '/api/admin/audit-logs')
     if (!auditResponse.ok())
-      note('/admin/audit-logs', 'audit', 'audit history could not be read after project changes')
+      note(
+        '/admin-portal-update/audit-logs',
+        'audit',
+        'audit history could not be read after project changes',
+      )
     else {
       const history = await auditResponse.json()
       for (const action of ['save_draft', 'publish', 'unpublish', 'delete', 'upload']) {
@@ -573,15 +604,19 @@ try {
           !response.ok() ||
           !result.items?.some((item) => item.action === action && item.result === 'success')
         )
-          note('/admin/audit-logs', 'audit', `${action} was not recorded`)
+          note('/admin-portal-update/audit-logs', 'audit', `${action} was not recorded`)
       }
       if (!history.items?.length || JSON.stringify(history).includes('password_hash'))
-        note('/admin/audit-logs', 'audit', 'history was empty or exposed private fields')
+        note(
+          '/admin-portal-update/audit-logs',
+          'audit',
+          'history was empty or exposed private fields',
+        )
     }
-    await page.goto(baseUrl + '/admin/audit-logs', { waitUntil: 'networkidle' })
+    await page.goto(baseUrl + '/admin-portal-update/audit-logs', { waitUntil: 'networkidle' })
     await page.getByRole('heading', { level: 1 }).waitFor()
     if (!(await page.getByRole('table').count()))
-      note('/admin/audit-logs', 'audit', 'audit table did not render')
+      note('/admin-portal-update/audit-logs', 'audit', 'audit table did not render')
     console.log(
       '✓ audit history: real authentication and project events, action filters, private ingestion and anonymous protection',
     )

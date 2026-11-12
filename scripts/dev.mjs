@@ -64,7 +64,7 @@ try {
   server = await createServer({ root, server: { host: 'localhost', port: 5173, strictPort: true } })
   await server.listen()
   server.printUrls()
-  console.log(`Admin login: ${origin}/admin/login`)
+  console.log(`Admin login: ${origin}/admin-portal-update/login`)
   console.log(`DEV credentials: ${getDevRuntimePaths().credentials}`)
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.once(signal, async () => {

@@ -2,6 +2,8 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+  # Retired Admin page URLs return 404 without disclosing the replacement path.
+  RewriteRule ^admin(?:/|$) - [R=404,L,NC]
   # Never rewrite real files or directories (assets, images, sitemap.xml, robots.txt …)
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

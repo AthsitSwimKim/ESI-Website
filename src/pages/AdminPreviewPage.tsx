@@ -47,7 +47,12 @@ export function AdminPreviewPage() {
             <strong>{t('admin.previewDraft')}</strong> · {t('admin.previewNotice')}
           </p>
           <Link
-            to={{ pathname: project ? `/admin/projects/${project.id}` : '/admin', search }}
+            to={{
+              pathname: project
+                ? `/admin-portal-update/projects/${project.id}`
+                : '/admin-portal-update/',
+              search,
+            }}
             className="inline-flex min-h-11 items-center gap-2 rounded-sm border border-esi-border bg-white px-4 py-2 text-sm font-semibold text-esi-blue"
           >
             <ArrowLeft size={16} aria-hidden />
@@ -64,7 +69,10 @@ export function AdminPreviewPage() {
       </aside>
       {!loaded ? (
         <Container className="py-20">
-          <Seo title={`${t('admin.previewDraft')} | ESI`} path={`/admin/preview/${id}`} />
+          <Seo
+            title={`${t('admin.previewDraft')} | ESI`}
+            path={`/admin-portal-update/preview/${id}`}
+          />
           <p role="status">{t('a11y.loading')}</p>
         </Container>
       ) : project ? (
@@ -74,7 +82,7 @@ export function AdminPreviewPage() {
           <Seo
             title={`${t('admin.previewMissing')} | ESI`}
             description={t('admin.pageDescription')}
-            path={`/admin/preview/${id ?? ''}`}
+            path={`/admin-portal-update/preview/${id ?? ''}`}
           />
           <Container className="py-20">
             <h1 className="display-title text-2xl text-esi-blue">{t('admin.previewMissing')}</h1>

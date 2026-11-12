@@ -51,7 +51,7 @@ export function ProjectDetailPage({ previewProject }: { previewProject?: Project
       <Seo
         title={pageTitle(copy.title)}
         description={copy.description.slice(0, 160)}
-        path={previewProject ? `/admin/preview/${project.id}` : `/projects/${project.slug}`}
+        path={previewProject ? `/admin-portal-update/preview/${project.id}` : `/projects/${project.slug}`}
         image={project.image.startsWith('/') ? project.image : undefined}
         type="article"
       />

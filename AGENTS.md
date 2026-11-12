@@ -38,6 +38,9 @@ writes, backups and durable audit outbox. Public pages and sitemap read publishe
 from PHP. MySQL project-content migration remains future work. Private config is prepared
 separately and NEVER included in the ZIP. See `database/chaiyo-production.md`.
 Run `npm run test:production` against the extracted ZIP with isolated local SQL before delivery.
+The Admin page entry is `/admin-portal-update/` (D60); retired `/admin` page routes return
+404 without a redirect. API endpoints remain `/api/admin/*` with server-side authentication.
+Send only changed deployment files for updates when a verified baseline is available.
 If another request implies server behavior beyond this scope,
 explain the constraint and offer the static alternative (`mailto:`, an embed, or static data).
 

@@ -41,8 +41,8 @@ export function AdminAccountMenu({
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
       {auth.user?.role === 'admin' && (
         <Link
-          to="/admin/audit-logs"
-          aria-current={location.pathname === '/admin/audit-logs' ? 'page' : undefined}
+          to="/admin-portal-update/audit-logs"
+          aria-current={location.pathname === '/admin-portal-update/audit-logs' ? 'page' : undefined}
           aria-disabled={disabled || undefined}
           onClick={(event) => {
             if (disabled) event.preventDefault()

@@ -64,7 +64,7 @@ export function AdminLoginPage() {
       <Seo
         title={`${t('auth.loginTitle')} | ESI`}
         description={t('auth.loginSeoDescription')}
-        path="/admin/login"
+        path="/admin-portal-update/login"
       />
       <meta name="robots" content="noindex, nofollow, noarchive" />
       <header className="shrink-0 border-b border-esi-border bg-white">

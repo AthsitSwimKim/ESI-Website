@@ -100,8 +100,8 @@ sitemap and Open Graph tags are all built from it.
 
 ## Local project editor
 
-Run `npm run dev`, then open `/admin` directly on the localhost URL printed by Vite.
-The editor redirects to `/admin/login` before showing private data. The Dev account is
+Run `npm run dev`, then open `/admin-portal-update` directly on the localhost URL printed by Vite.
+The editor redirects to `/admin-portal-update/login` before showing private data. The Dev account is
 `esi_dev_admin`; its generated password is in `.esi-admin/dev/dev-admin-credentials.txt`.
 This is separate from the `esi_admin` account on Hosting. The editor API checks the live PHP
 session, account status/role and CSRF on every write; it accepts requests from the local machine.
@@ -162,7 +162,7 @@ private settings. Plain `npm run dev` and audit continue to select the local dat
 
 ## Admin audit log
 
-Open `/admin/audit-logs` with an `admin` account to inspect real authentication and project
+Open `/admin-portal-update/audit-logs` with an `admin` account to inspect real authentication and project
 events. Filter by action, result, actor and Bangkok date range; pagination runs in SQL with
 25 rows per page. Events use the selected Local/Chaiyo profile. Project writes keep a durable
 private outbox and retry without duplicating events. Logs begin when this feature is enabled;

@@ -55,7 +55,7 @@ npm run dev:chaiyo
 
 คำสั่งนี้เปิด PHP profile Chaiyo ที่ `127.0.0.1:8788` และสลับ Vite bridge หลังตรวจ
 การเชื่อมต่อสำเร็จเท่านั้น ใช้ Vite `localhost:5173` ที่เปิดอยู่แล้วได้ หากเปิดใหม่
-ให้ใช้ `npm run dev:frontend` อีก terminal แล้ว reload หน้า `/admin/login`
+ให้ใช้ `npm run dev:frontend` อีก terminal แล้ว reload หน้า `/admin-portal-update/login`
 
 หยุดคำสั่ง `dev:chaiyo` ด้วย Ctrl+C เพื่อคืน bridge เดิม แล้วใช้ Local ต่อได้
 หาก process ปิดผิดปกติจน bridge ค้าง ให้ `node scripts/dev-auth.mjs prepare`

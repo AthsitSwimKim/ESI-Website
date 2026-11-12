@@ -66,7 +66,7 @@ export function RootLayout({ errorBoundary = false }: { errorBoundary?: boolean 
   const { t } = useT()
   const hideCta =
     errorBoundary || matches.some((m) => (m.handle as RouteHandle | undefined)?.hideCta)
-  const isPublicPage = !errorBoundary && !/^\/admin(?:\/|$)/i.test(pathname)
+  const isPublicPage = !errorBoundary && !/^\/admin-portal-update(?:\/|$)/i.test(pathname)
 
   return (
     <>

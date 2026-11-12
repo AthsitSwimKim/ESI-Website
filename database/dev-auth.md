@@ -15,7 +15,7 @@ node scripts/dev-auth-install.mjs
 npm run dev
 ```
 
-`npm run dev` เปิด PHP และ Vite ให้พร้อมกัน แล้วเข้า `/admin/login`
+`npm run dev` เปิด PHP และ Vite ให้พร้อมกัน แล้วเข้า `/admin-portal-update/login`
 ถ้าเปิด PHP ไว้แล้วจะตรวจ internal key ก่อนใช้ต่อ ไม่ปิด process ที่คำสั่งนี้ไม่ได้สร้าง
 Vite ใช้ `localhost:5173` แบบ strict port จึงไม่เผลอสลับ port หรือเปิดออก LAN
 รหัสของบัญชี `esi_dev_admin` อยู่ใน `.esi-admin/dev/dev-admin-credentials.txt`

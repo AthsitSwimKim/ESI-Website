@@ -74,7 +74,7 @@ export function AdminPage() {
   if (search) listParams.set('q', search)
   else listParams.delete('q')
   const listSearch = listParams.toString()
-  const listLocation = { pathname: '/admin', search: listSearch }
+  const listLocation = { pathname: '/admin-portal-update/', search: listSearch }
   const [workspace, setWorkspace] = useState<ProjectWorkspace>({
     revision: 0,
     nextId: 1,
@@ -100,7 +100,8 @@ export function AdminPage() {
   const [galleryUploading, setGalleryUploading] = useState(false)
   const uploading = imageUploading || galleryUploading
   const isNew = projectId === 'new'
-  const loaded = loadedKey === loadKey || (isNew && loadedKey === `/admin/projects/${selected.id}`)
+  const loaded =
+    loadedKey === loadKey || (isNew && loadedKey === `/admin-portal-update/projects/${selected.id}`)
   const busy = uploading || saving || !loaded
   const dirty = JSON.stringify(selected) !== baseline
   const missing =
@@ -247,7 +248,7 @@ export function AdminPage() {
       } else if (intent === 'preview') {
         allowNavigation.current = true
         void navigate(
-          { pathname: `/admin/preview/${result.project.id}`, search: listSearch },
+          { pathname: `/admin-portal-update/preview/${result.project.id}`, search: listSearch },
           { replace: isNew },
         )
         allowNavigation.current = false
@@ -255,7 +256,7 @@ export function AdminPage() {
         saveTrigger.current = submitter
         setSaveOpen(true)
         if (isNew) {
-          const editPath = `/admin/projects/${result.project.id}`
+          const editPath = `/admin-portal-update/projects/${result.project.id}`
           savedRoute.current = editPath
           setLoadedKey(editPath)
           allowNavigation.current = true
@@ -420,7 +421,7 @@ export function AdminPage() {
                       buttonClass,
                       'border-esi-blue! bg-esi-blue! text-white! hover:bg-esi-secondary!',
                     )}
-                    to={{ pathname: '/admin/projects/new', search: listSearch }}
+                    to={{ pathname: '/admin-portal-update/projects/new', search: listSearch }}
                   >
                     <Plus size={18} aria-hidden />
                     {t('admin.new')}
@@ -527,7 +528,10 @@ export function AdminPage() {
                       <ProjectCard
                         project={item}
                         variant="vertical"
-                        to={{ pathname: `/admin/projects/${item.id}`, search: listSearch }}
+                        to={{
+                          pathname: `/admin-portal-update/projects/${item.id}`,
+                          search: listSearch,
+                        }}
                         editor={{
                           label: t('admin.edit'),
                           status: t(
@@ -642,7 +646,7 @@ export function AdminPage() {
                         {t(`admin.${message}` as 'admin.saved')}
                         {message === 'saved' && (
                           <Link
-                            to={`/admin/preview/${selected.id}`}
+                            to={`/admin-portal-update/preview/${selected.id}`}
                             className="ml-2 inline-block font-semibold underline underline-offset-4"
                           >
                             {t('admin.previewDraft')}

@@ -36,7 +36,7 @@ function hasUnsafeCharacters(value: string): boolean {
 
 export function isAdminLoginPath(pathname: string): boolean {
   try {
-    return /^\/admin\/login\/?$/i.test(decodeURIComponent(pathname))
+    return /^\/admin-portal-update\/login\/?$/i.test(decodeURIComponent(pathname))
   } catch {
     return false
   }
@@ -45,27 +45,29 @@ export function isAdminLoginPath(pathname: string): boolean {
 /** Redirect only to this application's admin area, never to another origin or Login itself. */
 export function safeAdminReturnTo(value: string | null | undefined): string {
   if (!value || !value.startsWith('/') || value.startsWith('//') || hasUnsafeCharacters(value))
-    return '/admin'
+    return '/admin-portal-update/'
   try {
     const target = new URL(value, 'https://esi-admin.invalid')
     const pathname = decodeURIComponent(target.pathname)
     if (
       target.origin !== 'https://esi-admin.invalid' ||
       hasUnsafeCharacters(pathname) ||
-      !(pathname === '/admin' || pathname.startsWith('/admin/')) ||
-      /^\/admin\/login(?:\/|$)/i.test(pathname)
+      !(pathname === '/admin-portal-update' || pathname.startsWith('/admin-portal-update/')) ||
+      /^\/admin-portal-update\/login(?:\/|$)/i.test(pathname)
     )
-      return '/admin'
-    return target.pathname + target.search + target.hash
+      return '/admin-portal-update/'
+    const canonicalPath =
+      pathname === '/admin-portal-update' ? target.pathname + '/' : target.pathname
+    return canonicalPath + target.search + target.hash
   } catch {
-    return '/admin'
+    return '/admin-portal-update/'
   }
 }
 
 export function adminLoginPath(returnTo: string, expired = false): string {
   const params = new URLSearchParams({ returnTo: safeAdminReturnTo(returnTo) })
   if (expired) params.set('expired', '1')
-  return `/admin/login?${params}`
+  return `/admin-portal-update/login?${params}`
 }
 
 export function notifyAdminUnauthorized() {

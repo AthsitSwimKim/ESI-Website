@@ -146,6 +146,7 @@ try {
     `<?php
 if (($_SERVER['HTTP_X_ESI_TEST_HTTPS'] ?? '') === '${testToken}') $_SERVER['HTTPS'] = 'on';
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+if (preg_match('~^/admin(?:/|$)~i', $path)) { http_response_code(404); exit; }
 if (preg_match('~(^|/)\\.|\\.(tmp|ini)$~', rawurldecode($path))) { http_response_code(403); exit; }
 if (str_starts_with($path, '/api/') || $path === '/sitemap.xml') require ${phpQuote(path.join(web, 'api/index.php'))};
 if (is_file($_SERVER['DOCUMENT_ROOT'] . $path)) return false;
@@ -276,6 +277,19 @@ readfile($_SERVER['DOCUMENT_ROOT'] . '/index.html');
   }
   const anonymous = new Client(),
     client = new Client()
+  check(
+    (await readFile(path.join(web, '.htaccess'), 'utf8')).includes(
+      'RewriteRule ^admin(?:/|$) - [R=404,L,NC]',
+    ),
+    'Apache retires old Admin page paths without a redirect',
+  )
+  for (const path of ['/admin', '/admin/', '/admin/login', '/admin/projects/new', '/ADMIN/login']) {
+    const retired = await anonymous.request(path, { raw: true })
+    check(
+      retired.status === 404 && !retired.headers.location,
+      'old Admin route returns 404 without revealing replacement: ' + path,
+    )
+  }
   const seed = JSON.parse(await readFile(path.join(privateRoot, 'seed.json'), 'utf8'))
   const publicImages = new Set(
     seed.projects.flatMap((project) => [project.image, ...(project.gallery ?? [])]),
@@ -493,13 +507,13 @@ if ($argv[1] === 'restore') $pdo->exec('RENAME TABLE admin_events_test_paused TO
   await page.goto(origin + '/projects/' + project.slug)
   await page.getByRole('heading', { name: project.title, exact: true }).waitFor()
   check(true, 'production React resolves dynamically published detail on direct navigation')
-  await page.goto(origin + '/admin/login')
+  await page.goto(origin + '/admin-portal-update/login')
   await page.getByLabel('Username', { exact: true }).fill(runtime.username)
   await page.getByLabel('Password', { exact: true }).fill(runtime.password)
   await page.getByRole('button', { name: 'Log in', exact: true }).click()
-  await page.waitForURL('**/admin', { timeout: 15000 })
+  await page.waitForURL('**/admin-portal-update/', { timeout: 15000 })
   check(true, 'browser logs in with Secure cookies against actual extracted production assets')
-  await page.goto(origin + '/admin/audit-logs')
+  await page.goto(origin + '/admin-portal-update/audit-logs')
   await page.getByRole('heading', { name: /audit/i }).first().waitFor()
   await mkdir(path.join(root, 'screenshots/production'), { recursive: true })
   await page.screenshot({
